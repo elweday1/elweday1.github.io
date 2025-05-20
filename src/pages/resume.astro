@@ -1,0 +1,44 @@
+---
+import Layout from "@layouts/Layout.astro";
+import { RESUME } from "@config"; // RESUME.normal is used for the redirect
+
+const resumeUrl = RESUME.normal;
+// Placeholder for the Cloudflare Worker URL, user needs to replace this
+const notifyWorkerUrl = "YOUR_NOTIFY_RESUME_WORKER_URL"; 
+---
+<Layout title="Redirecting to Resume..." description="Downloading Mohammed Nasser's Resume">
+  <div class="flex flex-col items-center justify-center h-screen">
+    <p class="text-xl mb-4">Redirecting you to my resume...</p>
+    <p class="text-sm">If you are not redirected automatically, <a href={resumeUrl} class="underline">click here</a>.</p>
+  </div>
+  <script define:vars={{ resumeUrl, notifyWorkerUrl }}>
+    // Function to attempt to get client IP and notify
+    async function notifyDownload() {
+      let clientAddress = null;
+      try {
+        // Fetch client IP address
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        if (ipResponse.ok) {
+          const ipData = await ipResponse.json();
+          clientAddress = ipData.ip;
+        } else {
+          console.warn("Could not fetch IP address.");
+        }
+      } catch (err) {
+        console.warn("Error fetching IP address:", err);
+      }
+
+      // Send notification to Cloudflare Worker (non-blocking)
+      fetch(notifyWorkerUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientAddress }), // clientAddress might be null
+      }).catch(err => console.warn("Error sending resume download notification:", err));
+    }
+
+    // Perform notification and redirect
+    notifyDownload().finally(() => {
+      window.location.href = resumeUrl;
+    });
+  </script>
+</Layout>
