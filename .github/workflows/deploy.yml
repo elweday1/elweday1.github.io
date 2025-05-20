@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ static ]
+    branches: [ main ] # Changed from static to main
 permissions:
   contents: read
   pages: write
@@ -31,3 +31,36 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+
+  deploy_workers:
+    needs: build
+    runs-on: ubuntu-latest
+    # environment: # Optional: define an environment if you have specific CF worker environments
+    #   name: cloudflare-workers 
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 # Or your preferred version
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest # Or your preferred version
+          run_install: false # Do not run pnpm install, just setup pnpm
+      - name: Install Wrangler CLI
+        run: pnpm add -g wrangler@latest # Using pnpm as per existing build job
+      - name: Deploy contact-worker
+        run: |
+          cd cloudflare-workers/contact-worker
+          wrangler deploy src/index.ts --name contact-worker 
+          # Add --env your_environment if you use wrangler environments like staging/production
+      - name: Deploy notify-resume-worker
+        run: |
+          cd cloudflare-workers/notify-resume-worker # Path relative to repo root
+          wrangler deploy src/index.ts --name notify-resume-worker
+          # Add --env your_environment if needed

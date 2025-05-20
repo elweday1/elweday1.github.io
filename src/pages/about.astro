@@ -1,5 +1,4 @@
 ---
-export const prerender = false;
 import { MY_SHOWS, HOBBIES, RESUME, MESSAGE_OPTIONS } from "@config";
 import MoviesGallery from "@components/MoviesGallery.astro";
 import Tooltip from "@components/StackIconTooltip.astro";
@@ -190,7 +189,7 @@ const showsData = await getShowsData(import.meta.env.OMDB_API_KEY, MY_SHOWS);
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    const res = await fetch("/contactme", {
+    const res = await fetch("YOUR_CONTACT_WORKER_URL", {
       method: "POST",
       body: formData,
     });

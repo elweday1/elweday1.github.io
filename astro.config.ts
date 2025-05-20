@@ -7,7 +7,6 @@ import sitemap from "@astrojs/sitemap";
 import { SITE, RESUME } from "./src/config";
 import compress from "astro-compress";
 import preload from "astro-preload";
-import vercel from "@astrojs/vercel/serverless";
 import remarkMermaid from 'remark-mermaidjs'
 import chromium from "@sparticuz/chromium";
 import { chromium as playwright } from "playwright";
@@ -65,8 +64,7 @@ export default defineConfig({
       themes: {"light": "github-light", "dark": "github-dark"},
     },
   },
-  output: "hybrid",
-  adapter: vercel(),
+  output: "static",
 
   vite: {
     optimizeDeps: {
