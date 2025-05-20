@@ -189,7 +189,7 @@ const showsData = await getShowsData(import.meta.env.OMDB_API_KEY, MY_SHOWS);
     e.preventDefault();
     const form = e.target;
     const formData = new FormData(form);
-    const res = await fetch("YOUR_CONTACT_WORKER_URL", {
+    const res = await fetch("https://contact-worker.elweday.workers.dev/", {
       method: "POST",
       body: formData,
     });
