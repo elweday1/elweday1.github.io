@@ -8,13 +8,14 @@ import { SITE, RESUME } from "./src/config";
 import compress from "astro-compress";
 import preload from "astro-preload";
 import remarkMermaid from 'remark-mermaidjs'
-import chromium from "@sparticuz/chromium";
-import { chromium as playwright } from "playwright";
 
+
+/*
 const browser = await playwright.launch({
   args: chromium.args,
   executablePath: await chromium.executablePath(),
 });
+*/
 
 
 
@@ -33,14 +34,6 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: "shiki",
     remarkPlugins: [
-      [
-        remarkMermaid,
-        {
-          browserType: browser.browserType(),
-          strategy: 'img-svg',
-          dark: true,
-        }
-      ],
       [
         remarkToc,
         {
