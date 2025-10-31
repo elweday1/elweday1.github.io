@@ -7,8 +7,8 @@ import sitemap from "@astrojs/sitemap";
 import { SITE, RESUME } from "./src/config";
 import compress from "astro-compress";
 import preload from "astro-preload";
-import remarkMermaid from 'remark-mermaidjs'
-
+import remarkMermaid from 'remark-mermaidjs';
+import cloudflare from '@astrojs/cloudflare';
 
 /*
 const browser = await playwright.launch({
@@ -18,51 +18,39 @@ const browser = await playwright.launch({
 */
 
 
-
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
-  integrations: [
-    preload(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
-    react(),
-    sitemap(),
-    compress(),
-  ],
+  adapter: cloudflare(),
+  integrations: [preload(), tailwind({
+    applyBaseStyles: false
+  }), react(), sitemap(), compress()],
   markdown: {
     syntaxHighlight: "shiki",
-    remarkPlugins: [
-      [
-        remarkToc,
-        {
-          heading: "Contents",
-          tight: true,
-          maxDepth: 3,
-        },
-      ],
-      [
-        remarkCollapse,
-        {
-          test: "Contents",
-          content: "show contents",
-        },
-      ],
+    remarkPlugins: [[remarkToc, {
+      heading: "Contents",
+      tight: true,
+      maxDepth: 3
+    }], [remarkCollapse, {
+      test: "Contents",
+      content: "show contents"
+    }]
       //[stripMarkdown, {}]
     ],
     smartypants: true,
     shikiConfig: {
       wrap: true,
-      themes: {"light": "github-light", "dark": "github-dark"},
-    },
+      themes: {
+        "light": "github-light",
+        "dark": "github-dark"
+      }
+    }
   },
-  output: "static",
-
+  output: "hybrid",
   vite: {
     optimizeDeps: {
-      exclude: ["@resvg/resvg-js"],
-    },
+      exclude: ["@resvg/resvg-js"]
+    }
   },
-  scopedStyleStrategy: "where",
+  scopedStyleStrategy: "where"
 });
