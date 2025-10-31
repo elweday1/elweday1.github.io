@@ -17,7 +17,7 @@ stack:
   - ffmpeg
   - opengl
   - gcp
-cover: "/public/assets/media/manim.png"
+cover: "/src/assets/manim.png"
   
 ---
 

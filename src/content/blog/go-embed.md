@@ -1,7 +1,7 @@
 ---
 title: "GO Embed: An Interesting Way to Load Static Assets"
 slug: go-embed
-cover: "/public/assets/media/gopher.png"
+cover: "/src/assets/gopher.png"
 dateTime: 2024-8-29T08:00:00Z
 tags:
   - golang

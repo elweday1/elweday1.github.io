@@ -9,7 +9,7 @@ function calcFontSize(titleStr: string, descriptionStr: string) {
   const charCountDescription = descriptionStr.length;
 
   const minFontSizeTitle = 1.2;
-  const minFontSizeDescription = 0.8; 
+  const minFontSizeDescription = 0.8;
 
   const scalingFactorTitle = 0.02;
   const scalingFactorDescription = 0.004;
@@ -21,8 +21,8 @@ function calcFontSize(titleStr: string, descriptionStr: string) {
   const fontSizeDescription = Math.max(calculatedFontSizeDescription, minFontSizeDescription);
 
   return {
-      titleSize: `${fontSizeTitle}rem`,
-      descSize: `${fontSizeDescription}rem`,
+    titleSize: `${fontSizeTitle}rem`,
+    descSize: `${fontSizeDescription}rem`,
   }
 }
 
@@ -32,7 +32,7 @@ export default async (entry: Collection) => {
   const parsedUrl = new URL(entry.data.cover.src, 'https://example.com/'); // Base URL is needed for relative paths
   const pathname = parsedUrl.pathname;
   const filename = pathname.substring(pathname.lastIndexOf('/') + 1);
-  const cover = SITE.website + "/public/assets/media/" + filename;
+  const cover = SITE.website + "/src/assets/" + filename;
   const { titleSize, descSize } = calcFontSize(entry.data.title, entry.data.description);
   return (
     <div style={{ color: "rgba(255,255,255)", fontFamily: "kalam", width: "100%", height: "100%", position: "relative", display: "flex", backgroundColor: "black" }}>
@@ -45,8 +45,8 @@ export default async (entry: Collection) => {
         left: "0",
         width: "100%",
         height: "55%",
-        background: "linear-gradient(to top, black 45%, transparent 100%)", 
-        
+        background: "linear-gradient(to top, black 45%, transparent 100%)",
+
         fontFamily: "kalam",
       }}>
         <img
@@ -59,12 +59,12 @@ export default async (entry: Collection) => {
           alt="dsds"
           src={SITE.website + "/assets/404.png"}
         />
-      <div style={{  display: "flex", paddingTop : "80px", paddingLeft: "40px",  gap: "0", flexDirection: "column", fontWeight: "bold", width: "60%", justifyContent: "center" }} >
-        <h2 style={{ fontSize: titleSize, marginBottom: "-15px", fontFamily: "kalam-bold", fontWeight: "bolder" }}>{entry.data.title}</h2>
-        <h3 style={{ fontSize: descSize }}>{entry.data.description}</h3>
+        <div style={{ display: "flex", paddingTop: "80px", paddingLeft: "40px", gap: "0", flexDirection: "column", fontWeight: "bold", width: "60%", justifyContent: "center" }} >
+          <h2 style={{ fontSize: titleSize, marginBottom: "-15px", fontFamily: "kalam-bold", fontWeight: "bolder" }}>{entry.data.title}</h2>
+          <h3 style={{ fontSize: descSize }}>{entry.data.description}</h3>
+        </div>
       </div>
-      </div>
-      <h1 style={{ position: "absolute", top: "0", right: "50px", fontFamily: "batman", fontWeight: "bold", color:"#b31c26" }} >{SITE.title + " | " + (entry.collection === "blog" ? "Article" : "Project")}</h1>
+      <h1 style={{ position: "absolute", top: "0", right: "50px", fontFamily: "batman", fontWeight: "bold", color: "#b31c26" }} >{SITE.title + " | " + (entry.collection === "blog" ? "Article" : "Project")}</h1>
     </div>
   );
 };

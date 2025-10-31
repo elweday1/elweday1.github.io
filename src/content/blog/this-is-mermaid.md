@@ -3,7 +3,7 @@ title: "This is mermaid"
 date: 2021-01-01
 draft: true
 slug: this-is-mermaid
-cover: "/public/assets/media/portfolio.jpg"
+cover: "/src/assets/portfolio.jpg"
 description: "mermaid is a flowcharting language for diagrams, that is based on the graphviz language."
 
 ---
