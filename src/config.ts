@@ -1,5 +1,5 @@
 export const SITE = {
-  website: process.env.NODE_ENV === "production" ? "https://mnasser.dev" : "http://localhost:4321",
+  website: "mnasser.dev",
   author: "Mohammed Nasser",
   authorDescription: `
   Hey, I'm Mohammed Nasser. I'm a full-stack developer.
@@ -64,9 +64,7 @@ export const MESSAGE_OPTIONS = [
 ] as const;
 
 export const RESUME = {
-  normal:
-    "https://drive.google.com/file/d/18dNMu9h8MxWmr5pUI8QUCC7gs-SnW_2G/view",
-  redcated: "",
+  normal: `resume.${SITE.website}`,
 };
 export const PATHS = [
   { name: "Projects", path: "/projects", icon: "ic:baseline-code" },

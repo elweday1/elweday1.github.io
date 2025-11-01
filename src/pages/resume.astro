@@ -4,12 +4,21 @@ import { RESUME } from "@config"; // RESUME.normal is used for the redirect
 
 const resumeUrl = RESUME.normal;
 // Placeholder for the Cloudflare Worker URL, user needs to replace this
-const notifyWorkerUrl = "https://notify-resume-worker.elweday.workers.dev/"; 
+const notifyWorkerUrl = "https://notify-resume-worker.elweday.workers.dev/";
 ---
-<Layout title="Redirecting to Resume..." description="Downloading Mohammed Nasser's Resume">
-  <div class="flex flex-col items-center justify-center h-screen">
-    <p class="text-xl mb-4">Redirecting you to my resume...</p>
-    <p class="text-sm">If you are not redirected automatically, <a href={resumeUrl} class="underline">click here</a>.</p>
+
+<Layout
+  title="Redirecting to Resume..."
+  description="Downloading Mohammed Nasser's Resume"
+>
+  <div class="flex h-screen flex-col items-center justify-center">
+    <p class="mb-4 text-xl">Redirecting you to my resume...</p>
+    <p class="text-sm">
+      If you are not redirected automatically, <a
+        href={resumeUrl}
+        class="underline">click here</a
+      >.
+    </p>
   </div>
   <script define:vars={{ resumeUrl, notifyWorkerUrl }}>
     // Function to attempt to get client IP and notify
@@ -33,7 +42,9 @@ const notifyWorkerUrl = "https://notify-resume-worker.elweday.workers.dev/";
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clientAddress }), // clientAddress might be null
-      }).catch(err => console.warn("Error sending resume download notification:", err));
+      }).catch(err =>
+        console.warn("Error sending resume download notification:", err)
+      );
     }
 
     // Perform notification and redirect

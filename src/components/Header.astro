@@ -7,103 +7,135 @@ export interface Props {
   path?: string;
 }
 
-
-
 const currentPagePath = trim(Astro.url.pathname, "/").split("/");
-
 ---
 
-<header  class="h-fit sticky top-0 " >
-  <nav class="flex h-fit w-full flex-col items-center  sm:flex-row  "> 
-      <div class="flex  place-content-center justify-between sm:w-fit w-full ">
-
-  <button  class="w-fit" aria-label="homepage" id="batman-trigger">
-    <svg
+<header class="sticky top-0 h-fit">
+  <nav class="flex h-fit w-full flex-col items-center sm:flex-row">
+    <div class="flex w-full place-content-center justify-between sm:w-fit">
+      <a href="/" class="w-fit" aria-label="homepage" id="batman-trigger">
+        <svg
           xmlns="http://www.w3.org/2000/svg"
-          class={"h-14 w-14 hover:scale-[110%] transition-scale duration-150 " + (Astro.url.pathname == "/"? "fill-skin-accent":"fill-skin-base") }
+          class={"h-14 w-14 hover:scale-[110%] transition-scale duration-150 " +
+            (Astro.url.pathname == "/" ? "fill-skin-accent" : "fill-skin-base")}
           viewBox="0 0 680 295"
-          >
-          <path
-                stroke-width="0"
-                fill="rgb(var(--color-skin-accent))"
-                d="M257.841 206.478C266.3 206.478 275.54 209.075 285.301 214.205C309.08 226.695 329.477 269.516 339.768 294.664C350.062 269.516 370.451 226.695 394.234 214.205C403.995 209.075 413.235 206.478 421.69 206.478C438.773 206.478 448.418 216.626 453.605 222.075L454.686 223.205C458.686 227.303 464.38 234.359 468.519 239.65C480.679 227.941 508.683 204.425 537.716 204.163H538.365C553.241 204.163 564.643 208.798 572.254 217.936C584.034 232.084 582.026 251.423 580.619 259.083C579.197 266.81 576.134 275.115 572.944 282.344C572.944 282.344 667.612 227.412 677.726 167.373C689.375 98.2326 621.755 51.4936 562.977 24.4576C544.212 15.8258 516.519 6.96516 497.694 1.34328C511.126 24.8366 519.461 59.2509 493.146 87.9158C479.962 102.278 463.295 109.87 444.947 109.87C412.101 109.87 379.466 84.9022 375.109 56.44C372.283 37.9981 370.752 16.7415 369.93 0.386292L362.146 14.0694C360.784 16.4601 358.206 18.0138 355.474 17.8599L339.617 17.5447L324.062 17.8599C321.232 17.9838 318.747 16.4601 317.389 14.0694L309.605 0.386292C308.783 16.7378 307.252 37.9981 304.426 56.44C300.065 84.9022 267.434 109.87 234.588 109.87C216.24 109.87 199.577 102.278 186.393 87.9158C160.077 59.2472 168.413 24.8366 181.848 1.34328C163.023 6.96141 135.327 15.8221 116.562 24.4576C57.7839 51.4936 -9.83629 98.2363 1.81279 167.373C11.9307 227.412 74.3981 266.123 106.594 282.344C103.408 275.115 100.346 266.806 98.9235 259.083C97.5124 251.423 95.5008 232.084 107.281 217.94C114.892 208.798 126.297 204.163 141.178 204.163H141.827C170.86 204.425 198.864 227.941 211.023 239.65C215.163 234.359 220.852 227.303 224.857 223.201L225.945 222.068C231.12 216.622 240.769 206.478 257.841 206.478Z"
-                fill="none">
-          </path>
-          </svg>
-  </button>
-      
-        <button
-          class="menu-trigger sm:opened scale-150 block sm:hidden pointer-cursor"
-          aria-label="Open Menu"
-          aria-expanded="false"
-          aria-controls="menu-items"
         >
-        <svg width="100" height="100" viewBox="0 0 100 100">
-          <path class="line top" d="M 20,30 H 80"/>
-          <path class="line middle" d="M 20,50 H 80" />
-          <path class="line bottom" d="M 20,70 H 80"/>
+          <path
+            stroke-width="0"
+            fill="rgb(var(--color-skin-accent))"
+            d="M257.841 206.478C266.3 206.478 275.54 209.075 285.301 214.205C309.08 226.695 329.477 269.516 339.768 294.664C350.062 269.516 370.451 226.695 394.234 214.205C403.995 209.075 413.235 206.478 421.69 206.478C438.773 206.478 448.418 216.626 453.605 222.075L454.686 223.205C458.686 227.303 464.38 234.359 468.519 239.65C480.679 227.941 508.683 204.425 537.716 204.163H538.365C553.241 204.163 564.643 208.798 572.254 217.936C584.034 232.084 582.026 251.423 580.619 259.083C579.197 266.81 576.134 275.115 572.944 282.344C572.944 282.344 667.612 227.412 677.726 167.373C689.375 98.2326 621.755 51.4936 562.977 24.4576C544.212 15.8258 516.519 6.96516 497.694 1.34328C511.126 24.8366 519.461 59.2509 493.146 87.9158C479.962 102.278 463.295 109.87 444.947 109.87C412.101 109.87 379.466 84.9022 375.109 56.44C372.283 37.9981 370.752 16.7415 369.93 0.386292L362.146 14.0694C360.784 16.4601 358.206 18.0138 355.474 17.8599L339.617 17.5447L324.062 17.8599C321.232 17.9838 318.747 16.4601 317.389 14.0694L309.605 0.386292C308.783 16.7378 307.252 37.9981 304.426 56.44C300.065 84.9022 267.434 109.87 234.588 109.87C216.24 109.87 199.577 102.278 186.393 87.9158C160.077 59.2472 168.413 24.8366 181.848 1.34328C163.023 6.96141 135.327 15.8221 116.562 24.4576C57.7839 51.4936 -9.83629 98.2363 1.81279 167.373C11.9307 227.412 74.3981 266.123 106.594 282.344C103.408 275.115 100.346 266.806 98.9235 259.083C97.5124 251.423 95.5008 232.084 107.281 217.94C114.892 208.798 126.297 204.163 141.178 204.163H141.827C170.86 204.425 198.864 227.941 211.023 239.65C215.163 234.359 220.852 227.303 224.857 223.201L225.945 222.068C231.12 216.622 240.769 206.478 257.841 206.478Z"
+            fill="none"
+          >
+          </path>
         </svg>
-      
-        </button>
-      </div>
-        <div id="menu-items" class="place-self-center   sm:pl-56 items-center content-center gap-4 max-h-0 sm:max-h-[1000px] ease-in-out overflow-hidden sm:flex flex-row sm:p-2 px-3 w-full relative flex  h-full  mb-2 ">
+      </a>
 
-          <ul id="menu" class="sm:contents  flex flex-col w-full place-content-center place-items-center  p-2 ">
-            {
-              PATHS.map(({name, path, icon}) => {
-                const isActive = currentPagePath.includes(trim(path, "/"))
-                return (
-                  <li class="relative w-full ">
-                    <a href={path}  class={"flex flex-row items-center gap-2 w-full px-4 py-3 text-center font-medium hover:text-skin-accent sm:my-0 sm:px-2 sm:py-1" + (isActive?" font-bold text-skin-accent w-full":"")}>
-                      <span class="place-self-center  w-full">{name}</span>
-                    </a>
-                    { isActive ? (<span transition:name="active-nav" class="absolute top-0 left-0 h-full hidden sm:block w-full  border-skin-accent bg-black/10 border-2 rounded-xl"></span>) : null }
-                    </li>)
-              })
+      <button
+        class="menu-trigger sm:opened pointer-cursor block scale-150 sm:hidden"
+        aria-label="Open Menu"
+        aria-expanded="false"
+        aria-controls="menu-items"
+      >
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <path class="line top" d="M 20,30 H 80"></path>
+          <path class="line middle" d="M 20,50 H 80"></path>
+          <path class="line bottom" d="M 20,70 H 80"></path>
+        </svg>
+      </button>
+    </div>
+    <div
+      id="menu-items"
+      class="relative mb-2 flex h-full max-h-0 w-full flex-row content-center items-center gap-4 place-self-center overflow-hidden px-3 ease-in-out sm:flex sm:max-h-[1000px] sm:p-2 sm:pl-56"
+    >
+      <ul
+        id="menu"
+        class="flex w-full flex-col place-content-center place-items-center p-2 sm:contents"
+      >
+        {
+          PATHS.map(({ name, path, icon }) => {
+            const isActive = currentPagePath.includes(trim(path, "/"));
+            return (
+              <li class="relative w-full ">
+                <a
+                  href={path}
+                  class={
+                    "flex w-full flex-row items-center gap-2 px-4 py-3 text-center font-medium hover:text-skin-accent sm:my-0 sm:px-2 sm:py-1" +
+                    (isActive ? " w-full font-bold text-skin-accent" : "")
+                  }
+                >
+                  <span class="w-full  place-self-center">{name}</span>
+                </a>
+                {isActive ? (
+                  <span
+                    transition:name="active-nav"
+                    class="absolute left-0 top-0 hidden h-full w-full rounded-xl  border-2 border-skin-accent bg-black/10 sm:block"
+                  />
+                ) : null}
+              </li>
+            );
+          })
+        }
+        <li class="relative w-full content-center items-center">
+          {
+            SITE.lightAndDarkMode && (
+              <button
+                id="theme-btn"
+                class="  flex w-full place-content-center content-center px-4 py-3 text-center font-medium hover:text-skin-accent  sm:my-0 sm:px-2 sm:py-1  "
+                title="Toggles light & dark"
+                aria-label="auto"
+                aria-live="polite"
+              >
+                <svg class="" xmlns="http://www.w3.org/2000/svg" id="moon-svg">
+                  <path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" id="sun-svg">
+                  <path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z" />
+                </svg>
+              </button>
+            )
           }
-          <li class="relative w-full items-center content-center">
-            {
-              SITE.lightAndDarkMode && (
-                <button id="theme-btn" class="  px-4 py-3 text-center font-medium hover:text-skin-accent sm:my-0 sm:px-2 sm:py-1 w-full  flex content-center place-content-center  " title="Toggles light & dark" aria-label="auto" aria-live="polite">
-                  <svg class="" xmlns="http://www.w3.org/2000/svg" id="moon-svg">
-                    <path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z" />
-                  </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" id="sun-svg">
-                    <path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z" />
-                  </svg>
-                  </button>
-                  )
-                }
-          </li>
-        </ul>
-      </div>
-      </nav>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <Hr />
 </header>
 
 <style>
+  .line {
+    @apply stroke-skin-accent;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: all 500ms;
+  }
 
-.line {
-  @apply stroke-skin-accent;
-  stroke-width: 8;
-  stroke-linecap: round;
-  transition: all 500ms;
-}
+  .top {
+    transform-origin: 26px 40px;
+  }
 
-.top {transform-origin: 26px 40px;}
+  .middle {
+    stroke-dasharray: 60 60;
+  }
+  .bottom {
+    transform-origin: 26px 60px;
+  }
 
-.middle {stroke-dasharray: 60 60;}
-.bottom {transform-origin: 26px 60px;}
+  .menu-trigger.active .line {
+    stroke: #ff7c7c;
+  }
 
-.menu-trigger.active .line {stroke: #ff7c7c;}
+  .menu-trigger.active .top {
+    transform: rotate(45deg);
+  }
 
-.menu-trigger.active .top {transform: rotate(45deg);}
+  .menu-trigger.active .middle {
+    stroke-dasharray: 1 60;
+    stroke-dashoffset: -30;
+  }
 
-.menu-trigger.active .middle { stroke-dasharray: 1 60; stroke-dashoffset: -30;}
-
-.menu-trigger.active .bottom {
-  transform: rotate(-45deg);
-}
+  .menu-trigger.active .bottom {
+    transform: rotate(-45deg);
+  }
 
   #theme-btn {
     @apply p-3 sm:p-1;
@@ -125,66 +157,70 @@ const currentPagePath = trim(Astro.url.pathname, "/").split("/");
     @apply opacity-100;
   }
   #siteTitle {
-    letter-spacing:18px;
+    letter-spacing: 18px;
   }
-  
-
-
 </style>
 
 <script>
-  import { navigate } from 'astro:transitions/client';
+  import { navigate } from "astro:transitions/client";
 
-
-  document.addEventListener("astro:page-load", ()=>{
+  document.addEventListener("astro:page-load", () => {
     const menuBtn = document.querySelector(".menu-trigger");
     const menuItems = document.querySelector("#menu-items");
     // const menuExpanded = menuBtn?.getAttribute("aria-expanded") === "true";
     menuItems?.classList.remove("opened"); // Remove "opened" class if present
 
     function toggleMenu() {
-    if (menuItems?.classList.contains("opened")) {
-      menuItems.animate({ maxHeight: "0px", opacity: "0%" }, {
-        duration: 700, 
-        easing: "ease-in-out",
-        fill: "forwards", 
-      });
-      menuItems.classList.remove("opened");
-      menuBtn?.classList.remove("active");
-    } else {
-
-      menuItems?.animate({ maxHeight: "1000px", opacity: "100%" }, {
-        duration: 700,
-        easing: "ease-in-out",
-        fill: "forwards",
-      });
-      menuItems?.classList.add("opened");
-      menuBtn?.classList.add("active");
-
-      
-    }
-}
-
-    menuBtn?.addEventListener("click", toggleMenu); 
-    const trigger = document.getElementById("batman-trigger") as HTMLButtonElement
-    const items = ["thicken", "glowingBat", "gotham"].map(item => document.getElementById(item) as HTMLElement)
-    const isLong = (window.location.pathname === '/')  
-    const animationDuration = isLong? 3000: 500;
-    trigger.onclick = (e: MouseEvent) => {
-    items.forEach((item) => {
-      item.classList.add('showAnimation')
-      item.attributeStyleMap.set('animation-duration', `${animationDuration}ms`);
-    });
-    setTimeout(() => {
-      items.forEach((item) =>{ 
-        item.classList.remove('showAnimation')
-      });
-      if (window.location.pathname !== '/') {
-        navigate('/');
+      if (menuItems?.classList.contains("opened")) {
+        menuItems.animate(
+          { maxHeight: "0px", opacity: "0%" },
+          {
+            duration: 700,
+            easing: "ease-in-out",
+            fill: "forwards",
+          }
+        );
+        menuItems.classList.remove("opened");
+        menuBtn?.classList.remove("active");
+      } else {
+        menuItems?.animate(
+          { maxHeight: "1000px", opacity: "100%" },
+          {
+            duration: 700,
+            easing: "ease-in-out",
+            fill: "forwards",
+          }
+        );
+        menuItems?.classList.add("opened");
+        menuBtn?.classList.add("active");
       }
-    }, animationDuration); 
-  }
-});
+    }
+
+    menuBtn?.addEventListener("click", toggleMenu);
+    const trigger = document.getElementById(
+      "batman-trigger"
+    ) as HTMLButtonElement;
+    const items = ["thicken", "glowingBat", "gotham"].map(
+      item => document.getElementById(item) as HTMLElement
+    );
+    const isLong = window.location.pathname === "/";
+    const animationDuration = isLong ? 3000 : 500;
+    trigger.onclick = (e: MouseEvent) => {
+      items.forEach(item => {
+        item.classList.add("showAnimation");
+        item.attributeStyleMap.set(
+          "animation-duration",
+          `${animationDuration}ms`
+        );
+      });
+      setTimeout(() => {
+        items.forEach(item => {
+          item.classList.remove("showAnimation");
+        });
+        if (window.location.pathname !== "/") {
+          navigate("/");
+        }
+      }, animationDuration);
+    };
+  });
 </script>
-
-
