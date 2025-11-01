@@ -14,8 +14,17 @@ interface Props {
 
 const { project, class: className } = Astro.props;
 const { data, slug } = project;
-const { title, cover, stack, tags, dateTime, endDate, projectURL, githubURL } =
-  data;
+const {
+  title,
+  cover,
+  stack,
+  tags,
+  dateTime,
+  endDate,
+  projectURL,
+  githubURL,
+  description,
+} = data;
 
 const strTags = tags.map((tag: string) => slugifyStr(tag)).join("/");
 ---
@@ -31,7 +40,7 @@ const strTags = tags.map((tag: string) => slugifyStr(tag)).join("/");
   <div class="relative overflow-clip rounded-xl">
     <Image
       transition:name={slug + ":image"}
-      alt=""
+      alt={description}
       width={600}
       height={400}
       format="avif"
