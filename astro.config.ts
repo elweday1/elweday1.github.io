@@ -19,7 +19,7 @@ const browser = await playwright.launch({
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE.website,
+  site: "https://" + SITE.website,
   adapter: cloudflare(),
   integrations: [preload(), tailwind({
     applyBaseStyles: false
