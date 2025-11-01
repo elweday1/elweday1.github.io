@@ -7,8 +7,8 @@ import { techStackByType } from "@utils/getTechStack";
 import { Icon } from "astro-icon";
 import Layout from "@layouts/Layout.astro";
 import Socials from "@components/Socials.astro";
-
-const showsData = await getShowsData(import.meta.env.OMDB_API_KEY, MY_SHOWS);
+const { env } = Astro.locals.runtime;
+const showsData = await getShowsData(env.OMDB_API_KEY, MY_SHOWS);
 ---
 
 <Layout title="About" description="Mohammed Nasser | About me">

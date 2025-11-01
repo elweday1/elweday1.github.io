@@ -27,8 +27,6 @@ export type Show = {
   Response: string;
 };
 
-
-
 const omdbHandler = (omdbApiKey: string) => {
   return async (showName: string) => {
     const res = await fetch(
