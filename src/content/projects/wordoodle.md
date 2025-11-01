@@ -19,12 +19,12 @@ stack:
   - tailwind
   - trpc
 
-cover: "/src/assets/wordoodle2.jpg"
+cover: "../assets/wordoodle2.jpg"
   
 ---
 
 ## Introduction
-![Scribble](/src/assets/sc-original2.webp)
+![Scribble](../assets/sc-original2.webp)
 
 The Scribble Game is a fun and creative activity where players take turns drawing images based on given prompts or phrases. It's a fantastic way to unleash your imagination, challenge your artistic skills, and have a blast with friends or family.
 
@@ -68,7 +68,7 @@ the games are disposable, and theres no point of keeping track of all of these t
 > xState is a JavaScript library for creating finite state machines and statecharts. It simplifies managing application state and transitions, improving code clarity and predictability. xState features hierarchical states, transition guards, and actions for side effects. Visualization tools aid debugging and comprehension of statecharts.
 
 This was my introduction to xState, it sold me very much on the idea of `smart and dumb components` so I created the state chart that is visualized and running effictively with no possible bad states
-![xState](/src/assets/xState.png)
+![xState](../assets/xState.png)
 > here is a picture of the state machine that I've built
 
 ### Caveat 
@@ -229,6 +229,6 @@ observeDeep(store, ()=>{
 now all the state matches, and state easily managable and extendible.
 
 ## Gallery 
-![Image1](/src/assets/wordoodle1.jpg)
-![Image2](/src/assets/wordoodle3.jpg)
+![Image1](../assets/wordoodle1.jpg)
+![Image2](../assets/wordoodle3.jpg)
 

@@ -1,7 +1,7 @@
 ---
 title: Learning typescript
 slug: ts
-cover: "/src/assets/ts.png"
+cover: "../assets/ts.png"
 dateTime: 2024-1-10T08:00:00Z
 tags:
   - typescript

@@ -1,34 +1,50 @@
 ---
-
 import { slugifyStr } from "@utils/slugify";
 import Datetime from "./Datetime.astro";
 import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import { twMerge } from "tailwind-merge";
 
-
-
 export interface Props {
   post: CollectionEntry<"blog">;
   class?: string;
 }
 
-
-
-
-const { post,  class:className } = Astro.props;
+const { post, class: className } = Astro.props;
 const { slug, data } = post;
-const { title, description, dateTime, cover, tags } = (data);
-const strTags = tags.map((tag:string) => slugifyStr(tag)).join("/");
+const { title, description, dateTime, cover, tags } = data;
+const strTags = tags.map((tag: string) => slugifyStr(tag)).join("/");
 
 const href = `/blog/${slug}`;
-
 ---
-<li transition:name={slug+":item"} data-item-type="search-item" data-slug={slug} data-tags={strTags}  class={twMerge("flex flex-row p-3 bg-skin-fill rounded-lg  w-full h-full ", className)}>
-    <div class=" flex flex-col justify-between text-wrap w-full">
-      <Image transition:name={slug+":image"} alt="dffs" width={450} height={450}  format="avif" src={cover} class="rounded-2xl w-full p-2 aspect-video  object-cover"  />
-      <a transition:name={slug} href={href}   class="py-1 text-wrap text-xl origin-top-left font-medium text-skin-accent underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0   hover:underline" >{title}</a>
-      <p class="">{description}</p>
-      <Datetime class="scale-90 origin-bottom-left mt-auto  " datetime={dateTime} />
-    </div>
-  </li>
+
+<li
+  transition:name={slug + ":item"}
+  data-item-type="search-item"
+  data-slug={slug}
+  data-tags={strTags}
+  class={twMerge(
+    "flex flex-row p-3 bg-skin-fill rounded-lg  w-full h-full ",
+    className
+  )}
+>
+  <div class="flex w-full flex-col justify-between text-wrap">
+    <Image
+      transition:name={slug + ":image"}
+      alt={description}
+      width={450}
+      height={450}
+      format="avif"
+      src={cover}
+      class="aspect-video w-full rounded-2xl object-cover p-2"
+    />
+    <a
+      transition:name={slug}
+      href={href}
+      class="origin-top-left text-wrap py-1 text-xl font-medium text-skin-accent underline-offset-4 hover:underline focus-visible:no-underline focus-visible:underline-offset-0"
+      >{title}</a
+    >
+    <p class="">{description}</p>
+    <Datetime class="mt-auto origin-bottom-left scale-90" datetime={dateTime} />
+  </div>
+</li>

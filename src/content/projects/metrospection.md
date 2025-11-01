@@ -16,7 +16,7 @@ stack:
   - typescript
   - tailwind
 
-cover: "/src/assets/metro-cover.jpg"
+cover: "../assets/metro-cover.jpg"
 ---
 
 Metrospection is a Progressive Web Application (PWA) designed to assist non-Cairo residents in navigating the Egyptian metro system with ease. Leveraging modern web technologies, including React, responsive design, and the Geolocation API, Metrospection offers an intuitive interface for users to explore metro routes, find nearby stations, and plan their journeys efficiently.
@@ -30,6 +30,6 @@ Key Features
 
 
 ## Gallery 
-![Image1](/src/assets/metro0.jpg)
-![Image2](/src/assets/metro1.jpg)
-![Image3](/src/assets/metro2.jpg)
+![Image1](../assets/metro0.jpg)
+![Image2](../assets/metro1.jpg)
+![Image3](../assets/metro2.jpg)

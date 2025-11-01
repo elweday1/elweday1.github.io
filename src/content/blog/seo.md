@@ -1,7 +1,7 @@
 ---
 title: Astro for SEO
 slug: astro-seo
-cover: "/src/assets/seo.png"
+cover: "../assets/seo.png"
 dateTime: 2024-1-10T08:00:00Z
 tags:
   - Astro
