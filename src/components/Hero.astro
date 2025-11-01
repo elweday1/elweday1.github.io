@@ -2,62 +2,81 @@
 import { SOCIALS } from "@config";
 import Icon from "astro-icon";
 import Socials from "@components/Socials.astro";
+import { Image } from "astro:assets";
+import siemens from "@public/logos/siemens.svg";
+import deepmind from "@public/logos/deepmind.svg";
+
 const socialCount = SOCIALS.filter(social => social.active).length;
 ---
 
-<div
-  class="relative flex w-full flex-col place-content-center items-center justify-center gap-2"
+<section
+  class="relative flex w-full flex-col place-content-center items-center justify-center gap-4 py-12 md:gap-6"
+  aria-labelledby="hero-heading"
 >
-  <div
-    id="headshot"
-    class="relative flex aspect-square size-fit flex-col items-center justify-end"
-  >
-    <!--     <img
-      class="shadow-5xl aspect-square size-[12rem] rounded-full pt-2"
-      src="/me.png"
-      alt="Mohammed Nasser"
-    />
- -->
-    <div class="socials absolute top-12">
-      {
-        socialCount > 0 && (
-          <div class="socials">
-            <Socials />
-          </div>
-        )
-      }
-    </div>
-  </div>
-  <div>
-    <div class="box relative flex w-full flex-col items-center text-center">
-      <span class="mb-8 hidden text-center md:block">Hi, I'm</span>
+  <div class="relative flex w-full flex-col items-center px-4 text-center">
+    <span class="welcome text-skin-muted mb-2 text-lg md:text-xl">Hi, I'm</span>
 
-      <div class="title">
-        <span class="block"></span>
-        <h1 class="text-4xl text-skin-accent md:text-7xl">
-          Mohammed Nasser<span></span>
-        </h1>
-        <a class="absolute -right-9 top-3" href="/rss.xml">
-          <Icon name="ph:rss-bold" class="size-8 rounded-md text-skin-accent" />
-        </a>
-      </div>
-
-      <div class="role text-center">
-        <div class="block"></div>
-        <p
-          class="w-full text-center [letter-spacing:7px] md:text-4xl md:[letter-spacing:15px]"
-        >
-          Software Engineer
-        </p>
-      </div>
+    <div class="title relative mb-1 flex items-center justify-center">
+      <span class="block"></span>
+      <h1
+        id="hero-heading"
+        class="text-4xl font-bold text-skin-accent md:text-7xl"
+      >
+        Mohammed Nasser.<span></span>
+      </h1>
+      <a
+        class="absolute -right-9 top-1.5 text-skin-accent opacity-0 transition-opacity hover:opacity-70 md:top-3"
+        href="/rss.xml"
+        aria-label="RSS Feed"
+      >
+        <Icon name="ph:rss-bold" class="size-6 md:size-8" />
+      </a>
     </div>
 
-    <p id="desc" class="relative pt-6 text-center">
-      A Computer Engineering Student who is passionate about open source and web
-      development.
+    <div class="role relative h-auto w-full md:mb-2">
+      <span class.bind="block"></span>
+      <h2
+        class="text-skin-muted w-full text-center text-xl uppercase [letter-spacing:7px] md:text-2xl md:[letter-spacing:15px]"
+      >
+        Software Engineer
+      </h2>
+    </div>
+
+    <ul
+      id="experience"
+      class="mt-6 flex flex-col items-center gap-2 text-center"
+    >
+      <li
+        class="flex place-content-center items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 py-1 text-sm font-medium text-skin-base"
+      >
+        <Image width={20} height={20} src={deepmind} alt="" />
+        <span> SWE Intern @ Google DeepMind</span>
+      </li>
+      <li
+        class="flex place-content-center items-center justify-center gap-2 whitespace-nowrap rounded-full px-3 py-1 text-sm font-medium text-skin-base"
+      >
+        <Image width={40} height={40} src={siemens} alt="" />
+        <span> SWE Intern @ Siemens</span>
+      </li>
+    </ul>
+
+    <p
+      id="desc"
+      class="text-skin-muted relative max-w-lg pt-6 text-center text-base md:text-lg"
+    >
+      A Computer Engineering Student passionate about open source, web
+      development, and building tools that help people.
     </p>
   </div>
-</div>
+
+  {
+    socialCount > 0 && (
+      <div class="socials-container mt-8">
+        <Socials />
+      </div>
+    )
+  }
+</section>
 
 <style>
   :root {
@@ -90,7 +109,7 @@ const socialCount = SOCIALS.filter(social => social.active).length;
   }
   #headshot > img,
   .welcome,
-  .socials,
+  .socials-container,
   #desc {
     -webkit-animation: mainFadeIn 2s forwards;
     -o-animation: mainFadeIn 2s forwards;
@@ -110,10 +129,23 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     opacity: 0;
   }
 
+  #experience {
+    -webkit-animation: mainFadeIn 2s forwards;
+    -o-animation: mainFadeIn 2s forwards;
+    animation: mainFadeIn 2s forwards;
+    animation-delay: 2.8s;
+    opacity: 0;
+  }
+
+  .welcome {
+    animation-delay: 0.8s;
+  }
+
   #desc {
     animation-delay: 2.5s;
   }
-  .socials {
+  .socials-container {
+    /* Updated selector */
     animation-delay: 3s;
   }
 
@@ -160,7 +192,6 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     width: 100%;
     position: relative;
     display: flex;
-    height: 30px;
     margin-top: -10px;
   }
   .box .role .block {
@@ -172,7 +203,8 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     animation-delay: 1.5s;
     display: flex;
   }
-  .box .role p {
+
+  .box .role h2 {
     animation: secFadeIn 2s forwards;
     animation-delay: 1.8s;
     opacity: 0;
@@ -187,6 +219,26 @@ const socialCount = SOCIALS.filter(social => social.active).length;
     -o-animation: shake 3s forwards;
     animation: shake 5s forwards;
     transform-origin: bottom left;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #headshot > img,
+    .welcome,
+    .socials-container,
+    #desc,
+    #experience,
+    .box .title h1,
+    .box .role h2,
+    a {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+
+    .box .title .block,
+    .box .title h1 span,
+    .box .role .block {
+      display: none !important;
+    }
   }
 
   @keyframes mainBlock {
@@ -292,7 +344,8 @@ const socialCount = SOCIALS.filter(social => social.active).length;
       opacity: 0;
     }
     100% {
-      opacity: 0.5;
+      opacity: 1;
+      color: rgba(var(--color-muted), 1);
     }
   }
   @keyframes shake {
