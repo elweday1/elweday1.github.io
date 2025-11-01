@@ -121,6 +121,8 @@ export const MY_SHOWS = [
   "rick_and_morty",
   "how_i_met_your_mother",
   "the_office",
+  "peacemaker",
+  "dispatch"
 ];
 
 export const HOBBIES = [
