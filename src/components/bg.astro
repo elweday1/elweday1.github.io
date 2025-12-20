@@ -71,8 +71,6 @@ const cols = Array.from({ length: 80 });
 </div>
 
 <script>
-  import { animate } from "motion";
-
   const colors = [
     "#FFD400",
     "#FF9100",
@@ -117,48 +115,55 @@ const cols = Array.from({ length: 80 });
         if (iconSvg) {
           iconSvg.style.color = randomColor;
           iconSvg.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
-          iconSvg.style.opacity = "0";
           box.appendChild(iconSvg);
 
-          animate(
-            iconSvg,
-            {
-              opacity: [0, 1],
-              scale: [0.3, 1],
-              skewX: [48, 48],
-              skewY: [-14, -14],
-            },
-            { duration: 0.15, easing: "ease-out" }
-          );
-
-          animate(
-            box,
-            { backgroundColor: ["transparent", randomColor + "26"] },
-            { duration: 0.15 }
-          );
-
-          setTimeout(() => {
-            const outAnim = animate(
-              iconSvg,
+          // Native Web Animations API - Entrance
+          const iconIn = iconSvg.animate(
+            [
               {
-                opacity: [1, 0],
-                scale: [1, 0.2],
-                skewX: [48, 48],
-                skewY: [-14, -14],
+                opacity: 0,
+                transform: "scale(0.3) skewX(48deg) skewY(-14deg)",
               },
-              { duration: 0.4, easing: "ease-in" }
+              { opacity: 1, transform: "scale(1) skewX(48deg) skewY(-14deg)" },
+            ],
+            { duration: 150, fill: "forwards", easing: "ease-out" }
+          );
+
+          const boxIn = box.animate(
+            [
+              { backgroundColor: "transparent" },
+              { backgroundColor: randomColor + "26" },
+            ],
+            { duration: 150, fill: "forwards" }
+          );
+
+          // Wait 2s then exit
+          setTimeout(async () => {
+            const iconOut = iconSvg.animate(
+              [
+                {
+                  opacity: 1,
+                  transform: "scale(1) skewX(48deg) skewY(-14deg)",
+                },
+                {
+                  opacity: 0,
+                  transform: "scale(0.2) skewX(48deg) skewY(-14deg)",
+                },
+              ],
+              { duration: 400, fill: "forwards", easing: "ease-in" }
             );
 
-            animate(
-              box,
-              { backgroundColor: [randomColor + "26", "transparent"] },
-              { duration: 0.4 }
+            box.animate(
+              [
+                { backgroundColor: randomColor + "26" },
+                { backgroundColor: "transparent" },
+              ],
+              { duration: 400, fill: "forwards" }
             );
 
-            outAnim.finished.then(() => {
-              iconSvg.remove();
-              isAnimating = false;
-            });
+            await iconOut.finished;
+            iconSvg.remove();
+            isAnimating = false;
           }, 2000);
         }
       });
