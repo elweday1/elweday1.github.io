@@ -1,8 +1,8 @@
 ---
-// import tailwind merge 
+// import tailwind merge
 import { slugifyStr } from "@utils/slugify";
 import Icon from "astro-icon";
-import { twMerge } from "tailwind-merge"; 
+import { twMerge } from "tailwind-merge";
 export interface Props {
   name: string;
   size?: "sm" | "lg";
@@ -10,58 +10,64 @@ export interface Props {
   class?: string;
 }
 
-
-
-
-let {name, class: otherClasses, type} =  Astro.props;
-
-
+let { name, class: otherClasses, type } = Astro.props;
+const nameSlugged = slugifyStr(name);
 
 let href;
 switch (type) {
   case "tag":
-    href = `/search/content?tag=${name.toLowerCase()}`
-    break
+    href = `/search?tag=${nameSlugged}`;
+    break;
   case "category":
-    href = `#`
-    break
+    href = `#`;
+    break;
   default:
-    href = `/search/tags`
-    break
+    href = `/search/`;
+    break;
 }
 
-let tagProps = {}
+let tagProps = {};
 
 if (type !== "all") {
   tagProps = {
     "data-item-type": "item-tag",
-    "data-tag": slugifyStr(name)
-  }
+    "data-tag": nameSlugged,
+  };
 }
 
-const quickHash  = (s: string) => Array.from(s).reduce((a, b) => a + b.charCodeAt(0) * 17, 0) % 360;  
+const quickHash = (s: string) =>
+  Array.from(s).reduce((a, b) => a + b.charCodeAt(0) * 17, 0) % 360;
 
-
-const hsl = ( h: number,  a = 100, s = 40, l = 50 ) =>  `hsl(${h} ${s}%  ${l}% / ${a}%)`
-const hueVal = quickHash(name);
+const hsl = (h: number, a = 100, s = 40, l = 50) =>
+  `hsl(${h} ${s}%  ${l}% / ${a}%)`;
+const hueVal = quickHash(nameSlugged);
 const colorPartial = hsl(hueVal, 30);
 const color = hsl(hueVal, 100);
-
 ---
 
-
-
 <a
-  aria-label={name}
+  aria-label={nameSlugged}
   style={{ "--tag-color-partial": colorPartial, "--tag-color": color }}
-  class={twMerge(`   text-[var(--tag-color)] bg-[var(--tag-color-partial)] bg-opacity-90  rounded-xl  group  hover:-top-0.5 hover:text-skin-accent focus-visible:p-1 py-1 px-1 w-fit gap-1 flex justify-center ${type === "category" ? "pointer-events-none" : ""} `, otherClasses)}
+  class={twMerge(
+    `   text-[var(--tag-color)] bg-[var(--tag-color-partial)] bg-opacity-90  rounded-xl  group  hover:-top-0.5 hover:text-skin-accent focus-visible:p-1 py-1 px-1 w-fit gap-1 flex justify-center ${
+      type === "category" ? "pointer-events-none" : ""
+    } `,
+    otherClasses
+  )}
   href={href}
-  transition:name={"tag:"+slugifyStr(name)}
+  transition:name={"tag:" + nameSlugged}
   {...tagProps}
 >
-   {(type !== "all") && <Icon class="size-7 scale-95 fill-[var(--tag-color)] opacity-80 group-hover:fill-skin-accent data-[theme=dark]:outline-2" name="ph:hash-bold" />}
-    <span class="whitespace-nowrap text-sm element-to-style place-self-center scale-95 origin-left" >{name.toLowerCase()}</span>
-  </a>
-
-
-
+  {
+    type !== "all" && (
+      <Icon
+        class="size-7 scale-95 fill-[var(--tag-color)] opacity-80 group-hover:fill-skin-accent data-[theme=dark]:outline-2"
+        name="ph:hash-bold"
+      />
+    )
+  }
+  <span
+    class="element-to-style origin-left scale-95 place-self-center whitespace-nowrap text-sm"
+    >{name}</span
+  >
+</a>

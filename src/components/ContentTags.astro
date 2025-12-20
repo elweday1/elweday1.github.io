@@ -3,22 +3,21 @@ import Tag from "@components/Tag.astro";
 import { twMerge } from "tailwind-merge";
 
 export interface Props {
-    tags: string[]
-    class?: string
-    type?: "tag" | "category"
-    sort ?: boolean
-    limit ?: number
-
+  tags: string[];
+  class?: string;
+  type?: "tag" | "category";
+  sort?: boolean;
+  limit?: number;
 }
 
-
-
-
-const { tags, class: className, type, sort, limit=7, } = Astro.props
+const { tags, class: className, type, sort, limit = 7 } = Astro.props;
 ---
+
 <p class={twMerge("my-8 gap-2 flex flex-wrap", className)}>
-    {tags.map((tag, i) => (
-        <Tag class={ (i > limit ? "hidden" : "")} type={type} name={tag} />
-    ))}
-    <slot /> 
+  {
+    tags.map((tag, i) => (
+      <Tag class={i > limit ? "hidden" : ""} type={type} name={tag} />
+    ))
+  }
+  <slot />
 </p>

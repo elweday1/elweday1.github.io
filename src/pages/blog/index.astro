@@ -62,7 +62,7 @@ const tagSearchParams = isTags ? tags.map(tag => `tag=${tag}&`).join("") : "";
         <nav class="pagination-wrapper" aria-label="Pagination">
           <LinkButton
             disabled={prev === "disabled"}
-            href={`/search/content?${tagSearchParams}${
+            href={`/search?${tagSearchParams}${
               pageNum - 1 !== 1 ? "page=" + (pageNum - 1) : ""
             }`}
             className={`mr-4 select-none ${prev}`}
@@ -75,7 +75,7 @@ const tagSearchParams = isTags ? tags.map(tag => `tag=${tag}&`).join("") : "";
           </LinkButton>
           <LinkButton
             disabled={next === "disabled"}
-            href={`/search/content?${tagSearchParams}&page=${+pageNum + 1}`}
+            href={`/search?${tagSearchParams}&page=${+pageNum + 1}`}
             className={`ml-4 select-none ${next}`}
             ariaLabel="Next"
           >

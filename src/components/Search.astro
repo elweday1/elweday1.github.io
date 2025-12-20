@@ -1,5 +1,4 @@
 ---
-import { slugifyStr } from "@utils/slugify";
 import { getCollection } from "astro:content";
 import Datetime from "./Datetime.astro";
 import removeMd from "remove-markdown";
@@ -12,34 +11,42 @@ const projects = await getCollection("projects");
 const allEntries = [...posts, ...projects];
 const allTags = await getUniqueTags("blog", "projects");
 
+const urlTags = Astro.url.searchParams.getAll("tag");
+const urlQuery = Astro.url.searchParams.get("q") || "";
+
 const processedEntries = allEntries.map(entry => ({
   slug: entry.slug,
   collection: entry.collection,
   title: entry.data.title,
-  slugTitle: slugifyStr(entry.data.title),
   description: entry.data.description,
   tags: entry.data.tags || [],
   bodyPlainText: removeMd(entry.body),
   dateTime: entry.data.dateTime,
   endDate: entry.data.endDate,
 }));
+
+const searchDataMap = processedEntries.reduce((acc, entry) => {
+  acc[entry.slug] = entry;
+  return acc;
+}, {});
 ---
 
-<div class="search-container">
-  <label class="relative mb-6 block">
-    <span class="absolute inset-y-0 left-0 flex items-center pl-3 opacity-75">
+<div class="search-container mx-auto max-w-4xl">
+  <label class="relative mb-8 block">
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3 opacity-60">
       <Icon name="ion:search" class="size-5" />
     </span>
     <input
       id="search-input"
+      value={urlQuery}
       class="w-full rounded-lg border border-skin-fill border-opacity-40 bg-skin-card/30 py-3 pl-10 pr-4 focus:border-skin-accent focus:outline-none"
-      placeholder="Type to search projects and posts..."
+      placeholder="Fuzzy search projects and posts..."
       type="text"
       autocomplete="off"
     />
   </label>
 
-  <div class="mb-8">
+  <div class="mb-10">
     <h2 class="mb-4 text-xl font-bold">Filter by Tags</h2>
     <ul class="flex flex-wrap gap-2">
       {
@@ -55,12 +62,13 @@ const processedEntries = allEntries.map(entry => ({
               type="checkbox"
               hidden
               class="peer"
+              checked={urlTags.includes(tag)}
             />
             <Tag
               name={tag}
               size="lg"
               type="category"
-              class="w-full pr-3 peer-checked:bg-skin-card/10 peer-checked:text-skin-accent peer-checked:ring-2 peer-checked:ring-skin-accent peer-checked:[&>*:nth-child(1)]:[&>*:nth-child(1)]:fill-skin-accent"
+              class="w-full pr-3 peer-checked:bg-skin-card/10 peer-checked:text-skin-accent peer-checked:ring-2 peer-checked:ring-skin-accent"
             />
           </label>
         ))
@@ -69,28 +77,27 @@ const processedEntries = allEntries.map(entry => ({
   </div>
 
   <div id="results-wrapper">
-    <p id="number-of-results" class="mb-2 p-3 font-medium text-skin-base/70">
+    <p id="number-of-results" class="mb-4 px-4 font-medium text-skin-base/70">
     </p>
 
     <div
       id="empty-state"
-      class="flex hidden flex-col items-center justify-center py-12 text-center opacity-60"
+      class="flex hidden flex-col items-center justify-center py-20 text-center opacity-50"
     >
-      <Icon name="ion:search" class="mb-4 size-16" />
-      <p class="text-xl font-bold">No matches found</p>
-      <p class="text-sm">Try adjusting your search or filters</p>
+      <Icon name="tabler:search-off" class="mb-4 size-16" />
+      <p class="text-xl font-bold">No results found</p>
     </div>
 
-    <ul id="search-results" class="grid grid-cols-1 gap-4 p-4">
+    <ul id="search-results" class="grid grid-cols-1 gap-4 px-4">
       {
         processedEntries.map(entry => (
           <a
             href={`/${entry.collection}/${entry.slug}`}
             data-item
-            data-tags={JSON.stringify(entry.tags)}
-            class="flex hidden flex-col rounded-lg border border-transparent bg-skin-fill p-4 shadow-sm transition-colors hover:border-skin-accent"
+            data-slug={entry.slug}
+            class="flex hidden flex-col rounded-lg border border-transparent bg-skin-fill p-5 shadow-sm transition-all hover:border-skin-accent"
           >
-            <div class="mb-2 flex w-full flex-row justify-between">
+            <div class="mb-3 flex w-full flex-row justify-between">
               <Datetime
                 size="sm"
                 datetime={entry.dateTime}
@@ -107,17 +114,28 @@ const processedEntries = allEntries.map(entry => ({
                       : "ic:baseline-code"
                   }
                 />
-                <span class="text-xs">
+                <span class="text-xs font-medium uppercase">
                   {entry.collection === "blog" ? "Post" : "Project"}
                 </span>
               </div>
             </div>
-            <span class="text-lg font-bold text-skin-accent">
+
+            <span
+              class="mb-2 text-xl font-bold text-skin-accent"
+              data-field="title"
+            >
               {entry.title}
             </span>
-            <div class="mt-2 line-clamp-2 text-sm opacity-80">
+            <p class="mb-2 text-sm opacity-80" data-field="description">
               {entry.description}
-            </div>
+            </p>
+
+            <div
+              class="mb-4 hidden rounded border-l-2 border-skin-accent/50 bg-skin-card/20 p-2 text-xs italic"
+              data-field="snippet"
+            />
+
+            <div class="mt-auto flex flex-wrap gap-2" data-result-tags />
           </a>
         ))
       }
@@ -125,84 +143,143 @@ const processedEntries = allEntries.map(entry => ({
   </div>
 </div>
 
-<script define:vars={{ entriesData: JSON.stringify(processedEntries) }}>
-  const entries = JSON.parse(entriesData);
-  const input = document.getElementById("search-input");
-  const tagInputs = document.querySelectorAll('input[name="tag-filter"]');
-  const resultsList = document.querySelectorAll("[data-item]");
-  const status = document.getElementById("number-of-results");
-  const emptyState = document.getElementById("empty-state");
+<script define:vars={{ searchDataMap }}>
+  const setupSearch = () => {
+    const input = document.getElementById("search-input");
+    const tagInputs = document.querySelectorAll('input[name="tag-filter"]');
+    const resultsElements = document.querySelectorAll("[data-item]");
+    const status = document.getElementById("number-of-results");
+    const emptyState = document.getElementById("empty-state");
 
-  function updateSearch() {
-    const query = input.value.trim().toLowerCase();
-    const activeTags = Array.from(tagInputs)
-      .filter(i => i.checked)
-      .map(i => i.value);
+    if (!input) return;
 
-    // NEW CONDITION: Search is active if text is typed OR tags are clicked
-    const isSearchActive = query !== "" || activeTags.length > 0;
+    function getSnippet(text, query) {
+      const index = text.toLowerCase().indexOf(query.toLowerCase());
+      if (index === -1) return "";
 
-    if (!isSearchActive) {
-      resultsList.forEach(card => card.classList.add("hidden"));
-      status.innerText = "";
-      emptyState.classList.add("hidden");
-      tagInputs.forEach(ti => (ti.closest("label").style.opacity = "1"));
-      return;
+      const start = Math.max(0, index - 40);
+      const end = Math.min(text.length, index + query.length + 80);
+      let snippet = text.slice(start, end);
+
+      if (start > 0) snippet = "..." + snippet;
+      if (end < text.length) snippet = snippet + "...";
+
+      return highlightText(snippet, query);
     }
 
-    let visibleCount = 0;
-    const tagsInResults = new Set();
-
-    resultsList.forEach((card, index) => {
-      const entry = entries[index];
-      const entryTags = entry.tags;
-
-      // Text match logic (always true if query is empty)
-      const matchesText =
-        query === "" ||
-        entry.title.toLowerCase().includes(query) ||
-        entry.description.toLowerCase().includes(query) ||
-        entry.bodyPlainText.toLowerCase().includes(query);
-
-      // Tag match logic (always true if no tags selected)
-      const matchesTags =
-        activeTags.length === 0 || activeTags.some(t => entryTags.includes(t));
-
-      if (matchesText && matchesTags) {
-        card.classList.remove("hidden");
-        visibleCount++;
-        entryTags.forEach(t => tagsInResults.add(t));
-      } else {
-        card.classList.add("hidden");
-      }
-    });
-
-    // Toggle Empty State
-    if (visibleCount === 0) {
-      emptyState.classList.remove("hidden");
-      status.innerText = "No results found";
-    } else {
-      emptyState.classList.add("hidden");
-      const resultText =
-        query !== "" ? `for "${query}"` : "matching selected tags";
-      status.innerText = `Found ${visibleCount} ${
-        visibleCount === 1 ? "result" : "results"
-      } ${resultText}`;
+    function highlightText(text, query) {
+      if (!query) return text;
+      // Fuzzy match: Escape query for regex
+      const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(`(${escapedQuery})`, "gi");
+      return text.replace(
+        regex,
+        '<mark class="bg-skin-accent/30 text-skin-accent rounded-sm px-0.5">$1</mark>'
+      );
     }
 
-    // Dynamic Tag Highlighting based on text search
-    tagInputs.forEach(tagInput => {
-      const parentLabel = tagInput.closest("label");
-      if (query === "") {
-        parentLabel.style.opacity = "1";
-      } else {
-        parentLabel.style.opacity = tagsInResults.has(tagInput.value)
-          ? "1"
-          : "0.3";
-      }
-    });
-  }
+    function updateSearch(updateUrl = true) {
+      const query = input.value.trim();
+      const lowerQuery = query.toLowerCase();
+      const activeTags = Array.from(tagInputs)
+        .filter(i => i.checked)
+        .map(i => i.value);
+      const isSearchActive = query !== "" || activeTags.length > 0;
 
-  input.addEventListener("input", updateSearch);
-  tagInputs.forEach(t => t.addEventListener("change", updateSearch));
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        query ? url.searchParams.set("q", query) : url.searchParams.delete("q");
+        url.searchParams.delete("tag");
+        activeTags.forEach(tag => url.searchParams.append("tag", tag));
+        window.history.replaceState(null, "", url.toString());
+      }
+
+      if (!isSearchActive) {
+        resultsElements.forEach(el => el.classList.add("hidden"));
+        status.innerText = "";
+        emptyState.classList.add("hidden");
+        tagInputs.forEach(ti => (ti.closest("label").style.opacity = "1"));
+        return;
+      }
+
+      let visibleCount = 0;
+      const globalTagsInResults = new Set();
+
+      resultsElements.forEach(el => {
+        const slug = el.getAttribute("data-slug");
+        const data = searchDataMap[slug];
+
+        const bodyMatch =
+          query !== "" && data.bodyPlainText.toLowerCase().includes(lowerQuery);
+        const titleMatch =
+          query !== "" && data.title.toLowerCase().includes(lowerQuery);
+        const descMatch =
+          query !== "" && data.description.toLowerCase().includes(lowerQuery);
+        const tagMatch =
+          activeTags.length > 0 && activeTags.some(t => data.tags.includes(t));
+
+        if (bodyMatch || titleMatch || descMatch || tagMatch) {
+          el.classList.remove("hidden");
+          visibleCount++;
+          data.tags.forEach(t => globalTagsInResults.add(t));
+
+          // 1. Highlight title/desc
+          el.querySelector('[data-field="title"]').innerHTML = highlightText(
+            data.title,
+            query
+          );
+          el.querySelector('[data-field="description"]').innerHTML =
+            highlightText(data.description, query);
+
+          // 2. Handle Body Snippet (Only if text matched in body)
+          const snippetEl = el.querySelector('[data-field="snippet"]');
+          if (bodyMatch) {
+            snippetEl.innerHTML = getSnippet(data.bodyPlainText, query);
+            snippetEl.classList.remove("hidden");
+          } else {
+            snippetEl.classList.add("hidden");
+          }
+
+          // 3. Update tags on card
+          const tagContainer = el.querySelector("[data-result-tags]");
+          tagContainer.innerHTML = data.tags
+            .map(
+              t => `
+            <span class="text-[10px] px-2 py-0.5 rounded-full border border-skin-fill ${
+              activeTags.includes(t)
+                ? "bg-skin-accent/20 text-skin-accent border-skin-accent font-bold"
+                : "opacity-60"
+            }">
+              #${t}
+            </span>
+          `
+            )
+            .join("");
+        } else {
+          el.classList.add("hidden");
+        }
+      });
+
+      status.innerText =
+        visibleCount > 0 ? `Found ${visibleCount} results` : "No results found";
+      emptyState.classList.toggle("hidden", visibleCount > 0);
+
+      tagInputs.forEach(tagInput => {
+        const parentLabel = tagInput.closest("label");
+        parentLabel.style.opacity =
+          query === "" ||
+          globalTagsInResults.has(tagInput.value) ||
+          tagInput.checked
+            ? "1"
+            : "0.3";
+      });
+    }
+
+    input.addEventListener("input", () => updateSearch());
+    tagInputs.forEach(t => t.addEventListener("change", () => updateSearch()));
+    updateSearch(false);
+  };
+
+  document.addEventListener("astro:page-load", setupSearch);
+  if (document.readyState === "complete") setupSearch();
 </script>
