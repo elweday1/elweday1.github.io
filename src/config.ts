@@ -11,7 +11,7 @@ export const SITE = {
   desc: "A personal portfolio and blog.",
   title: "Nasser's Blog",
   ogImage: "assets/images/fallback.png",
-  lightAndDarkMode: true,
+  lightAndDarkMode: false,
   itemsPerPage: 20,
 } as const;
 

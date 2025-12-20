@@ -45,56 +45,36 @@ const currentPagePath = trim(Astro.url.pathname, "/").split("/");
     </div>
     <div
       id="menu-items"
-      class="relative mb-2 flex h-full max-h-0 w-full flex-row content-center items-center gap-4 place-self-center overflow-hidden px-3 ease-in-out sm:flex sm:max-h-[1000px] sm:p-2 sm:pl-56"
+      class="relative flex h-full max-h-0 w-full flex-row items-end justify-end overflow-hidden ease-in-out sm:flex sm:max-h-none sm:w-auto sm:ml-auto sm:overflow-visible"
     >
       <ul
         id="menu"
-        class="flex w-full flex-col place-content-center place-items-center p-2 sm:contents"
+        class="flex w-full flex-col items-end gap-1 p-2 sm:flex-row sm:items-center sm:gap-2 sm:p-0"
       >
         {
           PATHS.map(({ name, path, icon }) => {
             const isActive = currentPagePath.includes(trim(path, "/"));
             return (
-              <li class="relative w-full ">
+              <li class="relative w-full sm:w-28">
                 <a
                   href={path}
                   class={
-                    "flex w-full flex-row items-center gap-2 px-4 py-3 text-center font-medium hover:text-skin-accent sm:my-0 sm:px-2 sm:py-1" +
-                    (isActive ? " w-full font-bold text-skin-accent" : "")
+                    "relative z-10 flex h-9 w-full items-center justify-center rounded-xl text-center transition-all duration-200 hover:text-skin-accent" +
+                    (isActive ? " font-bold text-skin-accent" : " font-medium")
                   }
                 >
-                  <span class="w-full  place-self-center">{name}</span>
+                  <span class="relative z-20">{name}</span>
+                  {isActive ? (
+                    <span
+                      transition:name="active-nav"
+                      class="absolute inset-0 z-10 rounded-xl bg-skin-accent/10 shadow-[0_0_20px_rgba(var(--color-accent),0.2)] backdrop-blur-md"
+                    />
+                  ) : null}
                 </a>
-                {isActive ? (
-                  <span
-                    transition:name="active-nav"
-                    class="absolute left-0 top-0 hidden h-full w-full rounded-xl  border-2 border-skin-accent bg-black/10 sm:block"
-                  />
-                ) : null}
               </li>
             );
           })
         }
-        <li class="relative w-full content-center items-center">
-          {
-            SITE.lightAndDarkMode && (
-              <button
-                id="theme-btn"
-                class="  flex w-full place-content-center content-center px-4 py-3 text-center font-medium hover:text-skin-accent  sm:my-0 sm:px-2 sm:py-1  "
-                title="Toggles light & dark"
-                aria-label="auto"
-                aria-live="polite"
-              >
-                <svg class="" xmlns="http://www.w3.org/2000/svg" id="moon-svg">
-                  <path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z" />
-                </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" id="sun-svg">
-                  <path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z" />
-                </svg>
-              </button>
-            )
-          }
-        </li>
       </ul>
     </div>
   </nav>
