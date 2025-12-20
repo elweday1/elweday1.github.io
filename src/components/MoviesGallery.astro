@@ -1,6 +1,7 @@
 ---
 // @ts-ignore
 import { type Show } from "@/utils/shows";
+import Image from "astro/components/Image.astro";
 interface Props  {
   showsData: Show[]
 } 
@@ -18,10 +19,10 @@ const { showsData } = Astro.props
         return (   
           <sl-carousel-item tabindex="0" >
             <div class="group relative h-fit w-full rounded-xl">
-              <img
+              <Image
               src={Poster}
               class="rounded-xl aspect-[9/16] object-cover"
-              alt=""
+              alt={Title}
               />
               
         <div class="absolute flex left-0 top-0 h-full w-full opacity-0 group-hover:opacity-100  rounded-xl bg-gradient-to-b from-[rgba(0,0,0,0)] from-70% to-skin-accent  duration-500 " >
