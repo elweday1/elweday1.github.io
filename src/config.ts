@@ -111,7 +111,14 @@ export const HOBBIES = [
   { name: "3D Graphics", icon: "ph:cube-bold" },
 ] as const;
 
-export const Technologies = {
+export const Technologies: Record<string, {
+  name: string;
+  icon: string;
+  url: string;
+  description: string;
+  type: string;
+  display: boolean;
+}> = {
   javascript: {
     name: "Javascript",
     icon: "simple-icons:javascript",
@@ -266,6 +273,7 @@ export const Technologies = {
   },
   svelte: {
     name: "Svelte",
+    display: true,
     icon: "cib:svelte",
     url: "https://svelte.dev/",
     description: "A JavaScript framework for building user interfaces.",
@@ -387,5 +395,4 @@ export const Technologies = {
     type: "Backend & Systems",
     display: true,
   },
-
-} as const;
+};

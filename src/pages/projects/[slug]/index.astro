@@ -60,7 +60,8 @@ const {
     </h2>
     <ul class="flex flex-col gap-7">
       {
-        (stack as (keyof typeof Technologies)[]).map(t => {
+        stack.map(t => {
+          if (!Technologies[t]) return;
           const { name, icon, url, description } = Technologies[t];
           return (
             <li>
