@@ -8,33 +8,32 @@ interface Props {
 const { showsData } = Astro.props;
 ---
 
-<div class="slider">
-  {showsData.map(({ imdbID }) => <a href={`#slide-${imdbID}`} />)}
+<div class="slider-container">
+  <nav class="slider-nav">
+    {
+      showsData.map(({ imdbID }) => (
+        <a href={`#slide-${imdbID}`} class="nav-dot" />
+      ))
+    }
+  </nav>
+
   <div class="slides">
     {
       showsData.map(({ imdbID, Poster, Title }) => (
-        <div
-          id={`slide-${imdbID}`}
-          class="group relative h-fit w-full rounded-xl"
-        >
+        <div id={`slide-${imdbID}`} class="slide-item group">
           <Image
             src={Poster}
-            width={300}
-            height={450}
-            class="aspect-[9/16] rounded-xl object-cover"
-            alt=""
+            width={150}
+            height={225}
+            class="slide-image"
+            alt={Title}
           />
-
-          <div class="absolute left-0 top-0 flex h-full w-full rounded-xl bg-gradient-to-b from-[rgba(0,0,0,0)] from-70% to-skin-accent opacity-0 duration-500 group-hover:opacity-100">
-            <a
-              class="z-50 place-self-end"
-              href={`https://www.imdb.com/title/${imdbID}`}
-            >
-              <span class="text-balance p-3 text-lg font-bold text-white duration-300 group-hover:flex">
-                {Title}
-              </span>
-            </a>
-          </div>
+          <a
+            href={`https://www.imdb.com/title/${imdbID}`}
+            class="slide-overlay"
+          >
+            <span class="slide-title">{Title}</span>
+          </a>
         </div>
       ))
     }
@@ -42,104 +41,94 @@ const { showsData } = Astro.props;
 </div>
 
 <style>
-  .slider {
+  .slider-container {
     width: 100%;
-    height: 100%;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
   }
 
+  /* Navigation Dots */
+  .slider-nav {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    background: #ccc;
+    border-radius: 50%;
+    transition:
+      background 0.3s,
+      transform 0.2s;
+  }
+
+  .nav-dot:hover,
+  .nav-dot:focus {
+    background: #000;
+    transform: scale(1.2);
+  }
+
+  /* Slides Wrapper */
   .slides {
     display: flex;
-
+    width: 100%;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
+    gap: 1.5rem;
+    padding-bottom: 10px;
 
-    /*
-  scroll-snap-points-x: repeat(300px);
-  scroll-snap-type: mandatory;
-  */
+    /* Hide Scrollbar */
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
   }
+
   .slides::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    display: none; /* Chrome/Safari */
   }
-  .slides::-webkit-scrollbar-thumb {
-    background: black;
-    border-radius: 10px;
-  }
-  .slides::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .slides > div {
-    scroll-snap-align: start;
-    flex-shrink: 0;
-    width: 200px;
-    aspect-ratio: 9/16;
-    margin-right: 50px;
-    border-radius: 10px;
-    background: #eee;
-    transform-origin: center center;
-    transform: scale(1);
-    transition: transform 0.5s;
-    position: relative;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 100px;
+  /* Individual Slide */
+  .slide-item {
+    flex: 0 0 auto;
+    width: 150px; /* Reduced size */
+    aspect-ratio: 2/3;
+    position: relative;
+    scroll-snap-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f0f0f0;
   }
-  .slides > div:target {
-    /*   transform: scale(0.8); */
-  }
-  .author-info {
-    background: rgba(0, 0, 0, 0.75);
-    color: white;
-    padding: 0.75rem;
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    margin: 0;
-  }
-  .author-info a {
-    color: white;
-  }
-  img {
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
+
+  .slide-image {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
-  .slider > a {
-    display: inline-flex;
-    width: 1.5rem;
-    height: 1.5rem;
-    background: white;
+  /* Overlay Logic */
+  .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    display: flex;
+    align-items: flex-end;
+    padding: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     text-decoration: none;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    margin: 0 0 0.5rem 0;
-    position: relative;
-  }
-  .slider > a:active {
-    top: 1px;
-  }
-  .slider > a:focus {
-    background: #000;
   }
 
-  /* Don't need button navigation */
-  @supports (scroll-snap-type) {
-    .slider > a {
-      display: none;
-    }
+  .slide-item:hover .slide-overlay {
+    opacity: 1;
+  }
+
+  .slide-title {
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
   }
 </style>
