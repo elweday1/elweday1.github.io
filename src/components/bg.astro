@@ -1,13 +1,10 @@
 ---
 import { Technologies } from "@config";
-import Icon from "astro-icon";
+import { Icon } from "astro-icon";
 
 const activeIcons = Object.values(Technologies)
   .filter(t => t.display)
   .map(t => t.icon);
-
-const rows = Array.from({ length: 140 });
-const cols = Array.from({ length: 80 });
 ---
 
 <div
@@ -20,156 +17,135 @@ const cols = Array.from({ length: 80 });
   >
   </div>
 
-  <div id="icon-library" class="hidden">
-    {
-      activeIcons.map(iconName => (
-        <div data-icon-name={iconName}>
-          <Icon
-            name={iconName}
-            class="pointer-events-none relative z-20 block text-[2.8rem]"
-          />
-        </div>
-      ))
-    }
+  <div
+    id="interactive-grid"
+    class="pointer-events-auto absolute inset-0 z-0"
+    style="
+      width: 200vw; height: 200vh;
+      transform: translate(-25%, -25%) skewX(-48deg) skewY(14deg) scale(1.6);
+      background-size: 96px 48px;
+      background-image: 
+        linear-gradient(to right, rgba(51, 65, 85, 0.15) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(51, 65, 85, 0.15) 1px, transparent 1px);
+    "
+  >
+    <div class="absolute inset-0 opacity-15"></div>
   </div>
 
-  <div
-    id="boxes-container"
-    class="pointer-events-none absolute inset-0 z-0 flex h-[150vh] w-[150vw] bg-transparent"
-    style="transform: translate(-25%, -25%) skewX(-48deg) skewY(14deg) scale(1.6); transform-origin: center;"
-  >
+  <div id="icon-library" class="hidden">
     {
-      rows.map((_, i) => (
-        <div class="row relative h-12 w-24 border-l border-slate-700/10">
-          {cols.map((_, j) => (
-            <div
-              data-box
-              class="box pointer-events-auto relative flex h-12 w-24 items-center justify-center border-r border-t border-slate-700/10"
-            >
-              {j % 4 === 0 && i % 4 === 0 && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1"
-                  stroke="currentColor"
-                  class="pointer-events-none absolute -left-[22px] -top-[14px] h-6 w-10 text-slate-700/15"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 6v12m6-6H6"
-                  />
-                </svg>
-              )}
-            </div>
-          ))}
+      activeIcons.map(name => (
+        <div data-template>
+          <Icon name={name} class="text-[2.8rem]" />
         </div>
       ))
     }
   </div>
 </div>
 
+<style is:global>
+  .spawn-box {
+    position: absolute;
+    width: 96px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+
+  .spawn-svg {
+    transform: skewY(-14deg) skewX(48deg);
+    animation: icon-life 1.5s forwards cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @keyframes icon-life {
+    0% {
+      opacity: 0;
+      transform: skewY(-14deg) skewX(48deg) scale(0);
+    }
+    15% {
+      opacity: 1;
+      transform: skewY(-14deg) skewX(48deg) scale(1);
+    }
+    85% {
+      opacity: 1;
+      transform: skewY(-14deg) skewX(48deg) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: skewY(-14deg) skewX(48deg) scale(0);
+    }
+  }
+</style>
+
 <script>
-  const colors = [
-    "#FFD400",
-    "#FF9100",
-    "#FF4646",
-    "#F06292",
-    "#BA68C8",
-    "#9575CD",
-    "#7986CB",
-    "#64B5F6",
-    "#4FC3F7",
-    "#4DD0E1",
-    "#4DB6AC",
-    "#81C784",
-    "#AED581",
-    "#DCE775",
-    "#FF8A65",
-  ];
+  const COLORS = ["#FFD400", "#FF4646", "#BA68C8", "#64B5F6", "#81C784"];
+  const W = 96;
+  const H = 48;
 
-  const initBackground = () => {
+  // Keep state outside init to survive minor re-renders
+  let busyCells = new Set();
+
+  const handleMouseMove = (e: MouseEvent) => {
+    const grid = e.currentTarget as HTMLElement;
+    const cellX = Math.floor(e.offsetX / W) * W;
+    const cellY = Math.floor(e.offsetY / H) * H;
+    const id = `${cellX}-${cellY}`;
+
+    if (busyCells.has(id)) return;
+    busyCells.add(id);
+
     const library = document.getElementById("icon-library");
-    const iconTemplates = library ? Array.from(library.children) : [];
-    const boxes = document.querySelectorAll("[data-box]");
+    const templates = library?.querySelectorAll("[data-template]");
+    if (!templates || templates.length === 0) return;
 
-    boxes.forEach(box => {
-      if (box.hasAttribute("data-bg-initialized")) return;
-      box.setAttribute("data-bg-initialized", "true");
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const template = templates[Math.floor(Math.random() * templates.length)];
 
-      let isAnimating = false;
+    const wrapper = document.createElement("div");
+    wrapper.className = "spawn-box";
+    wrapper.style.left = `${cellX}px`;
+    wrapper.style.top = `${cellY}px`;
+    wrapper.style.backgroundColor = color + "15";
 
-      box.addEventListener("mouseenter", () => {
-        if (isAnimating || !iconTemplates.length) return;
+    const svg = (template.querySelector("svg") as SVGElement).cloneNode(
+      true
+    ) as SVGElement;
+    svg.classList.add("spawn-svg");
+    svg.style.color = color;
+    svg.style.filter = `drop-shadow(0 0 15px ${color})`;
 
-        isAnimating = true;
-        const randomTemplate =
-          iconTemplates[Math.floor(Math.random() * iconTemplates.length)];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    wrapper.appendChild(svg);
+    grid.appendChild(wrapper);
 
-        // Clone the pre-rendered SVG from the library
-        const iconWrapper = randomTemplate.cloneNode(true) as HTMLElement;
-        const iconSvg = iconWrapper.querySelector("svg");
+    setTimeout(() => {
+      wrapper.remove();
+      busyCells.delete(id);
+    }, 1500);
+  };
 
-        if (iconSvg) {
-          iconSvg.style.color = randomColor;
-          iconSvg.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
-          box.appendChild(iconSvg);
+  const init = () => {
+    const grid = document.getElementById("interactive-grid") as HTMLElement;
+    if (!grid || grid.dataset.hasListener) return;
 
-          // Native Web Animations API - Entrance
-          const iconIn = iconSvg.animate(
-            [
-              {
-                opacity: 0,
-                transform: "scale(0.3) skewX(48deg) skewY(-14deg)",
-              },
-              { opacity: 1, transform: "scale(1) skewX(48deg) skewY(-14deg)" },
-            ],
-            { duration: 150, fill: "forwards", easing: "ease-out" }
-          );
+    // Reset state on new page load
+    busyCells.clear();
 
-          const boxIn = box.animate(
-            [
-              { backgroundColor: "transparent" },
-              { backgroundColor: randomColor + "26" },
-            ],
-            { duration: 150, fill: "forwards" }
-          );
-
-          // Wait 2s then exit
-          setTimeout(async () => {
-            const iconOut = iconSvg.animate(
-              [
-                {
-                  opacity: 1,
-                  transform: "scale(1) skewX(48deg) skewY(-14deg)",
-                },
-                {
-                  opacity: 0,
-                  transform: "scale(0.2) skewX(48deg) skewY(-14deg)",
-                },
-              ],
-              { duration: 400, fill: "forwards", easing: "ease-in" }
-            );
-
-            box.animate(
-              [
-                { backgroundColor: randomColor + "26" },
-                { backgroundColor: "transparent" },
-              ],
-              { duration: 400, fill: "forwards" }
-            );
-
-            await iconOut.finished;
-            iconSvg.remove();
-            isAnimating = false;
-          }, 2000);
-        }
-      });
+    // Use rAF to wait for the browser to be "ready" after first paint
+    requestAnimationFrame(() => {
+      grid.addEventListener("mousemove", handleMouseMove, { passive: true });
+      grid.dataset.hasListener = "true";
     });
   };
 
-  initBackground();
-  document.addEventListener("astro:page-load", initBackground);
+  // Start logic
+  init();
+  document.addEventListener("astro:page-load", init);
+
+  // Clean up set on before-swap to prevent memory leaks
+  document.addEventListener("astro:before-swap", () => {
+    busyCells.clear();
+  });
 </script>
