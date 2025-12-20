@@ -13,9 +13,9 @@ export const SITE = {
 
 
 export const HIGHLIGHTS = [
-  { label: "Engineering", value: "Google DeepMind Intern", trend: "Gemini Collaborator" },
-  { label: "Focus", value: "Agentic Workflows", trend: "Intelligent Systems" },
-  { label: "Developing", value: "Advanced Orchestration", trend: "Cross-Org Retrieval" },
+  { label: "Engineering", value: "prev. Google DeepMind Intern", trend: "Gemini Collaborator" },
+  { label: "Focus", value: "Full Stack", trend: "Web Development" },
+  { label: "Developing", value: "Agentic Workflows", trend: "Intelligent Systems" },
 ];
 export const MESSAGE_OPTIONS = [
   {
