@@ -22,7 +22,7 @@ const anchorName = `--${id}`;
     class="block transition-all hover:scale-[1.3]"
     style={`anchor-name: ${anchorName};`}
   >
-    <Icon class="text-[33px]" icon={icon} />
+    <Icon class="text-[33px]" name={icon} />
   </a>
 
   <div
@@ -35,7 +35,7 @@ const anchorName = `--${id}`;
       class="rounded-xl bg-white p-2 shadow-xl ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10"
     >
       <div class="flex items-center gap-1">
-        <Icon class="text-[20px]" icon={icon} />
+        <Icon class="text-[20px]" name={icon} />
         <h4 class="text-[15px] font-medium">{name}</h4>
       </div>
       {description && <p class="mt-0.5 text-xs opacity-70">{description}</p>}

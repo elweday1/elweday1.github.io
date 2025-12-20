@@ -268,7 +268,7 @@ export const Technologies: Record<string, {
     icon: "cib:svelte",
     url: "https://svelte.dev/",
     description: "A JavaScript framework for building user interfaces.",
-    type: "Web Development",
+    type: "Frontend & Web",
 },
   gcp: {
     name: "GCP",
@@ -308,7 +308,7 @@ export const Technologies: Record<string, {
     url: "https://www.linux.org/",
     description:
       "A family of open-source Unix-like operating systems based on the Linux kernel.",
-    type: "Technology",
+    type: "Tools & Platforms",
     display: true,
   },
   
@@ -318,7 +318,7 @@ export const Technologies: Record<string, {
     url: "https://git-scm.com/",
     description:
       "A distributed version control system for tracking changes in source code.",
-    type: "Technology",
+    type: "Tools & Platforms",
     display: true,
   },
   tailwind: {
@@ -342,7 +342,7 @@ export const Technologies: Record<string, {
     icon: "file-icons:latex",
     url: "https://www.latex-project.org/",
     description: "A LaTeX markup language and typesetting system.",
-    type: "Technology",
+    type: "Tools & Platforms",
     display: false,
   },
   prisma: {

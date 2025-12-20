@@ -1,7 +1,6 @@
 ---
 import { type Show } from "@utils/shows";
-import { Image } from "astro-preload/components";
-
+import Image from "astro/components/Image.astro";
 interface Props {
   showsData: Show[];
 }
@@ -19,7 +18,9 @@ const { showsData } = Astro.props;
           class="group relative h-fit w-full rounded-xl"
         >
           <Image
-            url={Poster}
+            src={Poster}
+            width={300}
+            height={450}
             class="aspect-[9/16] rounded-xl object-cover"
             alt=""
           />
