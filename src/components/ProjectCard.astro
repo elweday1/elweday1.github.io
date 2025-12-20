@@ -34,98 +34,99 @@ const strTags = tags.map((tag: string) => slugifyStr(tag)).join("/");
   data-slug={slug}
   data-tags={strTags}
   data-title={slug}
-  class={twMerge("text-white group aspect-video col-span-2 ", className)}
+  class={twMerge("group relative overflow-hidden rounded-xl bg-skin-card transition-all duration-300 hover:shadow-lg hover:shadow-skin-accent/20", className)}
   transition:name={slug + ":cover"}
 >
-  <div class="relative overflow-clip rounded-xl">
-    <Image
-      transition:name={slug + ":image"}
-      alt={description}
-      width={600}
-      height={400}
-      format="avif"
-      src={cover}
-      class="aspect-video"
-    />
-    <div
-      class="absolute bottom-0 left-0 h-full w-full bg-gradient-to-b from-transparent from-50% to-skin-accent opacity-100 duration-1000 group-hover:opacity-0"
-    >
+  <a
+    href={`/projects/${slug}`}
+    class="block"
+    aria-label={`View ${title}`}
+  >
+    <div class="relative aspect-video overflow-hidden">
+      <Image
+        transition:name={slug + ":image"}
+        alt={description}
+        width={600}
+        height={400}
+        format="avif"
+        src={cover}
+        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
     </div>
-    <span
-      class="absolute bottom-0 left-0 flex h-full w-full place-items-end justify-between p-3 text-xl font-bold transition-opacity duration-300 group-hover:opacity-0"
-    >
-      <div class="flex h-full w-full flex-col justify-end gap-2">
-        <div class="origin-bottom-left">
-          <Datetime
-            datetime={dateTime}
-            endDate={endDate}
-            size="sm"
-            class="my-2 inline-block origin-bottom-left translate-y-2 scale-75 transform text-xs font-extralight"
-          />
-          <h2 class="text-lg font-bold sm:text-2xl" transition:name={slug}>
-            {title}
-          </h2>
-        </div>
-        <div
-          class="flex w-full place-content-center place-items-center justify-between"
+    
+    <div class="absolute bottom-0 left-0 right-0 p-4">
+      <div class="rounded-lg bg-black/20 backdrop-blur-md border border-white/10 p-3">
+        <Datetime
+          datetime={dateTime}
+          endDate={endDate}
+          size="sm"
+          class="mb-1 text-xs text-white/90"
+        />
+        <h2 
+          class="mb-2 text-lg font-bold text-white sm:text-xl" 
+          transition:name={slug}
         >
-          <div class="flex justify-stretch gap-2">
-            {
-              (stack as (keyof typeof Technologies)[]).map(technology => {
-                const { name, icon } = Technologies[technology];
-                return (
+          {title}
+        </h2>
+        <p class="mb-3 text-sm text-white/90" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+          {description}
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          {
+            (stack as (keyof typeof Technologies)[]).slice(0, 4).map(technology => {
+              const { name, icon } = Technologies[technology];
+              return (
+                <div
+                  class="flex items-center gap-1 rounded-md bg-white/20 px-2 py-1 backdrop-blur-sm"
+                  title={name}
+                >
                   <Icon
                     transition:name={slug + ":stack:" + name}
-                    class={"sm:size-8"}
+                    class="size-4 text-white"
                     name={icon}
                   />
-                );
-              })
-            }
-          </div>
+                  <span class="text-xs text-white">{name}</span>
+                </div>
+              );
+            })
+          }
+          {stack.length > 4 && (
+            <div class="flex items-center rounded-md bg-white/20 px-2 py-1 backdrop-blur-sm">
+              <span class="text-xs text-white">+{stack.length - 4}</span>
+            </div>
+          )}
         </div>
       </div>
-    </span>
-    <div
-      class="absolute left-0 top-0 flex h-full w-full flex-col opacity-0 transition-all duration-500 *:pointer-events-none *:flex *:cursor-pointer *:items-center *:justify-center group-hover:opacity-80 *:group-hover:pointer-events-auto"
-    >
-      {
-        githubURL && (
-          <a
-            href={githubURL}
-            aria-label="Github"
-            class={`h-full w-full cursor-pointer   bg-[#191f2d]  opacity-0  group-hover:opacity-100`}
-          >
-            <Icon class="size-14  " name="teenyicons:github-solid" />
-          </a>
-        )
-      }
-
-      <a
-        href={`/projects/${slug}`}
-        aria-label="Github"
-        class={`h-full bg-[#2c323f]  w-full cursor-pointer  opacity-0 group-hover:opacity-100`}
-      >
-        <Icon class="size-14" name="uil:eye" />
-      </a>
-
-      {
-        projectURL && (
-          <a
-            href={projectURL}
-            aria-label="Github"
-            class={`h-full w-full cursor-pointer bg-[#404652]  opacity-0 group-hover:opacity-100 `}
-          >
-            <Icon class="size-14  " name="mdi:web " />
-          </a>
-        )
-      }
     </div>
+  </a>
+
+  <!-- Action buttons overlay -->
+  <div class="absolute right-4 top-4 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+    {githubURL && (
+      <a
+        href={githubURL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="View on GitHub"
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-black/80 backdrop-blur-sm text-white transition-all hover:bg-black hover:scale-110"
+        onclick={(e) => e.stopPropagation()}
+      >
+        <Icon class="size-5" name="teenyicons:github-solid" />
+      </a>
+    )}
+    {projectURL && (
+      <a
+        href={projectURL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit project"
+        class="flex h-10 w-10 items-center justify-center rounded-lg bg-black/80 backdrop-blur-sm text-white transition-all hover:bg-black hover:scale-110"
+        onclick={(e) => e.stopPropagation()}
+      >
+        <Icon class="size-5" name="mdi:web" />
+      </a>
+    )}
   </div>
 </li>
-
-<style>
-  .text-smol {
-    font-size: 0.1rem;
-  }
-</style>

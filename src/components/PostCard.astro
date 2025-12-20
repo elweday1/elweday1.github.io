@@ -4,6 +4,7 @@ import Datetime from "./Datetime.astro";
 import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import { twMerge } from "tailwind-merge";
+import { Icon } from "astro-icon";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -23,28 +24,77 @@ const href = `/blog/${slug}`;
   data-item-type="search-item"
   data-slug={slug}
   data-tags={strTags}
-  class={twMerge(
-    "flex flex-row p-3 bg-skin-fill rounded-lg  w-full h-full ",
-    className
-  )}
+  class={twMerge("group relative overflow-hidden rounded-xl bg-skin-card transition-all duration-300 hover:shadow-lg hover:shadow-skin-accent/20", className)}
 >
-  <div class="flex w-full flex-col justify-between text-wrap">
-    <Image
-      transition:name={slug + ":image"}
-      alt={description}
-      width={450}
-      height={450}
-      format="avif"
-      src={cover}
-      class="aspect-video w-full rounded-2xl object-cover p-2"
-    />
+  <a
+    href={href}
+    class="block"
+    aria-label={`Read ${title}`}
+  >
+    <div class="relative aspect-video overflow-hidden">
+      <Image
+        transition:name={slug + ":image"}
+        alt={description}
+        width={450}
+        height={300}
+        format="avif"
+        src={cover}
+        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
+    </div>
+    
+    <div class="absolute bottom-0 left-0 right-0 p-4">
+      <div class="rounded-lg bg-black/20 backdrop-blur-md border border-white/10 p-3">
+        <Datetime
+          datetime={dateTime}
+          size="sm"
+          class="mb-1 text-xs text-white/90"
+        />
+        <h2 
+          class="mb-2 text-lg font-bold text-white sm:text-xl" 
+          transition:name={slug}
+        >
+          {title}
+        </h2>
+        <p class="mb-3 text-sm text-white/90" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+          {description}
+        </p>
+        
+        {tags.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {tags.slice(0, 4).map((tag: string) => (
+              <div
+                class="flex items-center gap-1 rounded-md bg-white/20 px-2 py-1 backdrop-blur-sm"
+                title={tag}
+              >
+                <Icon
+                  class="size-3 text-white"
+                  name="ph:hash-bold"
+                />
+                <span class="text-xs text-white">{tag}</span>
+              </div>
+            ))}
+            {tags.length > 4 && (
+              <div class="flex items-center rounded-md bg-white/20 px-2 py-1 backdrop-blur-sm">
+                <span class="text-xs text-white">+{tags.length - 4}</span>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </a>
+
+  <!-- Read icon overlay -->
+  <div class="absolute right-4 top-4 flex gap-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
     <a
-      transition:name={slug}
       href={href}
-      class="origin-top-left text-wrap py-1 text-xl font-medium text-skin-accent underline-offset-4 hover:underline focus-visible:no-underline focus-visible:underline-offset-0"
-      >{title}</a
+      aria-label="Read article"
+      class="flex h-10 w-10 items-center justify-center rounded-lg bg-black/80 backdrop-blur-sm text-white transition-all hover:bg-black hover:scale-110"
+      onclick={(e) => e.stopPropagation()}
     >
-    <p class="">{description}</p>
-    <Datetime class="mt-auto origin-bottom-left scale-90" datetime={dateTime} />
+      <Icon class="size-5" name="ant-design:read-outlined" />
+    </a>
   </div>
 </li>
