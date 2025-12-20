@@ -14,6 +14,6 @@
   },
   "upload_source_maps": true,
   "vars": {
-    "OMDB_API_KEY": ""
+    "OMDB_API_KEY": "50788f34"
   }
 }
