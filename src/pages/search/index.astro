@@ -1,9 +1,9 @@
 ---
 import SearchPage from "@layouts/SearchPage.astro";
-import SearchByText from "@components/SearchByText.astro";
-import SearchByTag from "@components/SearchByTag.astro";
+import Search from "@components/Search.astro";
 import getUniqueTags from "@utils/getUniqueTags";
 import trim from "@utils/trim";
+import Layout from "@layouts/Layout.astro";
 
 const tags = await getUniqueTags("blog", "projects");
 const currentPathName = trim(Astro.url.pathname, "/");
@@ -11,8 +11,8 @@ const searchType = Astro.url.searchParams.get("type") || "text";
 const showTextSearch = searchType === "text" || searchType === null;
 ---
 
-<SearchPage>
-  <div class="w-full">
-    {showTextSearch ? <SearchByText /> : <SearchByTag tags={tags} />}
+<Layout title="Search" description="Search through my blog and projects">
+  <div class="w-full p-2">
+    <Search />
   </div>
-</SearchPage>
+</Layout>

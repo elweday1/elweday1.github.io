@@ -1,0 +1,208 @@
+---
+import { slugifyStr } from "@utils/slugify";
+import { getCollection } from "astro:content";
+import Datetime from "./Datetime.astro";
+import removeMd from "remove-markdown";
+import { Icon } from "astro-icon";
+import Tag from "./Tag.astro";
+import getUniqueTags from "@utils/getUniqueTags";
+
+const posts = await getCollection("blog");
+const projects = await getCollection("projects");
+const allEntries = [...posts, ...projects];
+const allTags = await getUniqueTags("blog", "projects");
+
+const processedEntries = allEntries.map(entry => ({
+  slug: entry.slug,
+  collection: entry.collection,
+  title: entry.data.title,
+  slugTitle: slugifyStr(entry.data.title),
+  description: entry.data.description,
+  tags: entry.data.tags || [],
+  bodyPlainText: removeMd(entry.body),
+  dateTime: entry.data.dateTime,
+  endDate: entry.data.endDate,
+}));
+---
+
+<div class="search-container">
+  <label class="relative mb-6 block">
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3 opacity-75">
+      <Icon name="ion:search" class="size-5" />
+    </span>
+    <input
+      id="search-input"
+      class="w-full rounded-lg border border-skin-fill border-opacity-40 bg-skin-card/30 py-3 pl-10 pr-4 focus:border-skin-accent focus:outline-none"
+      placeholder="Type to search projects and posts..."
+      type="text"
+      autocomplete="off"
+    />
+  </label>
+
+  <div class="mb-8">
+    <h2 class="mb-4 text-xl font-bold">Filter by Tags</h2>
+    <ul class="flex flex-wrap gap-2">
+      {
+        allTags.map(tag => (
+          <label
+            for={tag}
+            class="relative cursor-pointer transition-all duration-200"
+          >
+            <input
+              name="tag-filter"
+              id={tag}
+              value={tag}
+              type="checkbox"
+              hidden
+              class="peer"
+            />
+            <Tag
+              name={tag}
+              size="lg"
+              type="category"
+              class="w-full pr-3 peer-checked:bg-skin-card/10 peer-checked:text-skin-accent peer-checked:ring-2 peer-checked:ring-skin-accent peer-checked:[&>*:nth-child(1)]:[&>*:nth-child(1)]:fill-skin-accent"
+            />
+          </label>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div id="results-wrapper">
+    <p id="number-of-results" class="mb-2 p-3 font-medium text-skin-base/70">
+    </p>
+
+    <div
+      id="empty-state"
+      class="flex hidden flex-col items-center justify-center py-12 text-center opacity-60"
+    >
+      <Icon name="tabler:search-off" class="mb-4 size-16" />
+      <p class="text-xl font-bold">No matches found</p>
+      <p class="text-sm">Try adjusting your search or filters</p>
+    </div>
+
+    <ul id="search-results" class="grid grid-cols-1 gap-4 p-4">
+      {
+        processedEntries.map(entry => (
+          <a
+            href={`/${entry.collection}/${entry.slug}`}
+            data-item
+            data-tags={JSON.stringify(entry.tags)}
+            class="flex hidden flex-col rounded-lg border border-transparent bg-skin-fill p-4 shadow-sm transition-colors hover:border-skin-accent"
+          >
+            <div class="mb-2 flex w-full flex-row justify-between">
+              <Datetime
+                size="sm"
+                datetime={entry.dateTime}
+                endDate={
+                  entry.collection === "blog" ? undefined : entry.endDate
+                }
+              />
+              <div class="flex items-center gap-1 opacity-70">
+                <Icon
+                  class="size-4"
+                  name={
+                    entry.collection === "blog"
+                      ? "ant-design:read-outlined"
+                      : "ic:baseline-code"
+                  }
+                />
+                <span class="text-xs">
+                  {entry.collection === "blog" ? "Post" : "Project"}
+                </span>
+              </div>
+            </div>
+            <span class="text-lg font-bold text-skin-accent">
+              {entry.title}
+            </span>
+            <div class="mt-2 line-clamp-2 text-sm opacity-80">
+              {entry.description}
+            </div>
+          </a>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script define:vars={{ entriesData: JSON.stringify(processedEntries) }}>
+  const entries = JSON.parse(entriesData);
+  const input = document.getElementById("search-input");
+  const tagInputs = document.querySelectorAll('input[name="tag-filter"]');
+  const resultsList = document.querySelectorAll("[data-item]");
+  const status = document.getElementById("number-of-results");
+  const emptyState = document.getElementById("empty-state");
+
+  function updateSearch() {
+    const query = input.value.trim().toLowerCase();
+    const activeTags = Array.from(tagInputs)
+      .filter(i => i.checked)
+      .map(i => i.value);
+
+    // NEW CONDITION: Search is active if text is typed OR tags are clicked
+    const isSearchActive = query !== "" || activeTags.length > 0;
+
+    if (!isSearchActive) {
+      resultsList.forEach(card => card.classList.add("hidden"));
+      status.innerText = "";
+      emptyState.classList.add("hidden");
+      tagInputs.forEach(ti => (ti.closest("label").style.opacity = "1"));
+      return;
+    }
+
+    let visibleCount = 0;
+    const tagsInResults = new Set();
+
+    resultsList.forEach((card, index) => {
+      const entry = entries[index];
+      const entryTags = entry.tags;
+
+      // Text match logic (always true if query is empty)
+      const matchesText =
+        query === "" ||
+        entry.title.toLowerCase().includes(query) ||
+        entry.description.toLowerCase().includes(query) ||
+        entry.bodyPlainText.toLowerCase().includes(query);
+
+      // Tag match logic (always true if no tags selected)
+      const matchesTags =
+        activeTags.length === 0 || activeTags.some(t => entryTags.includes(t));
+
+      if (matchesText && matchesTags) {
+        card.classList.remove("hidden");
+        visibleCount++;
+        entryTags.forEach(t => tagsInResults.add(t));
+      } else {
+        card.classList.add("hidden");
+      }
+    });
+
+    // Toggle Empty State
+    if (visibleCount === 0) {
+      emptyState.classList.remove("hidden");
+      status.innerText = "No results found";
+    } else {
+      emptyState.classList.add("hidden");
+      const resultText =
+        query !== "" ? `for "${query}"` : "matching selected tags";
+      status.innerText = `Found ${visibleCount} ${
+        visibleCount === 1 ? "result" : "results"
+      } ${resultText}`;
+    }
+
+    // Dynamic Tag Highlighting based on text search
+    tagInputs.forEach(tagInput => {
+      const parentLabel = tagInput.closest("label");
+      if (query === "") {
+        parentLabel.style.opacity = "1";
+      } else {
+        parentLabel.style.opacity = tagsInResults.has(tagInput.value)
+          ? "1"
+          : "0.3";
+      }
+    });
+  }
+
+  input.addEventListener("input", updateSearch);
+  tagInputs.forEach(t => t.addEventListener("change", updateSearch));
+</script>
