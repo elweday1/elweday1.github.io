@@ -99,8 +99,7 @@ export const MY_SHOWS = [
   "how_i_met_your_mother",
   "the_office",
   "peacemaker",
-  "dispatch_game",
-  "gen_v"
+  "gen_v",
 ];
 
 export const HOBBIES = [
