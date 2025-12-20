@@ -1,67 +1,126 @@
 ---
-// Define the grid size
-const rows = Array.from({ length: 150 });
-const cols = Array.from({ length: 100 });
+import { Technologies } from "@config";
+
+const icons = Object.values(Technologies)
+  .filter(t => t.display)
+  .map(t => t.icon);
+
+const rows = Array.from({ length: 140 });
+const cols = Array.from({ length: 80 });
 ---
 
-<div
-  id="boxes-container"
-  class="pointer-events-none absolute z-0 flex h-screen overflow-hidden p-4"
-  style="transform: translate(-40%,-60%) skewX(-48deg) skewY(14deg) scale(2) rotate(0deg) translateZ(0);"
->
-  {
-    rows.map((_, i) => (
-      <div class="row relative h-8 w-16 border-l border-slate-700/50">
-        {cols.map((_, j) => (
-          <div
-            data-box
-            class="box pointer-events-auto relative h-8 w-16 border-r border-t border-slate-700/50"
-          >
-            {j % 2 === 0 && i % 2 === 0 && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="pointer-events-none absolute -left-[22px] -top-[14px] h-6 w-10 stroke-[1px] text-slate-700/50"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 6v12m6-6H6"
-                />
-              </svg>
-            )}
-          </div>
-        ))}
-      </div>
-    ))
-  }
+<div id="bg-boundary" class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+  <!-- Vignette effect for soft edges -->
+  <div class="absolute inset-0 z-10 pointer-events-none" 
+       style="background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0, 0.4) 70%, rgba(0,0,0, 0.8) 100%);">
+  </div>
+
+  <div
+    id="boxes-container"
+    class="pointer-events-none absolute inset-0 z-0 flex h-[150vh] w-[150vw] bg-transparent"
+    style="transform: translate(-25%, -25%) skewX(-48deg) skewY(14deg) scale(1.6); transform-origin: center;"
+    data-icons={JSON.stringify(icons)}
+  >
+    {
+      rows.map((_, i) => (
+        <div class="row relative h-12 w-24 border-l border-slate-700/10">
+          {cols.map((_, j) => (
+            <div
+              data-box
+              class="box pointer-events-auto relative flex items-center justify-center h-12 w-24 border-r border-t border-slate-700/10"
+            >
+              {j % 4 === 0 && i % 4 === 0 && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1"
+                  stroke="currentColor"
+                  class="pointer-events-none absolute -left-[22px] -top-[14px] h-6 w-10 text-slate-700/15"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6v12m6-6H6"
+                  />
+                </svg>
+              )}
+            </div>
+          ))}
+        </div>
+      ))
+    }
+  </div>
 </div>
 
 <script>
   import { animate } from "motion";
-  const transparency = "AA";
-  const colors = ["#FFD41D", "#FFA240", "#D73535", "#FF4646"];
-
+  
+  const colors = [
+    "#FFD400", "#FF9100", "#FF4646", "#F06292", "#BA68C8", "#9575CD", 
+    "#7986CB", "#64B5F6", "#4FC3F7", "#4DD0E1", "#4DB6AC", "#81C784", 
+    "#AED581", "#DCE775", "#FF8A65"
+  ];
+  const container = document.getElementById('boxes-container');
+  const iconsData = container?.dataset.icons;
+  const icons = iconsData ? JSON.parse(iconsData) : [];
   const boxes = document.querySelectorAll("[data-box]");
 
   boxes.forEach(box => {
+    let isAnimating = false;
+
     box.addEventListener("mouseenter", () => {
+      if (isAnimating || !icons.length) return;
+      
+      isAnimating = true;
+      const randomIcon = icons[Math.floor(Math.random() * icons.length)];
       const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-      // Immediate flash to color
-      animate(
-        box,
-        { backgroundColor: randomColor + transparency },
-        { duration: 0 }
-      );
-    });
+      const icon = document.createElement('iconify-icon');
+      icon.setAttribute('icon', randomIcon);
+      icon.style.color = randomColor;
+      icon.style.fontSize = '2.8rem';
+      icon.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
+      icon.style.opacity = '0';
+      icon.style.pointerEvents = 'none';
+      icon.style.display = 'block';
+      icon.style.position = 'relative';
+      icon.style.zIndex = '20';
+      
+      box.appendChild(icon);
 
-    box.addEventListener("mouseleave", () => {
-      // Slow fade back to transparent
-      animate(box, { backgroundColor: "rgba(0,0,0,0)" }, { duration: 2 });
+      // Entrance animation
+      // @ts-ignore
+      animate(icon, { 
+        opacity: [0, 1], 
+        scale: [0.3, 1],
+        skewX: [48, 48],
+        skewY: [-14, -14]
+      }, { duration: 0.15, easing: "ease-out" });
+      
+      // @ts-ignore
+      animate(box, { backgroundColor: [ "transparent", randomColor + '26' ] }, { duration: 0.15 });
+
+      // Lifecycle stay then vanish
+      setTimeout(() => {
+        // @ts-ignore
+        const outAnim = animate(icon, { 
+          opacity: [1, 0], 
+          scale: [1, 0.2],
+          skewX: [48, 48],
+          skewY: [-14, -14]
+        }, { duration: 0.4, easing: "ease-in" });
+
+        // @ts-ignore
+        animate(box, { backgroundColor: ["rgba(0,0,0,0.15)", "transparent"] }, { duration: 0.4 });
+
+        outAnim.finished.then(() => {
+          if (icon && icon.parentNode === box) {
+            box.removeChild(icon);
+          }
+          isAnimating = false;
+        });
+      }, 2000); 
     });
   });
 </script>
