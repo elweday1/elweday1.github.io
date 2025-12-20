@@ -1,6 +1,6 @@
 ---
 export const prerender = false;
-import  { getCollection} from "astro:content";
+import { getCollection } from "astro:content";
 import { SITE } from "@config";
 import Layout from "@layouts/Layout.astro";
 import PostCard from "@components/PostCard.astro";
@@ -17,110 +17,138 @@ const allitems = await getCollection("blog");
 const allProjects = await getCollection("projects");
 
 const allItems = [...allitems, ...allProjects];
-const tags = Astro.url.searchParams.getAll('tag');
-const pageNum =  parseInt(Astro.url.searchParams.get('page')|| "1" )
-const isTags = tags.length > 0
+const tags = Astro.url.searchParams.getAll("tag");
+const pageNum = parseInt(Astro.url.searchParams.get("page") || "1");
+const isTags = tags.length > 0;
 const Items = isTags ? getItemsByTags(allItems, tags) : allItems;
 const totalPages = getPageNumbers(Items.length);
-const numPages = totalPages.length; 
+const numPages = totalPages.length;
 const lastItem = pageNum * SITE.itemsPerPage;
 const startItem = lastItem - SITE.itemsPerPage;
 const paginatedItems = Items.slice(startItem, lastItem);
 const prev = pageNum > 1 ? "" : "disabled";
 const next = pageNum < numPages ? "" : "disabled";
-const tagSearchParams = isTags ? tags.map(tag => `tag=${tag}&`).join('') : ''; 
+const tagSearchParams = isTags ? tags.map(tag => `tag=${tag}&`).join("") : "";
 import { slugifyStr } from "@utils/slugify";
 import Icon from "astro-icon";
 import Datetime from "@components/Datetime.astro";
-const strTags = tags.map((tag:string) => slugifyStr(tag)).join("/");
-
-
+const strTags = tags.map((tag: string) => slugifyStr(tag)).join("/");
 ---
 
-<data  id="tag-search-params" value={tagSearchParams}></data>
-<Layout title="Search By tag", description="Search by tags used in some of my technical projects and my blog Items." >
-  <h1 class="text-2xl tracking-wider sm:text-3xl text-start pt-6" >Tags</h1>
-</div>
+<data id="tag-search-params" value={tagSearchParams}></data>
+<Layout
+  title="Search By tag"
+  ,
+  description="Search by tags used in some of my technical projects and my blog Items."
+>
+  <div class="mx-auto w-full px-4 pb-12">
+    <h1 class="pt-6 text-start text-2xl tracking-wider sm:text-3xl">Tags</h1>
 
-<ContentTags tags={tags} type="tag">
-  <Tag class="bg-skin-card  text-xl  px-5  text-skin-inverted" name="VIEW-ALL" type="all" size="lg" />
-</ContentTags >
+    <ContentTags tags={tags} type="tag">
+      <Tag
+        class="bg-skin-card px-5 text-xl text-skin-inverted"
+        name="VIEW-ALL"
+        type="all"
+        size="lg"
+      />
+    </ContentTags>
 
-    <h1 class="text-2xl tracking-wider sm:text-3xl text-start py-6 ">Search Results..</h1>
-    <ul id="search-results"  class="grid grid-cols-1 gap-4 p-4 overflow-y-auto">
+    <h1 class="py-6 text-start text-2xl tracking-wider sm:text-3xl">
+      Search Results..
+    </h1>
+    <ul id="search-results" class="grid grid-cols-1 gap-4 overflow-y-auto p-4">
       {
-        Items.map(({slug, data, collection}) => {
-            const href = `/${collection}/${slug}`
-            return (
-                <a data-item-type="search-item" data-slug={slug} data-tags={strTags} data-title={slug} href={href} class="bg-skin-fill rounded-lg p-3 flex flex-col">
-                  <div class="w-full flex flex-row justify-between">
-                    <Datetime relative size="sm" datetime={data.dateTime} endDate={collection == "blog" ? undefined:data.endDate} class="text-skin-base/70  inline-block scale-75 origin-left" />
-                    <div class="w-fit flex gap-1  place-items-center justify-end ">
-                      <Icon class="text-skin-base/70 size-4" name={collection == "blog" ? "ant-design:read-outlined" : "ic:baseline-code" }/> 
-                      <span class="text-skin-base/70 scale-90">{collection == "blog" ? "Post" : "Project"}</span>
-                    </div>
-                  </div>
-                    <span transition:name={slug}  class="text-skin-accent">{data.title}</span>
-                    <div class="inline">
-                      {
-                        data.description
-                      }
-                    </div>
-                </a>
-            )
-        }
-    )}
+        paginatedItems.map(({ slug, data, collection }) => {
+          const href = `/${collection}/${slug}`;
+          return (
+            <a
+              data-item-type="search-item"
+              data-slug={slug}
+              data-tags={strTags}
+              data-title={slug}
+              href={href}
+              class="flex flex-col rounded-lg bg-skin-fill p-3"
+            >
+              <div class="flex w-full flex-row justify-between">
+                <Datetime
+                  relative
+                  size="sm"
+                  datetime={data.dateTime}
+                  endDate={collection == "blog" ? undefined : data.endDate}
+                  class="inline-block  origin-left scale-75 text-skin-base/70"
+                />
+                <div class="flex w-fit place-items-center  justify-end gap-1 ">
+                  <Icon
+                    class="size-4 text-skin-base/70"
+                    name={
+                      collection == "blog"
+                        ? "ant-design:read-outlined"
+                        : "ic:baseline-code"
+                    }
+                  />
+                  <span class="scale-90 text-skin-base/70">
+                    {collection == "blog" ? "Post" : "Project"}
+                  </span>
+                </div>
+              </div>
+              <span transition:name={slug} class="text-skin-accent">
+                {data.title}
+              </span>
+              <div class="inline">{data.description}</div>
+            </a>
+          );
+        })
+      }
     </ul>
 
-{
-  numPages > 1 && (
-    <nav class="pagination-wrapper" aria-label="Pagination">
-      <LinkButton
-        disabled={prev === "disabled"}
-        href={`/search/content?${tagSearchParams}${pageNum - 1 !== 1 ? "page=" + (pageNum - 1) : ""}`}
-        className={`mr-4 select-none ${prev}`}
-        ariaLabel="Previous"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class={`${prev}-svg`}>
-          <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
-        </svg>
-        Prev
-      </LinkButton>
-      <LinkButton
-        disabled={next === "disabled"}
-        href={`/search/content?${tagSearchParams}&page=${+pageNum + 1}`}
-        className={`ml-4 select-none ${next}`}
-        ariaLabel="Next"
-      >
-        Next
-        <svg xmlns="http://www.w3.org/2000/svg" class={`${next}-svg`}>
-          <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
-        </svg>
-      </LinkButton>
-    </nav>
-  )
-}
+    {
+      numPages > 1 && (
+        <nav class="pagination-wrapper" aria-label="Pagination">
+          <LinkButton
+            disabled={prev === "disabled"}
+            href={`/search/content?${tagSearchParams}${
+              pageNum - 1 !== 1 ? "page=" + (pageNum - 1) : ""
+            }`}
+            className={`mr-4 select-none ${prev}`}
+            ariaLabel="Previous"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class={`${prev}-svg`}>
+              <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z" />
+            </svg>
+            Prev
+          </LinkButton>
+          <LinkButton
+            disabled={next === "disabled"}
+            href={`/search/content?${tagSearchParams}&page=${+pageNum + 1}`}
+            className={`ml-4 select-none ${next}`}
+            ariaLabel="Next"
+          >
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" class={`${next}-svg`}>
+              <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
+            </svg>
+          </LinkButton>
+        </nav>
+      )
+    }
+  </div>
 </Layout>
 
 <style>
-.pagination-wrapper {
-  @apply mb-8 mt-auto flex justify-center;
-}
-.disabled {
-  @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
-}
-.disabled-svg {
-  @apply group-hover:!fill-skin-base;
-}
-section{
-    @apply justify-self-start  w-full flex flex-col gap-2  
+  .pagination-wrapper {
+    @apply mb-8 mt-auto flex justify-center;
   }
-  
+  .disabled {
+    @apply pointer-events-none select-none opacity-50 hover:text-skin-base group-hover:fill-skin-base;
+  }
+  .disabled-svg {
+    @apply group-hover:!fill-skin-base;
+  }
+  section {
+    @apply flex  w-full flex-col gap-2 justify-self-start;
+  }
 
-    h2 {
-      @apply text-xl tracking-wider sm:text-2xl  text-start ;
-    }
+  h2 {
+    @apply text-start text-xl tracking-wider  sm:text-2xl;
+  }
 </style>
-
-
-

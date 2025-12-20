@@ -3,11 +3,23 @@
 import { slugifyStr } from "@utils/slugify";
 import { getCollection } from "astro:content";
 import Datetime from "./Datetime.astro";
-
+import removeMd from "remove-markdown";
 
 const posts = await getCollection("blog");
 const projects = await getCollection("projects"); 
 const entries = [...posts, ...projects];
+
+// Process entries on server side to extract plain text
+const processedEntries = entries.map(entry => ({
+  slug: entry.slug,
+  collection: entry.collection,
+  title: entry.data.title,
+  description: entry.data.description,
+  bodyPlainText: removeMd(entry.body),
+  dateTime: entry.data.dateTime,
+  endDate: entry.data.endDate
+}));
+
 import { Icon } from "astro-icon";
 ---
 
@@ -35,18 +47,18 @@ import { Icon } from "astro-icon";
     <p id="number-of-results" class="text-skin-base/70 p-3 ">Search results</p>
     <ul id="search-results"  class="grid grid-cols-1 gap-4 p-4 overflow-y-auto">
       {
-        entries.map(({slug, data, collection}) => {
+        processedEntries.map(({slug, title, description, dateTime, endDate, collection}) => {
             const href = `/${collection}/${slug}`
             return (
-                <a data-title={slugifyStr(data.title)} href={href} class="bg-skin-fill rounded-lg p-3 flex flex-col">
+                <a data-title={slugifyStr(title)} href={href} class="bg-skin-fill rounded-lg p-3 flex flex-col">
                   <div class="w-full flex flex-row justify-between">
-                    <Datetime relative size="sm" datetime={data.dateTime} endDate={collection == "blog" ? undefined:data.endDate} class="text-skin-base/70  inline-block scale-75 origin-left" />
+                    <Datetime relative size="sm" datetime={dateTime} endDate={collection == "blog" ? undefined:endDate} class="text-skin-base/70  inline-block scale-75 origin-left" />
                     <div class="w-fit flex gap-1  place-items-center justify-end ">
                       <Icon class="text-skin-base/70 size-4" name={collection == "blog" ? "ant-design:read-outlined" : "ic:baseline-code" }/> 
                       <span class="text-skin-base/70 scale-90">{collection == "blog" ? "Post" : "Project"}</span>
                     </div>
                   </div>
-                    <span transition:name={slug}  class="text-skin-accent">{data.title}</span>
+                    <span transition:name={slug}  class="text-skin-accent">{title}</span>
                     <div class="inline">
                       <span aria-label="pre" class="" /><span aria-label="match" class="" /><span aria-label="post" class="" />
                     </div>
@@ -55,24 +67,28 @@ import { Icon } from "astro-icon";
         }
     )}
     </ul>
-  <script>
+  <script define:vars={{ entriesData: JSON.stringify(processedEntries) }}>
   import { slugifyStr } from "@utils/slugify";
-  import { getCollection, type  CollectionEntry } from "astro:content";
-  import removeMd from "remove-markdown"; 
-  const posts = await getCollection("blog");
-  const projects = await getCollection("projects"); 
-  type Entry = CollectionEntry<"blog"> | CollectionEntry<"projects"> 
+  
+  type Entry = {
+    slug: string;
+    collection: string;
+    title: string;
+    description: string;
+    bodyPlainText: string;
+    dateTime: Date | string;
+    endDate?: Date | string;
+  }
+  
   type searchResult =  {
         match: [string, string, string]
         title: string
   }
 
-
-
   const WINDOW_SIZE = 800; 
   const SENTENCES = 2; 
 
-  const entries = [...posts, ...projects] as Entry[] 
+  const entries: Entry[] = entriesData;
   const entryCount = entries.length 
   function sentence(s: string, first: boolean) {
       const delimiters = /[.!?,;\n]/g; 
@@ -87,7 +103,7 @@ import { Icon } from "astro-icon";
     }
 
   function getMatch(entry: Entry, query: string) {
-        const blob = [entry.data.title, entry.data.description, removeMd(entry.body)].join("\n")
+        const blob = [entry.title, entry.description, entry.bodyPlainText].join("\n")
         const start = blob.toLowerCase().indexOf(query.toLowerCase())
         const end = start + query.length
         if (start !== -1) {
@@ -98,7 +114,7 @@ import { Icon } from "astro-icon";
 
             return{
                 match: [pre, match, post],
-                title: slugifyStr(entry.data.title)
+                title: slugifyStr(entry.title)
             }        
         }
 
