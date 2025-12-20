@@ -1,4 +1,7 @@
 ---
+// Critical Fix 1: Ensure Cloudflare processes searchParams at runtime
+export const prerender = false;
+
 import { getCollection } from "astro:content";
 import Datetime from "./Datetime.astro";
 import removeMd from "remove-markdown";
@@ -25,6 +28,7 @@ const processedEntries = allEntries.map(entry => ({
   endDate: entry.data.endDate,
 }));
 
+// Critical Fix 2: Object map for O(1) lookup by slug
 const searchDataMap = processedEntries.reduce((acc, entry) => {
   acc[entry.slug] = entry;
   return acc;
@@ -39,8 +43,8 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
     <input
       id="search-input"
       value={urlQuery}
-      class="w-full rounded-lg border border-skin-fill border-opacity-40 bg-skin-card/30 py-3 pl-10 pr-4 focus:border-skin-accent focus:outline-none"
-      placeholder="Fuzzy search projects and posts..."
+      class="w-full rounded-lg border border-skin-fill border-opacity-40 bg-skin-card/30 py-3 pl-10 pr-4 transition-colors focus:border-skin-accent focus:outline-none"
+      placeholder="Search projects and posts..."
       type="text"
       autocomplete="off"
     />
@@ -119,22 +123,15 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
                 </span>
               </div>
             </div>
-
             <span
               class="mb-2 text-xl font-bold text-skin-accent"
               data-field="title"
             >
               {entry.title}
             </span>
-            <p class="mb-2 text-sm opacity-80" data-field="description">
+            <p class="mb-4 text-sm opacity-80" data-field="description">
               {entry.description}
             </p>
-
-            <div
-              class="mb-4 hidden rounded border-l-2 border-skin-accent/50 bg-skin-card/20 p-2 text-xs italic"
-              data-field="snippet"
-            />
-
             <div class="mt-auto flex flex-wrap gap-2" data-result-tags />
           </a>
         ))
@@ -143,33 +140,23 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
   </div>
 </div>
 
-<script define:vars={{ searchDataMap }}>
-  const setupSearch = () => {
+<div id="search-data" data-json={JSON.stringify(searchDataMap)} class="hidden">
+</div>
+
+<script>
+  function initSearch() {
+    const dataEl = document.getElementById("search-data");
     const input = document.getElementById("search-input");
+    if (!dataEl || !input) return;
+
+    const searchDataMap = JSON.parse(dataEl.dataset.json || "{}");
     const tagInputs = document.querySelectorAll('input[name="tag-filter"]');
     const resultsElements = document.querySelectorAll("[data-item]");
     const status = document.getElementById("number-of-results");
     const emptyState = document.getElementById("empty-state");
 
-    if (!input) return;
-
-    function getSnippet(text, query) {
-      const index = text.toLowerCase().indexOf(query.toLowerCase());
-      if (index === -1) return "";
-
-      const start = Math.max(0, index - 40);
-      const end = Math.min(text.length, index + query.length + 80);
-      let snippet = text.slice(start, end);
-
-      if (start > 0) snippet = "..." + snippet;
-      if (end < text.length) snippet = snippet + "...";
-
-      return highlightText(snippet, query);
-    }
-
     function highlightText(text, query) {
       if (!query) return text;
-      // Fuzzy match: Escape query for regex
       const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const regex = new RegExp(`(${escapedQuery})`, "gi");
       return text.replace(
@@ -179,8 +166,7 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
     }
 
     function updateSearch(updateUrl = true) {
-      const query = input.value.trim();
-      const lowerQuery = query.toLowerCase();
+      const query = input.value.trim().toLowerCase();
       const activeTags = Array.from(tagInputs)
         .filter(i => i.checked)
         .map(i => i.value);
@@ -208,22 +194,21 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
       resultsElements.forEach(el => {
         const slug = el.getAttribute("data-slug");
         const data = searchDataMap[slug];
+        if (!data) return;
 
-        const bodyMatch =
-          query !== "" && data.bodyPlainText.toLowerCase().includes(lowerQuery);
-        const titleMatch =
-          query !== "" && data.title.toLowerCase().includes(lowerQuery);
-        const descMatch =
-          query !== "" && data.description.toLowerCase().includes(lowerQuery);
-        const tagMatch =
+        const matchesText =
+          query !== "" &&
+          (data.title.toLowerCase().includes(query) ||
+            data.description.toLowerCase().includes(query) ||
+            data.bodyPlainText.toLowerCase().includes(query));
+        const matchesTags =
           activeTags.length > 0 && activeTags.some(t => data.tags.includes(t));
 
-        if (bodyMatch || titleMatch || descMatch || tagMatch) {
+        if (matchesText || matchesTags) {
           el.classList.remove("hidden");
           visibleCount++;
           data.tags.forEach(t => globalTagsInResults.add(t));
 
-          // 1. Highlight title/desc
           el.querySelector('[data-field="title"]').innerHTML = highlightText(
             data.title,
             query
@@ -231,23 +216,13 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
           el.querySelector('[data-field="description"]').innerHTML =
             highlightText(data.description, query);
 
-          // 2. Handle Body Snippet (Only if text matched in body)
-          const snippetEl = el.querySelector('[data-field="snippet"]');
-          if (bodyMatch) {
-            snippetEl.innerHTML = getSnippet(data.bodyPlainText, query);
-            snippetEl.classList.remove("hidden");
-          } else {
-            snippetEl.classList.add("hidden");
-          }
-
-          // 3. Update tags on card
           const tagContainer = el.querySelector("[data-result-tags]");
           tagContainer.innerHTML = data.tags
             .map(
               t => `
             <span class="text-[10px] px-2 py-0.5 rounded-full border border-skin-fill ${
               activeTags.includes(t)
-                ? "bg-skin-accent/20 text-skin-accent border-skin-accent font-bold"
+                ? "bg-skin-accent/10 text-skin-accent border-skin-accent"
                 : "opacity-60"
             }">
               #${t}
@@ -266,20 +241,21 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
 
       tagInputs.forEach(tagInput => {
         const parentLabel = tagInput.closest("label");
+        const isSelected = tagInput.checked;
+        const isRelated = globalTagsInResults.has(tagInput.value);
         parentLabel.style.opacity =
-          query === "" ||
-          globalTagsInResults.has(tagInput.value) ||
-          tagInput.checked
-            ? "1"
-            : "0.3";
+          query === "" || isSelected || isRelated ? "1" : "0.3";
       });
     }
 
     input.addEventListener("input", () => updateSearch());
     tagInputs.forEach(t => t.addEventListener("change", () => updateSearch()));
-    updateSearch(false);
-  };
 
-  document.addEventListener("astro:page-load", setupSearch);
-  if (document.readyState === "complete") setupSearch();
+    // Initial Run for URL params
+    updateSearch(false);
+  }
+
+  // Final Fix: Handle standard loads and Astro transitions
+  document.addEventListener("DOMContentLoaded", initSearch);
+  document.addEventListener("astro:page-load", initSearch);
 </script>
