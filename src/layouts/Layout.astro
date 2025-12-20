@@ -77,24 +77,6 @@ ogImage = ogImage ? ogImage : SITE.website + "/assets/images/fallback.png";
 
     <meta name="theme-color" content="" />
 
-    <script
-      src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"
-    ></script>
-
-    <!-- Shoelace -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/themes/light.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/themes/dark.css"
-    />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/shoelace-autoloader.js"
-    ></script>
-
     {
       /*  If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,
     include google-site-verification tag in the heading
@@ -115,21 +97,16 @@ ogImage = ogImage ? ogImage : SITE.website + "/assets/images/fallback.png";
       :root {
         color-scheme: light dark;
       }
-      /* Use standard CSS instead of @apply for Shoelace classes */
       html {
         content-visibility: visible;
       }
-      
-      /* Apply Shoelace themes based on system preference */
+
       @media (prefers-color-scheme: light) {
         html {
           background-color: rgb(242, 245, 248);
         }
-        html:not(.sl-theme-dark) {
-          /* Shoelace light theme is usually default, but we can be explicit */
-        }
       }
-      
+
       @media (prefers-color-scheme: dark) {
         html {
           background-color: rgb(30, 32, 35);

@@ -1,7 +1,8 @@
 ---
 import { Technologies } from "@config";
+import Icon from "astro-icon";
 
-const icons = Object.values(Technologies)
+const activeIcons = Object.values(Technologies)
   .filter(t => t.display)
   .map(t => t.icon);
 
@@ -9,17 +10,33 @@ const rows = Array.from({ length: 140 });
 const cols = Array.from({ length: 80 });
 ---
 
-<div id="bg-boundary" class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-  <!-- Vignette effect for soft edges -->
-  <div class="absolute inset-0 z-10 pointer-events-none" 
-       style="background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0, 0.4) 70%, rgba(0,0,0, 0.8) 100%);">
+<div
+  id="bg-boundary"
+  class="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+>
+  <div
+    class="pointer-events-none absolute inset-0 z-10"
+    style="background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0, 0.4) 70%, rgba(0,0,0, 0.8) 100%);"
+  >
+  </div>
+
+  <div id="icon-library" class="hidden">
+    {
+      activeIcons.map(iconName => (
+        <div data-icon-name={iconName}>
+          <Icon
+            name={iconName}
+            class="pointer-events-none relative z-20 block text-[2.8rem]"
+          />
+        </div>
+      ))
+    }
   </div>
 
   <div
     id="boxes-container"
     class="pointer-events-none absolute inset-0 z-0 flex h-[150vh] w-[150vw] bg-transparent"
     style="transform: translate(-25%, -25%) skewX(-48deg) skewY(14deg) scale(1.6); transform-origin: center;"
-    data-icons={JSON.stringify(icons)}
   >
     {
       rows.map((_, i) => (
@@ -27,7 +44,7 @@ const cols = Array.from({ length: 80 });
           {cols.map((_, j) => (
             <div
               data-box
-              class="box pointer-events-auto relative flex items-center justify-center h-12 w-24 border-r border-t border-slate-700/10"
+              class="box pointer-events-auto relative flex h-12 w-24 items-center justify-center border-r border-t border-slate-700/10"
             >
               {j % 4 === 0 && i % 4 === 0 && (
                 <svg
@@ -55,85 +72,99 @@ const cols = Array.from({ length: 80 });
 
 <script>
   import { animate } from "motion";
-  
+
   const colors = [
-    "#FFD400", "#FF9100", "#FF4646", "#F06292", "#BA68C8", "#9575CD", 
-    "#7986CB", "#64B5F6", "#4FC3F7", "#4DD0E1", "#4DB6AC", "#81C784", 
-    "#AED581", "#DCE775", "#FF8A65"
+    "#FFD400",
+    "#FF9100",
+    "#FF4646",
+    "#F06292",
+    "#BA68C8",
+    "#9575CD",
+    "#7986CB",
+    "#64B5F6",
+    "#4FC3F7",
+    "#4DD0E1",
+    "#4DB6AC",
+    "#81C784",
+    "#AED581",
+    "#DCE775",
+    "#FF8A65",
   ];
 
   const initBackground = () => {
-    const container = document.getElementById('boxes-container');
-    const iconsData = container?.dataset.icons;
-    const icons = iconsData ? JSON.parse(iconsData) : [];
+    const library = document.getElementById("icon-library");
+    const iconTemplates = library ? Array.from(library.children) : [];
     const boxes = document.querySelectorAll("[data-box]");
 
     boxes.forEach(box => {
-      // @ts-ignore dataset
-      if (box.dataset.bgInitialized) return;
-      // @ts-ignore dataset
-      box.dataset.bgInitialized = 'true';
+      if (box.hasAttribute("data-bg-initialized")) return;
+      box.setAttribute("data-bg-initialized", "true");
 
       let isAnimating = false;
 
       box.addEventListener("mouseenter", () => {
-        if (isAnimating || !icons.length) return;
-        
+        if (isAnimating || !iconTemplates.length) return;
+
         isAnimating = true;
-        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        const randomTemplate =
+          iconTemplates[Math.floor(Math.random() * iconTemplates.length)];
         const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-        const icon = document.createElement('iconify-icon');
-        icon.setAttribute('icon', randomIcon);
-        icon.style.color = randomColor;
-        icon.style.fontSize = '2.8rem';
-        icon.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
-        icon.style.opacity = '0';
-        icon.style.pointerEvents = 'none';
-        icon.style.display = 'block';
-        icon.style.position = 'relative';
-        icon.style.zIndex = '20';
-        
-        box.appendChild(icon);
+        // Clone the pre-rendered SVG from the library
+        const iconWrapper = randomTemplate.cloneNode(true) as HTMLElement;
+        const iconSvg = iconWrapper.querySelector("svg");
 
-        // Entrance animation
-        // @ts-ignore
-        animate(icon, { 
-          opacity: [0, 1], 
-          scale: [0.3, 1],
-          skewX: [48, 48],
-          skewY: [-14, -14]
-        }, { duration: 0.15, easing: "ease-out" });
-        
-        // @ts-ignore
-        animate(box, { backgroundColor: [ "transparent", randomColor + '26' ] }, { duration: 0.15 });
+        if (iconSvg) {
+          iconSvg.style.color = randomColor;
+          iconSvg.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
+          iconSvg.style.opacity = "0";
+          box.appendChild(iconSvg);
 
-        // Lifecycle stay then vanish
-        setTimeout(() => {
-          // @ts-ignore
-          const outAnim = animate(icon, { 
-            opacity: [1, 0], 
-            scale: [1, 0.2],
-            skewX: [48, 48],
-            skewY: [-14, -14]
-          }, { duration: 0.4, easing: "ease-in" });
+          animate(
+            iconSvg,
+            {
+              opacity: [0, 1],
+              scale: [0.3, 1],
+              skewX: [48, 48],
+              skewY: [-14, -14],
+            },
+            { duration: 0.15, easing: "ease-out" }
+          );
 
-          // @ts-ignore
-          animate(box, { backgroundColor: ["rgba(0,0,0,0.15)", "transparent"] }, { duration: 0.4 });
+          animate(
+            box,
+            { backgroundColor: ["transparent", randomColor + "26"] },
+            { duration: 0.15 }
+          );
 
-          outAnim.finished.then(() => {
-            if (icon && icon.parentNode === box) {
-              box.removeChild(icon);
-            }
-            isAnimating = false;
-          });
-        }, 2000); 
+          setTimeout(() => {
+            const outAnim = animate(
+              iconSvg,
+              {
+                opacity: [1, 0],
+                scale: [1, 0.2],
+                skewX: [48, 48],
+                skewY: [-14, -14],
+              },
+              { duration: 0.4, easing: "ease-in" }
+            );
+
+            animate(
+              box,
+              { backgroundColor: [randomColor + "26", "transparent"] },
+              { duration: 0.4 }
+            );
+
+            outAnim.finished.then(() => {
+              iconSvg.remove();
+              isAnimating = false;
+            });
+          }, 2000);
+        }
       });
     });
   };
 
-  // Initialize on first load
   initBackground();
-  // Re-initialize on every navigation
   document.addEventListener("astro:page-load", initBackground);
 </script>

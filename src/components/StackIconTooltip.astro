@@ -1,30 +1,94 @@
-  ---
-  interface Props {
-    name: string
-    url: string
-    icon: string
-    delayDuration?: number
-    description?: string
+---
+import { Icon } from "astro-icon";
+export interface Props {
+  name: string;
+  url: string;
+  icon: string;
+  description?: string;
+}
+
+const { name, url, icon, description } = Astro.props;
+
+const id = `tp-${crypto.randomUUID().slice(0, 8)}`;
+const anchorName = `--${id}`;
+---
+
+<div class="tooltip-wrapper inline-block">
+  {/* @ts-ignore popovertarget  */}
+  <a
+    href={url}
+    id={`trigger-${id}`}
+    popovertarget={id}
+    class="block transition-all hover:scale-[1.3]"
+    style={`anchor-name: ${anchorName};`}
+  >
+    <Icon class="text-[33px]" icon={icon} />
+  </a>
+
+  <div
+    id={id}
+    popover
+    class="tooltip-popover"
+    style={`position-anchor: ${anchorName};`}
+  >
+    <div
+      class="rounded-xl bg-white p-2 shadow-xl ring-1 ring-black/5 dark:bg-zinc-900 dark:ring-white/10"
+    >
+      <div class="flex items-center gap-1">
+        <Icon class="text-[20px]" icon={icon} />
+        <h4 class="text-[15px] font-medium">{name}</h4>
+      </div>
+      {description && <p class="mt-0.5 text-xs opacity-70">{description}</p>}
+    </div>
+  </div>
+</div>
+
+<script is:inline define:vars={{ id }}>
+  const trigger = document.getElementById(`trigger-${id}`);
+  const popover = document.getElementById(id);
+
+  if (trigger && popover) {
+    trigger.addEventListener("mouseenter", () => popover.showPopover());
+    trigger.addEventListener("mouseleave", () => popover.hidePopover());
+  }
+</script>
+
+<style>
+  .tooltip-popover {
+    /* Anchoring */
+    position: absolute;
+    inset: auto;
+    top: anchor(bottom);
+    left: anchor(center);
+    translate: -50% 8px;
+
+    /* Reset & Top Layer */
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    overflow: visible;
+    color: inherit;
+
+    /* Animation */
+    opacity: 0;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      display 0.2s allow-discrete;
+    transform: translateY(-4px);
   }
 
-  const { name, url, icon, description } = Astro.props
-  ---
+  .tooltip-popover:popover-open {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-  <sl-tooltip placement="bottom">
-    <a href={url}>
-      <iconify-icon class="grid text-[33px] cursor-pointer place-self-center transition-all hover:scale-[1.3] " icon={icon} />
-    </a>
-      <div slot="content">
-        <a tabindex="-1"  href={url} class=" cursor-pointer rounded-xl flex items-center justify-center gap-1 p-2  transition-all ">
-          <div class="flex flex-col">
-            <div class="flex items-center gap-1">
-              <iconify-icon  class="text-[20px] text-skin-base" icon={icon} /> 
-              <h4 class="text-[15px]">{name}</h4>
-            </div>
-            <p>{description}</p>
-          </div>
-        </a>
-      </div>
-  </sl-tooltip>
-
-
+  /* Transition for entering/exiting top layer */
+  @starting-style {
+    .tooltip-popover:popover-open {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+</style>
