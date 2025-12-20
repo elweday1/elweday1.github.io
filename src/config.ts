@@ -2,63 +2,41 @@ export const SITE = {
   website: "mnasser.dev",
   author: "Mohammed Nasser",
   authorDescription: `
-  Hey, I'm Mohammed Nasser. I'm a full-stack developer.
-  I love to build things for the web.
-  I'm currently learning web development.
-  I'm currently learning web development.
-  I'm currently learning web development.
+  Software Engineer at Google DeepMind. Passionate about Agentic workflows, System Design, and building high-performance digital tools.
   `,
-  desc: "A personal portfolio and blog.",
-  title: "Nasser's Blog",
+  desc: "Personal portfolio of Mohammed Nasser, Software Engineer at Google DeepMind.",
+  title: "M. Nasser | Software Engineer",
   ogImage: "assets/images/fallback.png",
   lightAndDarkMode: false,
   itemsPerPage: 20,
 } as const;
 
+
+export const HIGHLIGHTS = [
+  { label: "Engineering", value: "Google DeepMind Intern", trend: "Gemini Collaborator" },
+  { label: "Focus", value: "Agentic Workflows", trend: "Intelligent Systems" },
+  { label: "Developing", value: "Advanced Orchestration", trend: "Cross-Org Retrieval" },
+];
 export const MESSAGE_OPTIONS = [
   {
-    name: "Suggestion",
-    icon: "feather:thumbs-up",
+    name: "Business Inquiry",
+    icon: "ph:briefcase-bold",
     result: {
-      title: "Thank you for your suggestion",
-      message: "I will get back to you as soon as possible.",
+      title: "Partnership Opportunity",
+      message: "I'll review your inquiry and get back to you shortly.",
     },
   },
   {
-    name: "The website needs more batman logos",
-    icon: "feather:thumbs-down",
-    result: { title: "BATMAN!", message: "I know, right?" },
-  },
-  {
-    name: "Bug",
-    icon: "feather:thumbs-down",
-    result: {
-      title: "Thank you for your bug report",
-      message: "I will look into it.",
-    },
+    name: "Technical Question",
+    icon: "ph:code-bold",
+    result: { title: "Dev Talk", message: "Always happy to discuss tech!" },
   },
   {
     name: "Feedback",
-    icon: "feather:thumbs-up",
+    icon: "ph:chat-circle-dots-bold",
     result: {
-      title: "Thank you for your feedback",
-      message: " You're always welcome to leave any feedback.",
-    },
-  },
-  {
-    name: "Business inquiry",
-    icon: "feather:thumbs-up",
-    result: {
-      title: "Thank you for your inquiry",
-      message: "I will get back to you as soon as possible.",
-    },
-  },
-  {
-    name: "Other",
-    icon: "feather:thumbs-up",
-    result: {
-      title: "Thank you for your message",
-      message: "I will get back to you as soon as possible.",
+      title: "Thank you for yours feedback",
+      message: "Perspective is always appreciated.",
     },
   },
 ] as const;
@@ -66,6 +44,7 @@ export const MESSAGE_OPTIONS = [
 export const RESUME = {
   normal: `resume.${SITE.website}`,
 };
+
 export const PATHS = [
   { name: "Projects", path: "/projects", icon: "ic:baseline-code" },
   { name: "Blog", path: "/blog", icon: "ant-design:read-outlined" },
@@ -85,7 +64,7 @@ export const SOCIALS = [
   },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/mohamed-nasser-38b045234/",
+    href: "https://www.linkedin.com/in/elweday/",
     linkTitle: `${SITE.author} on LinkedIn`,
     active: true,
     icon: "mdi:linkedin",
@@ -99,7 +78,7 @@ export const SOCIALS = [
   },
   {
     name: "Discord",
-    href: "https://discord.com/users/elweday",
+    href: "https://discord.com/users/nomadnasser",
     linkTitle: `${SITE.author} on Discord`,
     active: true,
     icon: "ic:baseline-discord",
@@ -125,12 +104,11 @@ export const MY_SHOWS = [
 ];
 
 export const HOBBIES = [
-  { name: "Coding", icon: "ph:code-bold" },
-  { name: "Gaming", icon: "cil:gamepad" },
-  { name: "3d Modeling", icon: "carbon:chart-3d" },
-  { name: "TV shows", icon: "ic:round-tv" },
-  { name: "Cooking Food", icon: "ph:cooking-pot-bold" },
-  { name: "Music", icon: "mdi:music-box-multiple" },
+  { name: "Agentic Workflows", icon: "ph:magic-wand-bold" },
+  { name: "System Design", icon: "ph:tree-structure-bold" },
+  { name: "Open Source", icon: "ph:git-branch-bold" },
+  { name: "Real-time Systems", icon: "ph:lightning-bold" },
+  { name: "3D Graphics", icon: "ph:cube-bold" },
 ] as const;
 
 export const Technologies = {
@@ -146,153 +124,144 @@ export const Technologies = {
     name: "Typescript",
     icon: "simple-icons:typescript",
     url: "https://www.typescriptlang.org/",
-    description:
-      "A superset of JavaScript that adds static typing and other features.",
+    description: "A superset of JavaScript with static typing.",
     type: "Programming Language",
     display: true,
   },
   golang: {
-    name: "Golang",
-    icon: "cib:go",
-    url: "https://www.golang.org/",
-    description: "A popular general-purpose programming language.",
+    name: "Go",
+    icon: "simple-icons:go",
+    url: "https://go.dev/",
+    description: "Efficient, reliable enterprise-grade language.",
+    type: "Programming Language",
+    display: true,
+  },
+  rust: {
+    name: "Rust",
+    icon: "simple-icons:rust",
+    url: "https://www.rust-lang.org/",
+    description: "Safe, concurrent, and fast systems programming.",
+    type: "Programming Language",
+    display: true,
+  },
+  kotlin: {
+    name: "Kotlin",
+    icon: "simple-icons:kotlin",
+    url: "https://kotlinlang.org/",
+    description: "Modern language for JVM and Multiplatform.",
+    type: "Programming Language",
+    display: true,
+  },
+  java: {
+    name: "Java",
+    icon: "simple-icons:openjdk",
+    url: "https://www.java.com/",
+    description: "Versatile object-oriented language.",
     type: "Programming Language",
     display: true,
   },
   "c++": {
     name: "C++",
-    icon: "file-icons:c",
-    url: "https://en.cppreference.com/w/",
-    description: "A general-purpose programming language.",
+    icon: "simple-icons:cplusplus",
+    url: "https://isocpp.org/",
+    description: "Powerful general-purpose programming.",
     type: "Programming Language",
     display: true,
   },
   python: {
     name: "Python",
-    icon: "akar-icons:python-fill",
+    icon: "simple-icons:python",
     url: "https://www.python.org/",
-    description:
-      "A high-level programming language known for its readability and versatility.",
+    description: "High-level versatility and ML focus.",
     type: "Programming Language",
     display: true,
   },
-  bash: {
-    name: "Bash",
-    icon: "simple-icons:gnubash",
-    url: "https://www.gnu.org/software/bash/",
-    description: "A command-line shell and scripting language.",
+  c: {
+    name: "C",
+    icon: "simple-icons:c",
+    url: "https://en.cppreference.com/w/c",
+    description: "Foundation of modern systems.",
     type: "Programming Language",
-    display: true,
-  },
-  html: {
-    name: "HTML5",
-    icon: "akar-icons:html-fill",
-    url: "https://developer.mozilla.org/en-US/docs/Web/HTML/",
-    description:
-      "A markup language used for structuring and presenting content on the web.",
-    type: "Web Development",
-    display: true,
-  },
-  css: {
-    name: "CSS3",
-    icon: "akar-icons:css-fill",
-    url: "https://developer.mozilla.org/en-US/docs/Web/CSS",
-    description:
-      "A style sheet language used for structuring and presenting content on the web.",
-    type: "Web Development",
-    display: true,
-  },
-  nodejs: {
-    name: "Node.js",
-    icon: "fa-brands:node-js",
-    url: "https://nodejs.org/en/",
-    description: "A JavaScript runtime built on Chrome's V8 JavaScript engine.",
-    type: "Web Development",
     display: true,
   },
   react: {
     name: "React",
-    icon: "mdi:react",
+    icon: "simple-icons:react",
     url: "https://reactjs.org/",
-    description: "A JavaScript library for building user interfaces.",
-    type: "Web Development",
+    description: "Declarative UI component library.",
+    type: "Frontend & Web",
     display: true,
   },
-  astro: {
-    name: "Astro",
-    icon: "simple-icons:astro",
-    url: "https://astro.build/",
-    description: "A modern static site generator for faster websites.",
-    type: "Web Development",
-    display: true,
-  },
-  tailwind: {
-    name: "Tailwind",
-    icon: "mdi:tailwind",
-    url: "https://tailwindcss.com/",
-    description: "A utility-first CSS framework for rapid UI development.",
-    type: "Web Development",
-    display: true,
-  },
-  bootstrap: {
-    name: "Bootstrap",
-    icon: "akar-icons:bootstrap-fill",
-    url: "https://getbootstrap.com/",
-    description:
-      "A popular CSS framework for building responsive and mobile-first websites.",
-    type: "Web Development",
-    display: true,
-  },
-  postgres: {
-    name: "Postgres",
-    icon: "cib:postgresql",
-    url: "https://www.postgresql.org/",
-    description: "An open-source relational database system.",
-    type: "Technology",
-    display: true,
-  },
-  mongodb: {
-    name: "MongoDB",
-    icon: "simple-icons:mongodb",
-    url: "https://www.mongodb.com/",
-    description: "An open-source, cross-platform document-oriented database.",
-    type: "Technology",
-    display: true,
-  },
-
-  github: {
-    name: "GitHub",
-    icon: "akar-icons:github-fill",
-    url: "https://github.com/",
-    description: "A web-based hosting service for Git repositories.",
-    type: "Technology",
-    display: true,
-  },
-
-  django: {
-    name: "Django",
-    icon: "akar-icons:django-fill",
-    url: "https://www.djangoproject.com/",
-    description: "A web development framework for Python.",
-    type: "Web Development",
-    display: true,
-  },
-
-  flask: {
-    name: "Flask",
-    icon: "simple-icons:flask",
-    url: "https://flask.palletsprojects.com/",
-    description: "A lightweight web application framework for Python.",
-    type: "Web Development",
+  angular: {
+    name: "Angular",
+    icon: "simple-icons:angular",
+    url: "https://angular.io/",
+    description: "Enterprise-grade web platform.",
+    type: "Frontend & Web",
     display: true,
   },
   nextjs: {
     name: "Next.js",
     icon: "simple-icons:nextdotjs",
     url: "https://nextjs.org/",
-    description:
-      "A React framework for building static and dynamic web applications.",
-    type: "Web Development",
+    description: "Full-stack React framework.",
+    type: "Frontend & Web",
+    display: true,
+  },
+  astro: {
+    name: "Astro",
+    icon: "simple-icons:astro",
+    url: "https://astro.build/",
+    description: "The web framework for content-driven sites.",
+    type: "Frontend & Web",
+    display: true,
+  },
+  rxjs: {
+    name: "RxJS",
+    icon: "simple-icons:reactivex",
+    url: "https://rxjs.dev/",
+    description: "Reactive extensions for JavaScript.",
+    type: "Frontend & Web",
+    display: true,
+  },
+  yjs: {
+    name: "YJS",
+    icon: "ph:share-network-bold",
+    url: "https://docs.yjs.dev/",
+    description: "Shared data types for real-time collaboration.",
+    type: "Frontend & Web",
+    display: true,
+  },
+  nodejs: {
+    name: "Node.js",
+    icon: "simple-icons:nodedotjs",
+    url: "https://nodejs.org/",
+    description: "JavaScript runtime on the server.",
+    type: "Backend & Systems",
+    display: true,
+  },
+  fastapi: {
+    name: "FastAPI",
+    icon: "simple-icons:fastapi",
+    url: "https://fastapi.tiangolo.com/",
+    description: "Modern, high-performance Python API framework.",
+    type: "Backend & Systems",
+    display: true,
+  },
+  flask: {
+    name: "Flask",
+    icon: "simple-icons:flask",
+    url: "https://flask.palletsprojects.com/",
+    description: "Lightweight Python web framework.",
+    type: "Backend & Systems",
+    display: true,
+  },
+  grpc: {
+    name: "gRPC",
+    icon: "ph:arrows-left-right-bold",
+    url: "https://grpc.io/",
+    description: "High-performance RPC framework.",
+    type: "Backend & Systems",
     display: true,
   },
   svelte: {
@@ -301,66 +270,37 @@ export const Technologies = {
     url: "https://svelte.dev/",
     description: "A JavaScript framework for building user interfaces.",
     type: "Web Development",
+},
+  gcp: {
+    name: "GCP",
+    icon: "simple-icons:googlecloud",
+    url: "https://cloud.google.com/",
+    description: "Google's suite of cloud services.",
+    type: "Tools & Platforms",
     display: true,
   },
-
-  jinja: {
-    name: "Jinja",
-    icon: "simple-icons:jinja",
-    url: "https://jinja.palletsprojects.com/",
-    description: "A templating engine for Python, used in web development.",
-    type: "Web Development",
-    display: false,
-  },
-  plotly: {
-    name: "Plotly",
-    icon: "simple-icons:plotly",
-    url: "https://plotly.com/",
-    description:
-      "A data visualization library for creating interactive plots and dashboards.",
-    type: "Web Development",
-    display: false,
-  },
-  trpc: {
-    name: "tRPC",
-    icon: "mdi:api",
-    url: "https://trpc.io/",
-    description:
-      "A framework for building server-side and client-side applications.",
-    type: "Web Development",
-    display: true,
-  },
-  jotai: {
-    name: "Jotai",
-    icon: "simple-icons:ghostery",
-    url: "https://jotai.org/",
-    description: "A state management library for React and React Native.",
-    type: "Technology",
-    display: true,
-  },
-  ws: {
-    name: "WebSockets",
-    icon: "logos:websocket",
-    url: "https://www.websocket.org/",
-    description: "A protocol for real-time applications.",
-    type: "Technology",
-    display: true,
-  },
-  vercel: {
-    name: "Vercel",
-    icon: "simple-icons:vercel",
-    url: "https://vercel.com/",
-    description: "A platform for hosting and deploying websites.",
-    type: "Technology",
+  aws: {
+    name: "AWS",
+    icon: "simple-icons:amazonaws",
+    url: "https://aws.amazon.com/",
+    description: "Amazon's cloud computing platform.",
+    type: "Tools & Platforms",
     display: true,
   },
   docker: {
     name: "Docker",
-    icon: "mdi:docker",
+    icon: "simple-icons:docker",
     url: "https://www.docker.com/",
-    description:
-      "A platform for developing, shipping, and running applications in containers.",
-    type: "Technology",
+    description: "Containerization platform.",
+    type: "Tools & Platforms",
+    display: true,
+  },
+  githubactions: {
+    name: "GH Actions",
+    icon: "simple-icons:githubactions",
+    url: "https://github.com/features/actions",
+    description: "CI/CD directly from GitHub.",
+    type: "Tools & Platforms",
     display: true,
   },
   linux: {
@@ -372,7 +312,7 @@ export const Technologies = {
     type: "Technology",
     display: true,
   },
-
+  
   git: {
     name: "Git",
     icon: "mdi:git",
@@ -382,25 +322,23 @@ export const Technologies = {
     type: "Technology",
     display: true,
   },
-  npm: {
-    name: "NPM",
-    icon: "jam:npm",
-    url: "https://www.npmjs.com/",
-    description:
-      "The package manager for JavaScript, used to manage project dependencies.",
-    type: "Web Development",
-    display: false,
-  },
-  firebase: {
-    name: "Firebase",
-    icon: "teenyicons:firebase-solid",
-    url: "https://firebase.google.com/",
-    description:
-      "A platform for building web and mobile applications with serverless features.",
-    type: "Technology",
+  tailwind: {
+    name: "Tailwind",
+    icon: "simple-icons:tailwindcss",
+    url: "https://tailwindcss.com/",
+    description: "Utility-first CSS framework.",
+    type: "Frontend & Web",
     display: true,
   },
-  latex: {
+  trpc: {
+    name: "tRPC",
+    icon: "ph:arrows-left-right-bold",
+    url: "https://trpc.io/",
+    description: "End-to-end typesafe APIs.",
+    type: "Backend & Systems",
+    display: true,
+  },
+    latex: {
     name: "Latex",
     icon: "file-icons:latex",
     url: "https://www.latex-project.org/",
@@ -417,88 +355,37 @@ export const Technologies = {
     type: "Technology",
     display: false,
   },
+  postgres: {
+    name: "PostgreSQL",
+    icon: "simple-icons:postgresql",
+    url: "https://www.postgresql.org/",
+    description: "Advanced open source relational database.",
+    type: "Backend & Systems",
+    display: true,
+  },
   chartjs: {
     name: "Chart.js",
-    icon: "file-icons:chartjs",
+    icon: "simple-icons:chartdotjs",
     url: "https://www.chartjs.org/",
-    description:
-      "A simple yet flexible JavaScript charting library for designers & developers.",
-    type: "Technology",
-    display: false,
-  },
-  pandas: {
-    name: "Pandas",
-    icon: "simple-icons:pandas",
-    url: "https://pandas.pydata.org/",
-    description:
-      "A data manipulation and analysis library for the Python programming language.",
-    type: "Data Science",
-    display: true,
-  },
-  jupyter: {
-    name: "Jupyter",
-    icon: "simple-icons:jupyter",
-    url: "https://jupyter.org/",
-    description:
-      "An open-source platform for interactive computing and data science.",
-    type: "Data Science",
-    display: true,
-  },
-  numpy: {
-    name: "Numpy",
-    icon: "simple-icons:numpy",
-    url: "https://numpy.org/",
-    description: "A powerful library for numerical computing in Python.",
-    type: "Data Science",
-    display: true,
-  },
-  tensorflow: {
-    name: "TensorFlow",
-    icon: "simple-icons:tensorflow",
-    url: "https://www.tensorflow.org/",
-    description: "An open-source machine learning framework for everyone.",
-    type: "Data Science",
-    display: true,
-  },
-  sklearn: {
-    name: "Scikit-learn",
-    icon: "simple-icons:scikitlearn",
-    url: "https://scikit-learn.org/",
-    description: "A popular machine learning library for Python.",
-    type: "Data Science",
-    display: true,
-  },
-  opencv: {
-    name: "OpenCV",
-    icon: "simple-icons:opencv",
-    url: "https://opencv.org/",
-    description: "An open-source library for computer vision in Python.",
-    type: "Data Science",
+    description: "Simple yet flexible JavaScript charting.",
+    type: "Frontend & Web",
     display: true,
   },
   ffmpeg: {
     name: "FFmpeg",
-    icon: "file-icons:ffmpeg",
+    icon: "simple-icons:ffmpeg",
     url: "https://ffmpeg.org/",
-    description: "An open-source library for video and audio manipulation.",
-    type: "Data Science",
+    description: "Multimedia framework to process video and audio.",
+    type: "Backend & Systems",
     display: true,
   },
   opengl: {
     name: "OpenGL",
     icon: "simple-icons:opengl",
     url: "https://www.opengl.org/",
-    description: "A cross-platform 3D graphics API.",
-    type: "Data Science",
+    description: "Cross-language, cross-platform graphics API.",
+    type: "Backend & Systems",
     display: true,
   },
-  gcp: {
-    name: "Google Cloud Platform",
-    icon: "mdi:google-cloud",
-    url: "https://cloud.google.com/",
-    description:
-      "A platform for building and managing cloud computing services.",
-    type: "Technology",
-    display: true,
-  },
+
 } as const;
