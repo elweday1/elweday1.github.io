@@ -31,6 +31,9 @@ const omdbHandler = (omdbApiKey: string) => {
   return async (showName: string) => {
     const res = await fetch(
       `https://www.omdbapi.com/?t=${showName}&apikey=${omdbApiKey}`,
+      {
+        cache: "force-cache"
+      }
     );
     const data = await res.json();
     return data as Show;
