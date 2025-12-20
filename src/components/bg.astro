@@ -69,6 +69,11 @@ const cols = Array.from({ length: 80 });
     const boxes = document.querySelectorAll("[data-box]");
 
     boxes.forEach(box => {
+      // @ts-ignore dataset
+      if (box.dataset.bgInitialized) return;
+      // @ts-ignore dataset
+      box.dataset.bgInitialized = 'true';
+
       let isAnimating = false;
 
       box.addEventListener("mouseenter", () => {
