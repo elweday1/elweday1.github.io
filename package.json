@@ -44,6 +44,7 @@
     "github-slugger": "^2.0.0",
     "iconify-icon": "^1.0.8",
     "lucide-react": "^0.308.0",
+    "motion": "^12.23.26",
     "nanostores": "^0.9.5",
     "nodemailer": "^6.9.7",
     "playwright": "^1.48.2",

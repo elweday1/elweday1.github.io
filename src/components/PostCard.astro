@@ -24,7 +24,7 @@ const href = `/blog/${slug}`;
   data-item-type="search-item"
   data-slug={slug}
   data-tags={strTags}
-  class={twMerge("group relative overflow-hidden rounded-xl bg-skin-card transition-all duration-300 hover:shadow-lg hover:shadow-skin-accent/20", className)}
+  class={twMerge("group relative overflow-hidden rounded-xl border border-skin-line/10 bg-skin-card/40 backdrop-blur-[2px] transition-all duration-300 hover:border-skin-accent/20 hover:bg-skin-card/60", className)}
 >
   <a
     href={href}
@@ -45,7 +45,7 @@ const href = `/blog/${slug}`;
     </div>
     
     <div class="absolute bottom-0 left-0 right-0 p-4">
-      <div class="rounded-lg bg-black/20 backdrop-blur-md border border-white/10 p-3">
+      <div class="rounded-lg bg-black/25 backdrop-blur-[4px] border border-white/15 p-3">
         <Datetime
           datetime={dateTime}
           size="sm"

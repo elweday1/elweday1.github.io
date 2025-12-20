@@ -1,0 +1,67 @@
+---
+// Define the grid size
+const rows = Array.from({ length: 150 });
+const cols = Array.from({ length: 100 });
+---
+
+<div
+  id="boxes-container"
+  class="pointer-events-none absolute z-0 flex h-screen overflow-hidden p-4"
+  style="transform: translate(-40%,-60%) skewX(-48deg) skewY(14deg) scale(2) rotate(0deg) translateZ(0);"
+>
+  {
+    rows.map((_, i) => (
+      <div class="row relative h-8 w-16 border-l border-slate-700/50">
+        {cols.map((_, j) => (
+          <div
+            data-box
+            class="box pointer-events-auto relative h-8 w-16 border-r border-t border-slate-700/50"
+          >
+            {j % 2 === 0 && i % 2 === 0 && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="pointer-events-none absolute -left-[22px] -top-[14px] h-6 w-10 stroke-[1px] text-slate-700/50"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6v12m6-6H6"
+                />
+              </svg>
+            )}
+          </div>
+        ))}
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  import { animate } from "motion";
+  const transparency = "AA";
+  const colors = ["#FFD41D", "#FFA240", "#D73535", "#FF4646"];
+
+  const boxes = document.querySelectorAll("[data-box]");
+
+  boxes.forEach(box => {
+    box.addEventListener("mouseenter", () => {
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+      // Immediate flash to color
+      animate(
+        box,
+        { backgroundColor: randomColor + transparency },
+        { duration: 0 }
+      );
+    });
+
+    box.addEventListener("mouseleave", () => {
+      // Slow fade back to transparent
+      animate(box, { backgroundColor: "rgba(0,0,0,0)" }, { duration: 2 });
+    });
+  });
+</script>

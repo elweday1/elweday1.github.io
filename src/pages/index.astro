@@ -2,91 +2,412 @@
 export const prerender = true;
 import Layout from "@layouts/Layout.astro";
 import LinkButton from "@components/LinkButton.astro";
-import Hr from "@components/Hr.astro";
 import PostCard from "@components/PostCard.astro";
 import ProjectCard from "@components/ProjectCard.astro";
 import getSorted from "@utils/getSorted";
 import type { CollectionEntry } from "astro:content";
+import Hero from "@components/Hero.astro";
+import { Icon } from "astro-icon";
+import { Image } from "astro:assets";
+import siemens from "@public/logos/siemens.svg";
+import deepmind from "@public/logos/deepmind.svg";
+
 const projects = await getSorted("projects");
 const posts = await getSorted("blog");
-
-import Hero from "@components/Hero.astro";
 ---
 
 <Layout title="Home" description="Mohammed Nasser's personal blog">
-  <section class="flex flex-col pb-6 pt-8">
+  <div class="home-container">
+    <!-- Hero Section -->
     <Hero />
-  </section>
-  <Hr />
 
-  <Hr />
+    <!-- Experience Section -->
+    <section class="experience-section relative py-16 md:py-20">
+      <div class="container mx-auto px-4">
+        <div class="section-header fade-in-up" data-delay="0">
+          <div class="mb-8 text-center md:mb-10">
+            <span
+              class="section-label mb-1.5 block text-xs uppercase tracking-wider text-skin-accent md:text-sm"
+            >
+              Experience
+            </span>
+            <h2
+              class="text-3xl font-bold text-skin-base md:text-4xl lg:text-5xl"
+            >
+              Where I've Worked
+            </h2>
+          </div>
+        </div>
 
-  {
-    projects.length > 0 && (
-      <>
-        <section id="projects">
-          <h2 class="flex w-full justify-between  pb-2 ">
-            <span>Projects</span>
-            <LinkButton href="/projects">
-              <span class="inline-flex  scale-[60%] items-end whitespace-nowrap ">
-                View All...
-                <svg xmlns="http://www.w3.org/2000/svg">
-                  <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z" />
-                </svg>
+        <div class="experience-grid mx-auto max-w-3xl">
+          <div class="experience-item fade-in-up" data-delay="100">
+            <div
+              class="experience-card group flex items-center gap-4 rounded-xl border border-skin-line/15 bg-skin-card/30 p-5 backdrop-blur-[2px] transition-all hover:border-skin-accent/25 hover:bg-skin-card/40"
+            >
+              <div class="flex-shrink-0">
+                <Image
+                  width={48}
+                  height={48}
+                  src={deepmind}
+                  alt="DeepMind"
+                  class="rounded-lg"
+                />
+              </div>
+              <div class="flex-1">
+                <h3 class="mb-1 text-lg font-semibold text-skin-base">
+                  Software Engineer Intern
+                </h3>
+                <p class="mb-1 text-sm font-medium text-skin-accent">
+                  Google DeepMind
+                </p>
+                <p class="text-xs text-skin-base/70">
+                  Working on cutting-edge AI research and development
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="experience-item fade-in-up" data-delay="200">
+            <div
+              class="experience-card group flex items-center gap-4 rounded-xl border border-skin-line/15 bg-skin-card/30 p-5 backdrop-blur-[2px] transition-all hover:border-skin-accent/25 hover:bg-skin-card/40"
+            >
+              <div class="flex-shrink-0">
+                <Image
+                  width={48}
+                  height={48}
+                  src={siemens}
+                  alt="Siemens"
+                  class="rounded-lg"
+                />
+              </div>
+              <div class="flex-1">
+                <h3 class="mb-1 text-lg font-semibold text-skin-base">
+                  Software Engineer Intern
+                </h3>
+                <p class="mb-1 text-sm font-medium text-skin-accent">Siemens</p>
+                <p class="text-xs text-skin-base/70">
+                  Developing industrial software solutions
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    {
+      projects.length > 0 && (
+        <section class="projects-section relative py-16 md:py-24">
+          <div class="container mx-auto px-4">
+            <div class="section-header fade-in-up" data-delay="0">
+              <div class="mb-10 flex items-center justify-between md:mb-12">
+                <div>
+                  <span class="section-label mb-1.5 block text-xs uppercase tracking-wider text-skin-accent md:text-sm">
+                    Featured Work
+                  </span>
+                  <h2 class="text-3xl font-bold text-skin-base md:text-4xl lg:text-5xl">
+                    Projects
+                  </h2>
+                </div>
+                <LinkButton href="/projects">
+                  <span class="inline-flex items-center gap-2">
+                    View All
+                    <Icon name="mdi:arrow-right" class="size-4 md:size-5" />
+                  </span>
+                </LinkButton>
+              </div>
+            </div>
+
+            <div class="projects-grid">
+              {projects.slice(0, 4).map((p, index) => (
+                <div class="project-item fade-in-up" data-delay={index * 100}>
+                  <ProjectCard project={p as CollectionEntry<"projects">} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Blog Posts Section -->
+    {
+      posts.length > 0 && (
+        <section class="posts-section relative py-16 md:py-24">
+          <div class="container mx-auto px-4">
+            <div class="section-header fade-in-up" data-delay="0">
+              <div class="mb-10 flex items-center justify-between md:mb-12">
+                <div>
+                  <span class="section-label mb-1.5 block text-xs uppercase tracking-wider text-skin-accent md:text-sm">
+                    Latest Thoughts
+                  </span>
+                  <h2 class="text-3xl font-bold text-skin-base md:text-4xl lg:text-5xl">
+                    Recent Posts
+                  </h2>
+                </div>
+                <LinkButton href="/blog">
+                  <span class="inline-flex items-center gap-2">
+                    Read More
+                    <Icon name="mdi:arrow-right" class="size-4 md:size-5" />
+                  </span>
+                </LinkButton>
+              </div>
+            </div>
+
+            <div class="posts-grid">
+              {posts.slice(0, 4).map((post, index) => (
+                <div class="post-item fade-in-up" data-delay={index * 100}>
+                  <PostCard post={post as CollectionEntry<"blog">} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- CTA Section -->
+    <section class="cta-section relative overflow-hidden py-16 md:py-24">
+      <div class="container mx-auto px-4 text-center">
+        <div class="cta-content fade-in-up mx-auto max-w-2xl">
+          <h2 class="mb-4 text-3xl font-bold text-skin-base md:text-4xl">
+            Let's Build Something Together
+          </h2>
+          <p class="mb-8 text-lg text-skin-base/70">
+            Interested in collaborating or have a project in mind? Let's
+            connect!
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <LinkButton href="/about">
+              <span class="inline-flex items-center gap-2">
+                About Me
+                <Icon name="mdi:information" class="size-5" />
               </span>
             </LinkButton>
-          </h2>
-          <ul class="grid place-items-center gap-10 place-self-center  sm:grid-cols-2">
-            {projects.slice(0, 2).map(p => (
-              <ProjectCard project={p as CollectionEntry<"projects">} />
-            ))}
-          </ul>
-        </section>
-
-        <Hr />
-      </>
-    )
-  }
-
-  <section id="recent-posts">
-    <h2 class="flex w-full justify-between pb-2">
-      <span> Recent Posts</span>
-      <LinkButton href="/blog">
-        <span
-          class="inline-flex origin-right scale-[60%] items-center whitespace-nowrap"
-        >
-          Read More...
-          <svg xmlns="http://www.w3.org/2000/svg"
-            ><path
-              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
-            ></path>
-          </svg>
-        </span>
-      </LinkButton>
-    </h2>
-    <ul class="grid place-items-center gap-2 place-self-center sm:grid-cols-2">
-      {
-        posts
-          .slice(0, 2)
-          .map(post => <PostCard post={post as CollectionEntry<"blog">} />)
-      }
-    </ul>
-  </section>
+            <LinkButton href="/projects">
+              <span class="inline-flex items-center gap-2">
+                View Projects
+                <Icon name="mdi:code-tags" class="size-5" />
+              </span>
+            </LinkButton>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <style>
-  section {
-    @apply h-screen w-full pb-6 pt-12;
-    scroll-snap-align: start;
-    scroll-snap-type: mandatory;
-    height: calc(100vh - 55px);
-    overflow-y: hidden;
-    scroll-snap-stop: always;
-
-    justify-content: center;
-    align-content: center;
+  .home-container {
+    position: relative;
   }
-  h2 {
-    @apply text-2xl font-semibold tracking-wide;
+
+  /* Hero Section */
+  .hero-section {
+    position: relative;
+    background: transparent;
+  }
+
+  /* Section Headers */
+  .section-header {
+    position: relative;
+  }
+
+  .section-label {
+    opacity: 0.7;
+    font-weight: 600;
+  }
+
+  /* Experience Section */
+  .experience-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .experience-grid {
+      gap: 1.5rem;
+    }
+  }
+
+  .experience-item {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .experience-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Projects & Posts Grid */
+  .projects-grid,
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .projects-grid,
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  .project-item,
+  .post-item {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-item.visible,
+  .post-item.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  /* Stagger animation for grid items */
+  .project-item:nth-child(1),
+  .post-item:nth-child(1) {
+    transition-delay: 0ms;
+  }
+
+  .project-item:nth-child(2),
+  .post-item:nth-child(2) {
+    transition-delay: 150ms;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    background: rgba(var(--color-fill), 0.2);
+    position: relative;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Fade in animations */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Sections - no harsh shadows */
+  .projects-section,
+  .posts-section {
+    position: relative;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in-up,
+    .project-item,
+    .post-item,
+    .experience-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .scroll-indicator {
+      animation: none;
+    }
   }
 </style>
+
+<script>
+  function initScrollAnimations() {
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: "0px 0px -100px 0px",
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+
+          const delay = entry.target.dataset.delay || 0;
+          if (delay > 0) {
+            setTimeout(() => {
+              entry.target.style.transitionDelay = `${delay}ms`;
+            }, 10);
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document
+      .querySelectorAll(
+        ".fade-in-up, .project-item, .post-item, .experience-item, .section-header"
+      )
+      .forEach(el => {
+        observer.observe(el);
+      });
+
+    // Parallax and scroll effects
+    let ticking = false;
+    const heroSection = document.querySelector(".hero-section");
+
+    function updateScrollEffects() {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      // Hero parallax - subtle
+      if (heroSection && scrollY < windowHeight) {
+        const heroContent = document.querySelector(".hero-content");
+        if (heroContent) {
+          const parallaxValue = scrollY * 0.15;
+          heroContent.style.transform = `translateY(${parallaxValue}px)`;
+        }
+      }
+
+      // Scroll indicator fade - keep visible until significant scroll
+      const scrollIndicator = document.querySelector(".scroll-indicator");
+      if (scrollIndicator) {
+        // Only fade if scrolled past 200px, otherwise keep fully visible
+        if (scrollY < 200) {
+          scrollIndicator.style.opacity = "1";
+        } else {
+          const indicatorOpacity = Math.max(0, 1 - (scrollY - 200) / 400);
+          scrollIndicator.style.opacity = indicatorOpacity.toString();
+        }
+      }
+
+      ticking = false;
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(updateScrollEffects);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    updateScrollEffects();
+  }
+
+  document.addEventListener("DOMContentLoaded", initScrollAnimations);
+  document.addEventListener("astro:page-load", initScrollAnimations);
+</script>
