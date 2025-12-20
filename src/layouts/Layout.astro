@@ -34,7 +34,7 @@ ogImage = ogImage ? ogImage : SITE.website + "/assets/images/fallback.png";
 
 <!doctype html>
 <html
-  class="sl-theme-dark h-full w-full overscroll-y-contain motion-safe:scroll-smooth"
+  class="h-full w-full overscroll-y-contain motion-safe:scroll-smooth"
   lang="en"
 >
   <head>
@@ -111,7 +111,34 @@ ogImage = ogImage ? ogImage : SITE.website + "/assets/images/fallback.png";
     }
     <ViewTransitions />
 
-    <script is:inline src="/assets/js/toggle-theme.js"></script>
+    <style is:global>
+      :root {
+        color-scheme: light dark;
+      }
+      /* Use standard CSS instead of @apply for Shoelace classes */
+      html {
+        content-visibility: visible;
+      }
+      
+      /* Apply Shoelace themes based on system preference */
+      @media (prefers-color-scheme: light) {
+        html {
+          background-color: rgb(242, 245, 248);
+        }
+        html:not(.sl-theme-dark) {
+          /* Shoelace light theme is usually default, but we can be explicit */
+        }
+      }
+      
+      @media (prefers-color-scheme: dark) {
+        html {
+          background-color: rgb(30, 32, 35);
+        }
+        html {
+          color-scheme: dark;
+        }
+      }
+    </style>
     <style>
       #main-body:nth-child(3) {
         container-name: main-body;
@@ -123,8 +150,8 @@ ogImage = ogImage ? ogImage : SITE.website + "/assets/images/fallback.png";
     <Batman />
 
     <div
-      style="background-color: rgba(var(--color-fill-ligher), 0.3);"
-      class="main-container flex h-full w-full flex-col place-self-center overflow-hidden rounded-xl border border-skin-line/10 px-4 backdrop-blur-[2px] md:my-7 md:max-w-5xl"
+      style="background-color: rgba(15, 15, 15, 0.5);"
+      class="main-container flex h-full w-full flex-col place-self-center overflow-hidden rounded-xl px-4 backdrop-blur-xl md:my-7 md:max-w-5xl"
     >
       <Header path={path} />
       <main
