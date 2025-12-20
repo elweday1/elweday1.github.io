@@ -61,66 +61,74 @@ const cols = Array.from({ length: 80 });
     "#7986CB", "#64B5F6", "#4FC3F7", "#4DD0E1", "#4DB6AC", "#81C784", 
     "#AED581", "#DCE775", "#FF8A65"
   ];
-  const container = document.getElementById('boxes-container');
-  const iconsData = container?.dataset.icons;
-  const icons = iconsData ? JSON.parse(iconsData) : [];
-  const boxes = document.querySelectorAll("[data-box]");
 
-  boxes.forEach(box => {
-    let isAnimating = false;
+  const initBackground = () => {
+    const container = document.getElementById('boxes-container');
+    const iconsData = container?.dataset.icons;
+    const icons = iconsData ? JSON.parse(iconsData) : [];
+    const boxes = document.querySelectorAll("[data-box]");
 
-    box.addEventListener("mouseenter", () => {
-      if (isAnimating || !icons.length) return;
-      
-      isAnimating = true;
-      const randomIcon = icons[Math.floor(Math.random() * icons.length)];
-      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    boxes.forEach(box => {
+      let isAnimating = false;
 
-      const icon = document.createElement('iconify-icon');
-      icon.setAttribute('icon', randomIcon);
-      icon.style.color = randomColor;
-      icon.style.fontSize = '2.8rem';
-      icon.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
-      icon.style.opacity = '0';
-      icon.style.pointerEvents = 'none';
-      icon.style.display = 'block';
-      icon.style.position = 'relative';
-      icon.style.zIndex = '20';
-      
-      box.appendChild(icon);
+      box.addEventListener("mouseenter", () => {
+        if (isAnimating || !icons.length) return;
+        
+        isAnimating = true;
+        const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-      // Entrance animation
-      // @ts-ignore
-      animate(icon, { 
-        opacity: [0, 1], 
-        scale: [0.3, 1],
-        skewX: [48, 48],
-        skewY: [-14, -14]
-      }, { duration: 0.15, easing: "ease-out" });
-      
-      // @ts-ignore
-      animate(box, { backgroundColor: [ "transparent", randomColor + '26' ] }, { duration: 0.15 });
+        const icon = document.createElement('iconify-icon');
+        icon.setAttribute('icon', randomIcon);
+        icon.style.color = randomColor;
+        icon.style.fontSize = '2.8rem';
+        icon.style.filter = `drop-shadow(0 0 18px ${randomColor})`;
+        icon.style.opacity = '0';
+        icon.style.pointerEvents = 'none';
+        icon.style.display = 'block';
+        icon.style.position = 'relative';
+        icon.style.zIndex = '20';
+        
+        box.appendChild(icon);
 
-      // Lifecycle stay then vanish
-      setTimeout(() => {
+        // Entrance animation
         // @ts-ignore
-        const outAnim = animate(icon, { 
-          opacity: [1, 0], 
-          scale: [1, 0.2],
+        animate(icon, { 
+          opacity: [0, 1], 
+          scale: [0.3, 1],
           skewX: [48, 48],
           skewY: [-14, -14]
-        }, { duration: 0.4, easing: "ease-in" });
-
+        }, { duration: 0.15, easing: "ease-out" });
+        
         // @ts-ignore
-        animate(box, { backgroundColor: ["rgba(0,0,0,0.15)", "transparent"] }, { duration: 0.4 });
+        animate(box, { backgroundColor: [ "transparent", randomColor + '26' ] }, { duration: 0.15 });
 
-        outAnim.finished.then(() => {
-          if (icon && icon.parentNode === box) {
-            box.removeChild(icon);
-          }
-          isAnimating = false;
-        });
-      }, 2000); 
+        // Lifecycle stay then vanish
+        setTimeout(() => {
+          // @ts-ignore
+          const outAnim = animate(icon, { 
+            opacity: [1, 0], 
+            scale: [1, 0.2],
+            skewX: [48, 48],
+            skewY: [-14, -14]
+          }, { duration: 0.4, easing: "ease-in" });
+
+          // @ts-ignore
+          animate(box, { backgroundColor: ["rgba(0,0,0,0.15)", "transparent"] }, { duration: 0.4 });
+
+          outAnim.finished.then(() => {
+            if (icon && icon.parentNode === box) {
+              box.removeChild(icon);
+            }
+            isAnimating = false;
+          });
+        }, 2000); 
+      });
     });
-  });
+  };
+
+  // Initialize on first load
+  initBackground();
+  // Re-initialize on every navigation
+  document.addEventListener("astro:page-load", initBackground);
 </script>
