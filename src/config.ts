@@ -158,14 +158,6 @@ export const Technologies: Record<string, {
     type: "Programming Language",
     display: true,
   },
-  java: {
-    name: "Java",
-    icon: "simple-icons:openjdk",
-    url: "https://www.java.com/",
-    description: "Versatile object-oriented language.",
-    type: "Programming Language",
-    display: true,
-  },
   "c++": {
     name: "C++",
     icon: "simple-icons:cplusplus",
