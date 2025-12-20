@@ -1,5 +1,5 @@
 ---
-import { MY_SHOWS, HOBBIES, MESSAGE_OPTIONS } from "@config";
+import { MY_SHOWS, HOBBIES, MESSAGE_OPTIONS, SITE } from "@config";
 import MoviesGallery from "@components/MoviesGallery.astro";
 import Tooltip from "@components/StackIconTooltip.astro";
 import getShowsData from "@utils/shows";
@@ -80,7 +80,7 @@ const showsData = await getShowsData(env.OMDB_API_KEY, MY_SHOWS);
             </button>
             <a
               class="flex w-full place-items-center justify-center gap-2 place-self-center rounded-lg bg-skin-accent/30 px-4 py-2 text-lg transition-all hover:scale-[1.03] hover:bg-skin-accent/80"
-              href="/resume"
+              href={"https://resume." + SITE.website}
             >
               <Icon class="fill-skin-base" name="lucide:download" />
               <span> Resume</span>
@@ -121,16 +121,33 @@ const showsData = await getShowsData(env.OMDB_API_KEY, MY_SHOWS);
         </ul>
       </section>
       <section>
-        <h2 tabindex="0">Hobbies and Interests</h2>
+        <h2 tabindex="0">Education</h2>
+        <div class="rounded-lg bg-skin-fill p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+            <h3 class="font-bold text-lg text-skin-base">Helwan University</h3>
+            <span class="text-sm font-medium text-skin-accent">Graduation: June 2026</span>
+          </div>
+          <div>
+            <p class="text-skin-base/80 mb-2">B.S. in Computer Engineering</p>
+            <div class="border-l-2 border-skin-accent/30 pl-4 py-1">
+              <span class="text-xs font-black uppercase tracking-widest text-skin-accent/60 block mb-1">Graduation Project</span>
+              <p class="text-sm italic text-skin-base/60">Virtual Laboratory Learning Management System to connect physical labs to user accessible AI assisted UIs.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 tabindex="0">Professional Interests</h2>
         <ul class="grid grid-cols-2 justify-center gap-3 sm:grid-cols-3">
           {
             HOBBIES.map(hobby => (
               <li
                 tabindex="0"
-                class="flex gap-5 rounded-lg  bg-skin-fill px-5 py-2"
+                class="flex gap-4 rounded-lg bg-skin-fill px-5 py-3 transition-all hover:bg-skin-accent/10 border border-transparent hover:border-skin-accent/20"
               >
-                <Icon name={hobby.icon} class="size-9" />
-                <span class="place-self-center">{hobby.name}</span>
+                <Icon name={hobby.icon} class="size-6 text-skin-accent" />
+                <span class="place-self-center text-sm font-medium">{hobby.name}</span>
               </li>
             ))
           }

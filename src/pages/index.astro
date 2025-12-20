@@ -22,72 +22,82 @@ const posts = await getSorted("blog");
     <Hero />
 
     <!-- Experience Section -->
-    <section class="experience-section relative py-16 md:py-20">
-      <div class="container mx-auto px-4">
-        <div class="section-header fade-in-up" data-delay="0">
-          <div class="mb-8 text-center md:mb-10">
-            <span
-              class="section-label mb-1.5 block text-xs uppercase tracking-wider text-skin-accent md:text-sm"
-            >
-              Experience
-            </span>
-            <h2
-              class="text-3xl font-bold text-skin-base md:text-4xl lg:text-5xl"
-            >
-              Where I've Worked
-            </h2>
-          </div>
+    <section class="experience-section relative py-20 px-6 lg:px-12">
+      <div class="container mx-auto max-w-7xl">
+        <div class="section-header animate-reveal mb-12" data-delay="0">
+          <span class="text-xs font-black uppercase tracking-[0.5em] text-skin-accent/60">01. History</span>
+          <h2 class="mt-4 text-4xl font-black tracking-tighter text-skin-base sm:text-6xl">RESEARCH & INDUSTRY<span class="text-skin-accent">_</span></h2>
         </div>
 
-        <div class="experience-grid mx-auto max-w-3xl">
-          <div class="experience-item fade-in-up" data-delay="100">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div class="experience-item animate-reveal" data-delay="200">
             <div
-              class="experience-card group flex items-center gap-4 rounded-xl border border-skin-line/15 bg-skin-card/30 p-5 backdrop-blur-[2px] transition-all hover:border-skin-accent/25 hover:bg-skin-card/40"
+              class="group flex flex-col gap-6 rounded-2xl border border-white/5 bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:bg-white/[0.06] hover:border-skin-accent/20 h-full"
             >
-              <div class="flex-shrink-0">
-                <Image
-                  width={48}
-                  height={48}
-                  src={deepmind}
-                  alt="DeepMind"
-                  class="rounded-lg"
-                />
+              <div class="flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 border border-white/10 p-2 shadow-xl group-hover:scale-110 transition-transform">
+                  <Image width={32} height={32} src={deepmind} alt="DeepMind" class="rounded-sm" />
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-skin-base leading-none">DeepMind</h3>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-skin-accent/60">Zurich, Switzerland</span>
+                </div>
               </div>
-              <div class="flex-1">
-                <h3 class="mb-1 text-lg font-semibold text-skin-base">
-                  Software Engineer Intern
-                </h3>
-                <p class="mb-1 text-sm font-medium text-skin-accent">
-                  Google DeepMind
-                </p>
-                <p class="text-xs text-skin-base/70">
-                  Working on cutting-edge AI research and development
-                </p>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-skin-base/30">
+                  <span>Jun 2025 — Sep 2025</span>
+                  <div class="size-1 rounded-full bg-skin-accent"></div>
+                </div>
+                <h4 class="text-sm font-bold text-skin-base">Intern Software Engineer</h4>
+                <p class="text-xs leading-relaxed text-skin-base/50">Gemini Collaborator: Agentic workflows & novel internal productivity platform on advanced orchestration.</p>
               </div>
             </div>
           </div>
 
-          <div class="experience-item fade-in-up" data-delay="200">
+          <div class="experience-item animate-reveal" data-delay="300">
             <div
-              class="experience-card group flex items-center gap-4 rounded-xl border border-skin-line/15 bg-skin-card/30 p-5 backdrop-blur-[2px] transition-all hover:border-skin-accent/25 hover:bg-skin-card/40"
+              class="group flex flex-col gap-6 rounded-2xl border border-white/5 bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:bg-white/[0.06] hover:border-skin-accent/20 h-full"
             >
-              <div class="flex-shrink-0">
-                <Image
-                  width={48}
-                  height={48}
-                  src={siemens}
-                  alt="Siemens"
-                  class="rounded-lg"
-                />
+              <div class="flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 border border-white/10 p-2 shadow-xl group-hover:scale-110 transition-transform">
+                  <Image width={32} height={32} src={siemens} alt="Siemens" class="rounded-sm" />
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-skin-base leading-none">Siemens</h3>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-skin-accent/60">Cairo, EG</span>
+                </div>
               </div>
-              <div class="flex-1">
-                <h3 class="mb-1 text-lg font-semibold text-skin-base">
-                  Software Engineer Intern
-                </h3>
-                <p class="mb-1 text-sm font-medium text-skin-accent">Siemens</p>
-                <p class="text-xs text-skin-base/70">
-                  Developing industrial software solutions
-                </p>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-skin-base/30">
+                  <span>Aug 2024 — May 2025</span>
+                  <div class="size-1 rounded-full bg-skin-base/10"></div>
+                </div>
+                <h4 class="text-sm font-bold text-skin-base">Intern Software Engineer</h4>
+                <p class="text-xs leading-relaxed text-skin-base/50">QuestaOne: Full-stack features for hardware IDE, gRPC services, and performant RTL tree-view components.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="experience-item animate-reveal" data-delay="400">
+            <div
+              class="group flex flex-col gap-6 rounded-2xl border border-white/5 bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:bg-white/[0.06] hover:border-skin-accent/20 h-full"
+            >
+              <div class="flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-900 border border-white/10 p-2 shadow-xl group-hover:scale-110 transition-transform">
+                  <div class="flex h-full w-full items-center justify-center font-black text-skin-accent">S</div>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-skin-base leading-none">Studyo</h3>
+                  <span class="text-[10px] font-bold uppercase tracking-widest text-skin-accent/60">London, UK (Remote)</span>
+                </div>
+              </div>
+              <div class="flex-1 space-y-2">
+                <div class="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-skin-base/30">
+                  <span>Nov 2023 — Aug 2024</span>
+                  <div class="size-1 rounded-full bg-skin-base/10"></div>
+                </div>
+                <h4 class="text-sm font-bold text-skin-base">Software Engineer (Contract)</h4>
+                <p class="text-xs leading-relaxed text-skin-base/50">GCP Architecture: Backend video processing microservices in Go/Python and automated CI/CD pipelines.</p>
               </div>
             </div>
           </div>
@@ -98,30 +108,22 @@ const posts = await getSorted("blog");
     <!-- Projects Section -->
     {
       projects.length > 0 && (
-        <section class="projects-section relative py-16 md:py-24">
-          <div class="container mx-auto px-4">
-            <div class="section-header fade-in-up" data-delay="0">
-              <div class="mb-10 flex items-center justify-between md:mb-12">
-                <div>
-                  <span class="section-label mb-1.5 block text-xs uppercase tracking-wider text-skin-accent md:text-sm">
-                    Featured Work
-                  </span>
-                  <h2 class="text-3xl font-bold text-skin-base md:text-4xl lg:text-5xl">
-                    Projects
-                  </h2>
-                </div>
-                <LinkButton href="/projects">
-                  <span class="inline-flex items-center gap-2">
-                    View All
-                    <Icon name="mdi:arrow-right" class="size-4 md:size-5" />
-                  </span>
-                </LinkButton>
+        <section class="projects-section relative py-20 px-6 lg:px-12">
+          <div class="container mx-auto max-w-7xl">
+            <div class="animate-reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end mb-12" data-delay="0">
+              <div>
+                <span class="text-xs font-black uppercase tracking-[0.5em] text-skin-accent/60">02. Selected Work</span>
+                <h2 class="mt-4 text-4xl font-black tracking-tighter text-skin-base sm:text-6xl">THE WORKSPACE<span class="text-skin-accent">_</span></h2>
               </div>
+              <LinkButton href="/projects" className="group flex items-center gap-3 text-xs font-black uppercase tracking-widest text-skin-base/60 hover:text-skin-accent">
+                All Projects
+                <Icon name="ph:arrow-right-bold" class="size-4 transition-transform group-hover:translate-x-1" />
+              </LinkButton>
             </div>
 
-            <div class="projects-grid">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
               {projects.slice(0, 4).map((p, index) => (
-                <div class="project-item fade-in-up" data-delay={index * 100}>
+                <div class="project-item animate-reveal" data-delay={200 + index * 100}>
                   <ProjectCard project={p as CollectionEntry<"projects">} />
                 </div>
               ))}
@@ -134,30 +136,22 @@ const posts = await getSorted("blog");
     <!-- Blog Posts Section -->
     {
       posts.length > 0 && (
-        <section class="posts-section relative py-16 md:py-24">
-          <div class="container mx-auto px-4">
-            <div class="section-header fade-in-up" data-delay="0">
-              <div class="mb-10 flex items-center justify-between md:mb-12">
-                <div>
-                  <span class="section-label mb-1.5 block text-xs uppercase tracking-wider text-skin-accent md:text-sm">
-                    Latest Thoughts
-                  </span>
-                  <h2 class="text-3xl font-bold text-skin-base md:text-4xl lg:text-5xl">
-                    Recent Posts
-                  </h2>
-                </div>
-                <LinkButton href="/blog">
-                  <span class="inline-flex items-center gap-2">
-                    Read More
-                    <Icon name="mdi:arrow-right" class="size-4 md:size-5" />
-                  </span>
-                </LinkButton>
+        <section class="posts-section relative py-20 px-6 lg:px-12">
+          <div class="container mx-auto max-w-7xl">
+            <div class="animate-reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end mb-12" data-delay="0">
+              <div>
+                <span class="text-xs font-black uppercase tracking-[0.5em] text-skin-accent/60">03. Archive</span>
+                <h2 class="mt-4 text-4xl font-black tracking-tighter text-skin-base sm:text-6xl">THOUGHTS<span class="text-skin-accent">/</span>WRITINGS</h2>
               </div>
+              <LinkButton href="/blog" className="group flex items-center gap-3 text-xs font-black uppercase tracking-widest text-skin-base/60 hover:text-skin-accent">
+                Inside the Blog
+                <Icon name="ph:arrow-right-bold" class="size-4 transition-transform group-hover:translate-x-1" />
+              </LinkButton>
             </div>
 
-            <div class="posts-grid">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
               {posts.slice(0, 4).map((post, index) => (
-                <div class="post-item fade-in-up" data-delay={index * 100}>
+                <div class="post-item animate-reveal" data-delay={200 + index * 100}>
                   <PostCard post={post as CollectionEntry<"blog">} />
                 </div>
               ))}
@@ -168,32 +162,30 @@ const posts = await getSorted("blog");
     }
 
     <!-- CTA Section -->
-    <section class="cta-section relative overflow-hidden py-16 md:py-24">
-      <div class="container mx-auto px-4 text-center">
-        <div class="cta-content fade-in-up mx-auto max-w-2xl">
-          <h2 class="mb-4 text-3xl font-bold text-skin-base md:text-4xl">
-            Let's Build Something Together
+    <section class="cta-section relative overflow-hidden py-32 px-6 lg:px-12">
+      <div class="container relative z-10 mx-auto max-w-4xl text-center">
+        <div class="cta-content animate-reveal" data-delay="0">
+          <span class="text-xs font-black uppercase tracking-[0.5em] text-skin-accent/60 mb-6 block">Collaboration</span>
+          <h2 class="mb-6 text-5xl font-black tracking-tighter text-skin-base sm:text-7xl">
+            LET'S SYNC<span class="text-skin-accent">.</span>
           </h2>
-          <p class="mb-8 text-lg text-skin-base/70">
-            Interested in collaborating or have a project in mind? Let's
-            connect!
+          <p class="mb-12 text-xl font-medium text-skin-base/60 sm:text-2xl">
+            Open for <span class="text-skin-base italic">innovative</span> partnerships or just a tech chat.
           </p>
-          <div class="flex flex-wrap justify-center gap-4">
-            <LinkButton href="/about">
-              <span class="inline-flex items-center gap-2">
-                About Me
-                <Icon name="mdi:information" class="size-5" />
-              </span>
-            </LinkButton>
-            <LinkButton href="/projects">
-              <span class="inline-flex items-center gap-2">
-                View Projects
-                <Icon name="mdi:code-tags" class="size-5" />
-              </span>
-            </LinkButton>
+          <div class="flex flex-wrap justify-center gap-6">
+            <a href="/about" class="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-10 py-5 font-bold text-skin-base transition-all hover:bg-white/10 hover:border-skin-accent/30 backdrop-blur-md">
+              <span>My Journey</span>
+              <Icon name="ph:user-bold" class="size-5" />
+            </a>
+            <a href="mailto:mohammednh2864@gmail.com" class="group relative flex items-center gap-3 overflow-hidden rounded-2xl bg-skin-accent px-10 py-5 font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98]">
+              <span>Get in Touch</span>
+              <Icon name="ph:envelope-simple-bold" class="size-5 transition-transform group-hover:-rotate-12" />
+            </a>
           </div>
         </div>
       </div>
+      <!-- Artistic Background Detail -->
+      <div class="absolute top-1/2 left-1/2 -z-10 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-skin-accent/10 blur-[120px]"></div>
     </section>
   </div>
 </Layout>
@@ -203,113 +195,23 @@ const posts = await getSorted("blog");
     position: relative;
   }
 
-  /* Hero Section */
-  .hero-section {
-    position: relative;
-    background: transparent;
-  }
-
-  /* Section Headers */
-  .section-header {
-    position: relative;
-  }
-
-  .section-label {
-    opacity: 0.7;
-    font-weight: 600;
-  }
-
   /* Experience Section */
-  .experience-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  @media (min-width: 640px) {
-    .experience-grid {
-      gap: 1.5rem;
-    }
-  }
-
   .experience-item {
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Reveal animations */
+  .animate-reveal {
     opacity: 0;
+    filter: blur(10px);
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .experience-item.visible {
+  .animate-reveal.is-visible {
     opacity: 1;
+    filter: blur(0);
     transform: translateY(0);
-  }
-
-  /* Projects & Posts Grid */
-  .projects-grid,
-  .posts-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  @media (min-width: 640px) {
-    .projects-grid,
-    .posts-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-  }
-
-  .project-item,
-  .post-item {
-    opacity: 0;
-    transform: translateY(50px) scale(0.95);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .project-item.visible,
-  .post-item.visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  /* Stagger animation for grid items */
-  .project-item:nth-child(1),
-  .post-item:nth-child(1) {
-    transition-delay: 0ms;
-  }
-
-  .project-item:nth-child(2),
-  .post-item:nth-child(2) {
-    transition-delay: 150ms;
-  }
-
-  /* CTA Section */
-  .cta-section {
-    background: rgba(var(--color-fill), 0.2);
-    position: relative;
-  }
-
-  .cta-content {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Fade in animations */
-  .fade-in-up {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .fade-in-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Sections - no harsh shadows */
-  .projects-section,
-  .posts-section {
-    position: relative;
   }
 
   /* Smooth scroll behavior */
@@ -319,17 +221,11 @@ const posts = await getSorted("blog");
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
-    .fade-in-up,
-    .project-item,
-    .post-item,
-    .experience-item {
+    .animate-reveal {
       opacity: 1;
       transform: none;
+      filter: none;
       transition: none;
-    }
-
-    .scroll-indicator {
-      animation: none;
     }
   }
 </style>
@@ -337,61 +233,40 @@ const posts = await getSorted("blog");
 <script>
   function initScrollAnimations() {
     const observerOptions = {
-      threshold: 0.15,
-      rootMargin: "0px 0px -100px 0px",
+      threshold: 0.1,
+      rootMargin: "0px",
     };
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-
-          const delay = entry.target.dataset.delay || 0;
-          if (delay > 0) {
-            setTimeout(() => {
-              entry.target.style.transitionDelay = `${delay}ms`;
-            }, 10);
-          }
+          const target = entry.target as HTMLElement;
+          const delay = parseInt(target.dataset.delay || "0");
+          setTimeout(() => {
+            target.classList.add("is-visible");
+          }, delay);
         }
       });
     }, observerOptions);
 
-    // Observe all animated elements
+    // Observe all architectural animated elements
     document
-      .querySelectorAll(
-        ".fade-in-up, .project-item, .post-item, .experience-item, .section-header"
-      )
+      .querySelectorAll(".animate-reveal")
       .forEach(el => {
         observer.observe(el);
       });
 
-    // Parallax and scroll effects
+    // Parallax effects
     let ticking = false;
     const heroSection = document.querySelector(".hero-section");
 
     function updateScrollEffects() {
       const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-
-      // Hero parallax - subtle
-      if (heroSection && scrollY < windowHeight) {
-        const heroContent = document.querySelector(".hero-content");
-        if (heroContent) {
-          const parallaxValue = scrollY * 0.15;
-          heroContent.style.transform = `translateY(${parallaxValue}px)`;
-        }
-      }
-
-      // Scroll indicator fade - keep visible until significant scroll
-      const scrollIndicator = document.querySelector(".scroll-indicator");
-      if (scrollIndicator) {
-        // Only fade if scrolled past 200px, otherwise keep fully visible
-        if (scrollY < 200) {
-          scrollIndicator.style.opacity = "1";
-        } else {
-          const indicatorOpacity = Math.max(0, 1 - (scrollY - 200) / 400);
-          scrollIndicator.style.opacity = indicatorOpacity.toString();
-        }
+      
+      // Subtle title parallax
+      const title = document.querySelector('.hero-title') as HTMLElement;
+      if (title && scrollY < 600) {
+        title.style.transform = `translateY(${scrollY * 0.15}px)`;
       }
 
       ticking = false;

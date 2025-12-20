@@ -1,248 +1,141 @@
----
-import { SOCIALS } from "@config";
+  ---
+import { SOCIALS, HIGHLIGHTS } from "@config";
 import Icon from "astro-icon";
 import Socials from "@components/Socials.astro";
 import { Image } from "astro:assets";
-import siemens from "@public/logos/siemens.svg";
 import deepmind from "@public/logos/deepmind.svg";
-
-const socialCount = SOCIALS.filter(social => social.active).length;
 ---
 
 <section
-  class="hero-section relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden px-4"
+  class="hero-section relative flex min-h-[85vh] w-full flex-col justify-center overflow-hidden px-6 lg:px-12"
   aria-labelledby="hero-heading"
 >
-  <!-- Subtle background -->
-  <div class="hero-bg absolute inset-0 overflow-hidden">
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
+  <!-- Minimalist Background Architecture -->
+  <div class="hero-bg absolute inset-0 pointer-events-none">
+    <div class="absolute top-0 right-0 h-full w-1/3 bg-gradient-to-l from-skin-accent/5 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-skin-accent/[0.02] to-transparent"></div>
   </div>
 
-  <div
-    class="hero-content relative z-10 flex w-full max-w-3xl flex-col items-center text-center"
-  >
-    <!-- Greeting -->
-    <div class="hero-greeting animate-fade-in-up mb-3" data-delay="0">
-      <span class="text-sm font-medium text-skin-accent md:text-base"
-        >Hi, I'm</span
-      >
-    </div>
-
-    <!-- Name with RSS as the dot -->
-    <div class="hero-name animate-fade-in-up mb-4" data-delay="200">
-      <h1
-        id="hero-heading"
-        class="hero-title text-3xl font-bold leading-tight md:text-4xl lg:text-5xl"
-      >
-        <span class="name-first">Mohammed</span>
-        <span class="name-last">Nasser</span>
-        <a
-          href="/rss.xml"
-          aria-label="RSS Feed"
-          class="rss-dot ml-1.5 inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-skin-accent transition-all hover:scale-125 hover:bg-skin-accent/80 md:h-3 md:w-3"
-          title="RSS Feed"
-        >
-          <Icon name="ph:rss-bold" class="size-1.5 text-white md:size-2" />
-        </a>
-      </h1>
-    </div>
-
-    <!-- Role -->
-    <div class="hero-role animate-fade-in-up mb-6" data-delay="400">
-      <h2
-        class="text-base font-light uppercase tracking-[0.2em] text-skin-base/70 md:text-lg md:tracking-[0.25em]"
-      >
-        Software Engineer
-      </h2>
-    </div>
-
-    <!-- Description -->
-    <div
-      class="hero-description animate-fade-in-up mb-8 max-w-xl"
-      data-delay="600"
-    >
-      <p class="text-sm leading-relaxed text-skin-base/80 md:text-base">
-        A Computer Engineering Student passionate about
-        <span class="font-semibold text-skin-accent">open source</span>,
-        <span class="font-semibold text-skin-accent">web development</span>, and
-        building tools that help people.
-      </p>
-    </div>
-
-    <!-- Social links -->
-    {
-      socialCount > 0 && (
-        <div class="hero-socials animate-fade-in-up mb-12" data-delay="800">
-          <Socials />
+  <div class="container relative z-10 mx-auto max-w-7xl">
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      
+      <!-- Primary Brand Identity -->
+      <div class="max-w-4xl space-y-6">
+        <div class="hero-label-wrap animate-reveal" data-delay="0">
+          <span class="text-xs font-black uppercase tracking-[0.5em] text-skin-accent/60">SOFTWARE ENGINEER</span>
         </div>
-      )
-    }
+        
+        <h1 id="hero-heading" class="hero-title animate-reveal text-6xl font-black leading-[0.9] tracking-tighter text-skin-base sm:text-8xl lg:text-[10rem]" data-delay="200">
+          M.NASSER<span class="text-skin-accent">_</span>
+        </h1>
+
+        <p class="hero-tagline animate-reveal max-w-2xl text-xl font-medium leading-tight text-skin-base/60 sm:text-3xl" data-delay="400">
+          Engineering <span class="text-skin-base italic">agentic intelligence</span> and cross-org retrieval systems for the next phase of the web at <span class="bg-skin-accent/10 px-2 py-0.5 text-skin-accent rounded-md">DeepMind</span>.
+        </p>
+      </div>
+
+      <!-- Compact Social Sidebar -->
+      <div class="hero-sidebar animate-reveal flex flex-row items-center gap-6 lg:flex-col lg:items-end lg:justify-end lg:pb-4" data-delay="800">
+        <div class="hidden h-24 w-px bg-skin-line/20 lg:block"></div>
+        <Socials class="!p-0 !gap-6 flex-row lg:flex-col" />
+      </div>
+    </div>
+
+    <!-- The "Useful Info" Architecture -->
+    <div class="mt-20 grid grid-cols-1 gap-4 border-t border-skin-line/10 pt-12 sm:grid-cols-2 lg:grid-cols-3">
+      {HIGHLIGHTS.map((item, i) => (
+        <div class="hero-card animate-reveal group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.03] p-8 backdrop-blur-sm transition-all hover:bg-white/[0.06] hover:border-skin-accent/20" data-delay={600 + (i * 100)}>
+          <div class="relative z-10 space-y-4">
+             <div class="flex items-center justify-between">
+               <span class="text-[10px] font-bold uppercase tracking-widest text-skin-accent">{item.label}</span>
+               <div class="size-1 rounded-full bg-skin-accent group-hover:scale-[3] transition-transform"></div>
+             </div>
+             <div>
+               <h3 class="text-xl font-bold text-skin-base leading-tight">{item.value}</h3>
+               <p class="mt-1 text-xs font-medium text-skin-base/40 italic">{item.trend}</p>
+             </div>
+          </div>
+          <!-- Artistic card light -->
+          <div class="absolute -bottom-10 -right-10 size-32 rounded-full bg-skin-accent/5 blur-3xl group-hover:bg-skin-accent/10 transition-colors"></div>
+        </div>
+      ))}
+    </div>
   </div>
 
-  <!-- Scroll indicator - always visible -->
-  <div
-    class="scroll-indicator absolute bottom-12 left-1/2 z-30 -translate-x-1/2"
-    style="opacity: 1 !important;"
-  >
-    <div class="-mt-[100px] flex flex-col items-center gap-1.5">
-      <span
-        class="text-[10px] font-medium uppercase tracking-wider text-skin-base/50"
-        >Scroll</span
-      >
-      <div class="scroll-arrow">
-        <Icon name="mdi:chevron-down" class="size-5 text-skin-accent/80" />
-      </div>
+  <!-- Scroll Hook -->
+  <div class="absolute bottom-6 right-6 lg:bottom-12 lg:right-12">
+    <div class="flex items-center gap-4 rotate-90 origin-right translate-x-1/2">
+       <span class="text-[10px] font-black uppercase tracking-[0.5em] text-skin-base/20 whitespace-nowrap">Scroll Down</span>
+       <div class="h-20 w-px bg-gradient-to-t from-skin-accent to-transparent"></div>
     </div>
   </div>
 </section>
 
 <style>
-  .hero-bg {
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .gradient-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.05;
-    animation: float 30s ease-in-out infinite;
-  }
-
-  .orb-1 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(
-      circle,
-      rgba(var(--color-accent), 0.08) 0%,
-      transparent 70%
-    );
-    top: -150px;
-    left: -150px;
-    animation-delay: 0s;
-  }
-
-  .orb-2 {
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(
-      circle,
-      rgba(var(--color-accent), 0.06) 0%,
-      transparent 70%
-    );
-    bottom: -125px;
-    right: -125px;
-    animation-delay: 15s;
-  }
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translate(0, 0) scale(1);
-    }
-    50% {
-      transform: translate(30px, -30px) scale(1.03);
-    }
-  }
-
+  /* High-End Condensed Typography */
   .hero-title {
-    color: rgb(var(--color-skin-base));
+    font-family: 'Nunito', sans-serif; /* Fallback, assumes you have a strong sans-serif */
+    letter-spacing: -0.05em;
   }
 
-  .name-first,
-  .name-last {
-    display: inline-block;
-    color: rgb(var(--color-skin-base));
-  }
-
-  .rss-dot {
-    vertical-align: middle;
-    box-shadow: 0 0 6px rgba(var(--color-accent), 0.3);
-  }
-
-  .scroll-arrow {
-    animation: bounce-arrow 2s ease-in-out infinite;
-  }
-
-  @keyframes bounce-arrow {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(4px);
-    }
-  }
-
-  .animate-fade-in-up {
+  /* Entrance Animation: Artistic reveal */
+  .animate-reveal {
     opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: blur(10px);
+    transform: translateY(30px);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .animate-fade-in-up.visible {
+  .animate-reveal.show {
     opacity: 1;
+    filter: blur(0);
     transform: translateY(0);
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .gradient-orb,
-    .scroll-arrow,
-    .animate-fade-in-up {
-      animation: none !important;
-    }
+  /* Interactive Elements */
+  .hero-card {
+    cursor: default;
+  }
 
-    .animate-fade-in-up {
+  /* Reduced contrast for bloat control */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-reveal {
       opacity: 1;
       transform: none;
+      filter: none;
+      transition: none;
     }
   }
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: "0px",
-    };
-
-    const observer = new IntersectionObserver(entries => {
+  const initHero = () => {
+    const items = document.querySelectorAll(".animate-reveal");
+    
+    // Intersection Observer for the reveal
+    const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const delay = entry.target.dataset.delay || 0;
+          const delay = parseInt((entry.target as HTMLElement).dataset.delay || "0");
           setTimeout(() => {
-            entry.target.classList.add("visible");
+            entry.target.classList.add("show");
           }, delay);
         }
       });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    document.querySelectorAll(".animate-fade-in-up").forEach(el => {
-      observer.observe(el);
-    });
-  });
+    items.forEach(item => observer.observe(item));
 
-  document.addEventListener("astro:page-load", () => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: "0px",
-    };
+    // Simple parallax for the background orbs (if added back)
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const title = document.querySelector('.hero-title') as HTMLElement;
+      if (title) {
+        title.style.transform = `translateY(${scrolled * 0.1}px)`;
+      }
+    }, { passive: true });
+  };
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const delay = entry.target.dataset.delay || 0;
-          setTimeout(() => {
-            entry.target.classList.add("visible");
-          }, delay);
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll(".animate-fade-in-up").forEach(el => {
-      observer.observe(el);
-    });
-  });
+  document.addEventListener("astro:page-load", initHero);
+  initHero();
 </script>
