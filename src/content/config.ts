@@ -36,7 +36,7 @@ const projects = defineCollection({
         .date()
         .or(z.enum(["Present"]))
         .default("Present"),
-      stack: z.array(z.enum(keys)).default([]),
+      stack: z.array(z.enum(keys).or(z.string())).default([]),
       projectURL: z.string().url().optional(),
       githubURL: z.string().url().optional(),
       cover: image(),
