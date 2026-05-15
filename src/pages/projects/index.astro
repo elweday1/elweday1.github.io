@@ -15,41 +15,207 @@ export interface Props {
 }
 const allProjects: CollectionEntry<"projects">[] =
   await getCollection("projects");
+
+const experience = [
+  {
+    code: "W-01",
+    role: "Software Engineer",
+    org: "Google Health",
+    place: "London, UK",
+    time: "2026 - Present",
+    tone: "current",
+    keywords: ["health", "fitbit", "mobile dev"],
+  },
+  {
+    code: "W-02",
+    role: "Intern Software Engineer",
+    org: "Google DeepMind",
+    place: "Zurich, Switzerland",
+    time: "Jun 2025 - Sep 2025",
+    tone: "previous",
+    keywords: ["gemini", "agents", "collaborator"],
+  },
+  {
+    code: "W-03",
+    role: "Intern Software Engineer",
+    org: "Siemens",
+    place: "Cairo, Egypt · Hybrid",
+    time: "Aug 2024 - May 2025",
+    tone: "previous",
+    keywords: ["theia", "grpc", "rtl"],
+  },
+  {
+    code: "W-04",
+    role: "Software Engineer",
+    org: "Studyo",
+    place: "London, UK · Remote",
+    time: "Nov 2023 - Aug 2024",
+    tone: "previous",
+    keywords: ["gcp", "video", "automation"],
+  },
+];
+
 ---
 
 <Layout
-  title="projects"
-  description="List of some of technical projects I did."
+  title="work"
+  description="Mohammed Nasser's work, experience, and selected software projects."
 >
-  <article>
-    <h1 class="pt-6 text-start text-2xl tracking-wider sm:text-3xl">Tags</h1>
-  </article>
+  <section class="collection-page">
+    <header class="collection-hero">
+      <div>
+        <p class="eyebrow">Work Surface</p>
+        <h1>Work</h1>
+      </div>
+      <p class="lede">
+        Experience and selected software artifacts.
+      </p>
+    </header>
 
-  <ContentTags tags={allTags} type="tag">
-    <Tag
-      class="bg-skin-card px-5 py-2 text-xl text-skin-inverted"
-      name="VIEW-ALL"
-      type="all"
-      size="lg"
-    />
-  </ContentTags>
 
-  <h1 class="py-6 text-start text-2xl tracking-wider sm:text-3xl">Projects</h1>
-  <ul class="grid place-items-center gap-2 place-self-center sm:grid-cols-2">
+    <section aria-labelledby="experience-title" class="experience-board">
+      <h2 class="section-label" id="experience-title">Experience</h2>
+      <ol class="experience-list">
+        {
+          experience.map(item => (
+          <li class:list={["experience-card", item.tone]}>
+            <div class="experience-code">{item.code}</div>
+            <div class="experience-main">
+              <p>{item.time}</p>
+              <h2>{item.role}</h2>
+              <h3>{item.org}<span>{item.place}</span></h3>
+              <div class="experience-keywords">
+                {item.keywords.map(keyword => <span>{keyword}</span>)}
+              </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section aria-labelledby="project-tags">
+      <h2 class="section-label" id="project-tags">Tags</h2>
+      <ContentTags tags={allTags} type="tag">
+        <Tag name="View all" type="all" size="lg" />
+      </ContentTags>
+    </section>
+
+    <h2 class="section-label">Project Files</h2>
+    <ul class="work-grid">
     {
       allProjects.map(project => (
-        <ProjectCard class="col-span-1" project={project} />
+        <ProjectCard project={project} />
       ))
     }
-  </ul>
+    </ul>
+  </section>
 </Layout>
 
 <style>
-  section {
-    @apply flex  w-full flex-col gap-2 justify-self-start;
+  .experience-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 
-  h2 {
-    @apply text-start text-xl tracking-wider  sm:text-2xl;
+  .experience-card {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    min-height: 78px;
+    padding: 9px;
+    border: 1px solid rgba(9, 44, 46, 0.13);
+    border-radius: 3px;
+    background: rgba(248, 252, 249, 0.76);
+  }
+
+  .experience-card.current {
+    border-color: rgba(19, 114, 103, 0.3);
+    background: rgba(242, 251, 247, 0.88);
+  }
+
+  .experience-code {
+    display: grid;
+    height: 36px;
+    place-items: center;
+    border: 1px solid #9df2ff;
+    border-radius: 2px;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.12) 50%, rgba(0, 0, 0, 0.12) 50%),
+      #061b24;
+    background-size: 100% 4px, auto;
+    color: #d9fbff;
+    font-size: 10px;
+    font-weight: 900;
+    text-shadow: 0 0 8px #63ddf5;
+  }
+
+  .experience-main {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .experience-card p,
+  .experience-card h2,
+  .experience-card h3 {
+    margin: 0;
+  }
+
+  .experience-card p:first-child,
+  .experience-keywords span {
+    color: #137267;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .experience-card h2 {
+    overflow: hidden;
+    color: #092c2e;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: clamp(18px, 1.35vw, 24px);
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .experience-card h3 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    color: #137267;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .experience-card h3 span {
+    color: #486566;
+    font-weight: 700;
+  }
+
+  .experience-keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    margin-top: 2px;
+  }
+
+  .experience-keywords span {
+    padding-left: 7px;
+    border-left: 2px solid #9df2ff;
+    color: #486566;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 860px) {
+    .experience-list {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

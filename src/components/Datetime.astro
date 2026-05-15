@@ -15,16 +15,14 @@ const { datetime, size, class:className, endDate, relative = false } = Astro.pro
 
 const myDatetime = new Date(datetime);
 const dateFormat: Intl.DateTimeFormatOptions =  endDate? { year: "numeric", month: "short"} : { year: "numeric", month: "short", day: "numeric"}
-const timeFormat: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit"}
 const date = myDatetime.toLocaleDateString(LOCALE, dateFormat);
-const time = myDatetime.toLocaleTimeString(LOCALE, timeFormat);
 const end = endDate && endDate !== "Present"  ? new Date(endDate).toLocaleDateString(LOCALE, dateFormat): "Present";
 let stringDate = "";
 if (relative) {
   stringDate = getRelativeTime(myDatetime)
 }
 else {
-  stringDate = date + (end ? " - " + end : "") + (!endDate ? " " + time : "")
+  stringDate = date + (endDate ? " - " + end : "")
 }
 ---
 

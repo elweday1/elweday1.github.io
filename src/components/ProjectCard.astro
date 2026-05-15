@@ -1,11 +1,9 @@
 ---
-import Datetime from "./Datetime.astro";
 import type { CollectionEntry } from "astro:content";
 import { Icon } from "astro-icon";
 import { twMerge } from "tailwind-merge";
 import { Technologies } from "@config";
 import { Image } from "astro:assets";
-import { slugifyStr } from "@utils/slugify";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -18,139 +16,83 @@ const {
   title,
   cover,
   stack,
-  tags,
-  dateTime,
-  endDate,
-  projectURL,
   githubURL,
+  projectURL,
   description,
 } = data;
-
-const strTags = tags.map((tag: string) => slugifyStr(tag)).join("/");
+const cardCode = `P-${String(
+  (Array.from(slug).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 89) + 10
+)}`;
 ---
 
 <li
   data-item-type="search-item"
   data-slug={slug}
   data-title={slug}
-  class={twMerge(
-    "group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.03] backdrop-blur-sm transition-all duration-500 hover:border-skin-accent/30 hover:bg-white/[0.08] hover:shadow-2xl hover:shadow-skin-accent/5",
-    className
-  )}
+  data-card-code={cardCode}
+  class={twMerge("work-card group", className)}
 >
-  <a href={`/projects/${slug}`} class="block" aria-label={`View ${title}`}>
-    <div class="relative aspect-video overflow-hidden">
+  <a href={`/projects/${slug}`} class="work-card-anchor" aria-label={`View ${title}`}>
+    <div class="work-card-media">
       <Image
-        transition:name={slug + ":image"}
         alt={description}
         width={600}
         height={400}
         format="avif"
         src={cover}
-        class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
       />
-      <!-- Artistic gradient overlay -->
-      <div
-        class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"
-      >
-      </div>
-
-      <!-- Top info: Status or Year -->
-      <div class="absolute left-4 top-4">
-        <div
-          class="rounded-full border border-white/10 bg-black/40 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white/60 backdrop-blur-md"
-        >
-          {endDate ? "Completed" : "Active Development"}
-        </div>
-      </div>
     </div>
 
-    <div class="p-6">
-      <div class="mb-4 flex items-center justify-between">
-        <span
-          class="text-[10px] font-black uppercase tracking-[0.3em] text-skin-accent/80"
-          >Project.log</span
-        >
-        <div class="flex gap-1">
-          <div class="size-1 rounded-full bg-skin-accent"></div>
-          <div class="size-1 rounded-full bg-skin-accent/40"></div>
-        </div>
-      </div>
+    <div class="work-card-body">
+      <span class="card-kicker">Project</span>
+      <h2>{title}</h2>
 
-      <h2
-        class="mb-2 text-2xl font-black tracking-tight text-skin-base transition-colors group-hover:text-skin-accent"
-        transition:name={slug}
-      >
-        {title}
-      </h2>
+      <p>{description}</p>
 
-      <p class="mb-6 line-clamp-2 text-sm leading-relaxed text-skin-base/60">
-        {description}
-      </p>
-
-      <div class="flex flex-wrap gap-2">
+      <div class="card-chip-row">
         {
           (stack as (keyof typeof Technologies)[])
-            .slice(0, 3)
+            .slice(0, 2)
             .map(technology => {
               const tech = Technologies[technology];
               if (!tech) return null;
               const { name, icon } = tech;
               return (
                 <div
-                  class="flex items-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2.5 py-1.5 transition-colors group-hover:border-skin-accent/20 group-hover:bg-skin-accent/5"
+                  class="card-chip"
                   title={name}
                 >
-                  <Icon
-                    transition:name={slug + ":stack:" + name}
-                    class="size-3.5 text-skin-base/40 transition-colors group-hover:text-skin-accent"
-                    name={icon}
-                  />
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-skin-base/40 transition-colors group-hover:text-skin-base">
-                    {name}
-                  </span>
+                  <Icon name={icon} />
+                  <span>{name}</span>
                 </div>
               );
             })
         }
         {
-          stack.length > 3 && (
-            <div class="flex items-center rounded-lg border border-white/5 bg-white/5 px-2.5 py-1.5 text-[10px] font-bold text-skin-base/30">
-              +{stack.length - 3}
+          stack.length > 2 && (
+            <div class="card-chip">
+              +{stack.length - 2}
             </div>
           )
         }
       </div>
     </div>
   </a>
-
-  <!-- Action buttons overlay - Cleaned up -->
-  <div
-    class="absolute right-6 top-6 flex translate-y-2 gap-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-  >
+  <div class="card-link-row" aria-label={`${title} links`}>
+    <a href={`/projects/${slug}`}>Read</a>
     {
       githubURL && (
-        <a
-          href={githubURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="View on GitHub"
-          class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-skin-accent hover:bg-black"
-        >
-          <Icon class="size-5" name="ph:github-logo-fill" />
+        <a href={githubURL} target="_blank" rel="noopener noreferrer">
+          <Icon name="ph:github-logo-fill" />
+          GitHub
         </a>
       )
     }
     {
       projectURL && (
-        <a
-          href={projectURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit project"
-          class="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 hover:border-skin-accent hover:bg-black"
-        >
-          <Icon class="size-5" name="ph:browser-bold" />
+        <a href={projectURL} target="_blank" rel="noopener noreferrer">
+          <Icon name="ph:browser-bold" />
+          Site
         </a>
       )
     }

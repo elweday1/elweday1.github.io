@@ -45,7 +45,7 @@ const currentPagePath = trim(Astro.url.pathname, "/").split("/");
     </div>
     <div
       id="menu-items"
-      class="relative flex h-full max-h-0 w-full flex-row items-end justify-end overflow-hidden ease-in-out sm:flex sm:max-h-none sm:w-auto sm:ml-auto sm:overflow-visible"
+      class="relative flex h-full max-h-0 w-full flex-row items-end justify-end overflow-hidden ease-in-out sm:ml-auto sm:flex sm:max-h-none sm:w-auto sm:overflow-visible"
     >
       <ul
         id="menu"
@@ -65,10 +65,7 @@ const currentPagePath = trim(Astro.url.pathname, "/").split("/");
                 >
                   <span class="relative z-20">{name}</span>
                   {isActive ? (
-                    <span
-                      transition:name="active-nav"
-                      class="absolute inset-0 z-10 rounded-xl bg-skin-accent/10 shadow-[0_0_20px_rgba(var(--color-accent),0.2)] backdrop-blur-md"
-                    />
+                    <span class="absolute inset-0 z-10 rounded-xl bg-skin-accent/10 shadow-[0_0_20px_rgba(var(--color-accent),0.2)] backdrop-blur-md" />
                   ) : null}
                 </a>
               </li>

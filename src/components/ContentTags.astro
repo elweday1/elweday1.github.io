@@ -13,7 +13,7 @@ export interface Props {
 const { tags, class: className, type, sort, limit = 7 } = Astro.props;
 ---
 
-<p class={twMerge("my-8 gap-2 flex flex-wrap", className)}>
+<p class={twMerge("tag-bank", className)}>
   {
     tags.map((tag, i) => (
       <Tag class={i > limit ? "hidden" : ""} type={type} name={tag} />

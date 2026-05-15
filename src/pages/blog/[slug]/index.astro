@@ -3,7 +3,6 @@ export const prerender = true;
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Datetime from "@components/Datetime.astro";
-import { slugifyStr } from "@utils/slugify";
 import ContentTags from "@components/ContentTags.astro";
 import { Image } from "astro:assets";
 import { SITE } from "@config";
@@ -20,7 +19,6 @@ const {
   data: { title, description, dateTime, tags, cover },
   slug,
 } = post;
-const slugged = slugifyStr(title);
 const { Content } = await post.render();
 ---
 
@@ -29,37 +27,30 @@ const { Content } = await post.render();
   description={description}
   ogImage={SITE.website + "/blog/" + slug + ".png"}
 >
-  <main class="mx-auto w-full px-4 pb-12" id="main-content">
-    <div class="mx-auto flex w-full justify-start px-2">
-      <button class="mb-2 mt-8 flex hover:opacity-75" onclick="history.back()">
-        <svg xmlns="http://www.w3.org/2000/svg"
-          ><path
-            d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-          ></path>
-        </svg><span>back</span>
-      </button>
-    </div>
+  <main class="detail-page" id="main-content">
+    <a class="back-link" href="/blog">Back to writing</a>
 
-    <Datetime datetime={dateTime} size="lg" class="my-2" />
-    <h1
-      transition:name={slugged}
-      class="text-2xl font-semibold text-skin-accent"
-    >
-      {title}
-    </h1>
-    <p>{description}</p>
-    <figure>
+    <header class="detail-hero">
+      <div>
+        <p class="eyebrow">Note File</p>
+        <h1>{title}</h1>
+      </div>
+      <div class="info-panel p-5">
+        <Datetime datetime={dateTime} size="lg" />
+        <p class="lede">{description}</p>
+      </div>
+    </header>
+
+    <figure class="detail-cover">
       <Image
-        transition:name={slugged + ":image"}
         width={1280}
         height={1024}
         alt={description}
         format="avif"
         src={cover}
-        class="aspect-video w-full rounded-2xl p-2"
       />
     </figure>
-    <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
+    <article id="article" role="article" class="prose">
       <Content />
     </article>
 

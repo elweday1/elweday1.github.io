@@ -1,0 +1,303 @@
+---
+interface Props {
+  mode?: "bins" | "strip";
+}
+
+const { mode = "strip" } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const items = [
+  { code: "01", label: "Work", href: "/projects", value: "18%" },
+  { code: "02", label: "Notes", href: "/blog", value: "42%" },
+  { code: "03", label: "About", href: "/about", value: "7%" },
+  { code: "04", label: "Search", href: "/search", value: "64%" },
+];
+
+const isActive = (href: string) => {
+  if (!href.startsWith("/")) return false;
+  return href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+};
+---
+
+{
+  mode === "strip" && (
+    <a
+      href="/"
+      class:list={["mdr-floating-home", { active: isActive("/") }]}
+      aria-label="Home"
+      transition:name="mdr-google-mark"
+    >
+      <i aria-hidden="true">
+      </i>
+    </a>
+  )
+}
+
+<nav
+  class:list={["mdr-nav", mode === "bins" ? "mdr-nav-bins" : "mdr-nav-strip"]}
+  aria-label="Primary navigation"
+  transition:name="mdr-refinement-nav"
+>
+  {
+    items.map(item => (
+      <a
+        href={item.href}
+        class:list={[{ active: isActive(item.href) }]}
+        data-code={item.code}
+        data-value={item.value}
+      >
+        <b>{item.code}</b>
+        <span>{item.label}</span>
+        <small>{item.value}</small>
+      </a>
+    ))
+  }
+</nav>
+
+<style is:global>
+  .mdr-nav {
+    font-family: "IBM Plex Mono", "Azeret Mono", monospace;
+    font-weight: 900;
+  }
+
+  .mdr-nav a {
+    position: relative;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .mdr-nav-bins {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 4px;
+    border-top: 2px solid #9df2ff;
+    color: #d9fbff;
+    text-shadow: 0 0 8px #63ddf5;
+  }
+
+  .mdr-nav-bins a {
+    display: grid;
+    grid-template-rows: 30px 20px;
+    border: 2px solid #9df2ff;
+    overflow: hidden;
+  }
+
+  .mdr-nav-bins b,
+  .mdr-nav-bins small {
+    display: grid;
+    place-items: center;
+    border-bottom: 2px solid #9df2ff;
+  }
+
+  .mdr-nav-bins span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(6, 27, 36, 0.94);
+    font-size: 10px;
+    letter-spacing: 0;
+    opacity: 0;
+    transform: translateY(7px);
+    transition:
+      opacity 140ms ease,
+      transform 140ms ease;
+  }
+
+  .mdr-nav-bins small {
+    justify-content: start;
+    padding-left: 5px;
+    border-bottom: 0;
+    font-size: 11px;
+  }
+
+  .mdr-nav-bins a:hover span,
+  .mdr-nav-bins a:focus-visible span {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mdr-nav-strip {
+    position: fixed;
+    top: 22px;
+    right: 28px;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(76px, 1fr));
+    gap: 10px;
+    padding: 0;
+    border-top: 0;
+    color: #d9fbff;
+    text-shadow: 0 0 8px #63ddf5;
+  }
+
+  .mdr-floating-home {
+    position: fixed;
+    top: 22px;
+    left: 28px;
+    z-index: 21;
+    display: grid;
+    width: 86px;
+    height: 54px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid #9df2ff;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.11) 50%, rgba(0, 0, 0, 0.12) 50%),
+      #061b24;
+    background-size: 100% 5px, auto;
+    color: #d9fbff;
+    text-shadow: 0 0 8px #63ddf5;
+    box-shadow:
+      inset 0 0 18px rgba(99, 221, 245, 0.16),
+      0 0 0 1px rgba(6, 27, 36, 0.8),
+      0 10px 28px rgba(9, 44, 46, 0.16);
+    transition:
+      background 160ms ease,
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .mdr-floating-home i {
+    position: relative;
+    display: block;
+    width: 76px;
+    height: 34px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow:
+      inset 0 0 12px rgba(99, 221, 245, 0.22),
+      0 0 12px rgba(99, 221, 245, 0.16);
+  }
+
+  .mdr-floating-home i::before,
+  .mdr-floating-home i::after {
+    content: "";
+    position: absolute;
+    inset: 5px 3px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .mdr-floating-home i::before {
+    border-top: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    opacity: 0.86;
+  }
+
+  .mdr-floating-home i::after {
+    inset: -7px 25px;
+    border-right: 2px solid currentColor;
+    border-left: 2px solid currentColor;
+    opacity: 0.72;
+  }
+
+  .mdr-floating-home:hover,
+  .mdr-floating-home:focus-visible,
+  .mdr-floating-home.active {
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.15) 50%, rgba(0, 0, 0, 0.1) 50%),
+      #082c39;
+    box-shadow:
+      inset 0 0 22px rgba(99, 221, 245, 0.24),
+      0 0 0 1px rgba(157, 242, 255, 0.32),
+      0 10px 30px rgba(99, 221, 245, 0.14);
+    transform: translateY(-2px);
+  }
+
+  .mdr-nav-strip a {
+    display: grid;
+    grid-template-rows: 30px 20px;
+    min-height: 54px;
+    overflow: hidden;
+    border: 2px solid #9df2ff;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.11) 50%, rgba(0, 0, 0, 0.12) 50%),
+      #061b24;
+    background-size: 100% 5px, auto;
+    box-shadow:
+      inset 0 0 18px rgba(99, 221, 245, 0.16),
+      0 0 0 1px rgba(6, 27, 36, 0.8),
+      0 10px 28px rgba(9, 44, 46, 0.16);
+    backdrop-filter: blur(12px);
+    transition:
+      background 160ms ease,
+      color 160ms ease,
+      transform 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .mdr-nav-strip b,
+  .mdr-nav-strip small {
+    display: grid;
+    place-items: center;
+    border-bottom: 2px solid #9df2ff;
+    font-size: 13px;
+  }
+
+  .mdr-nav-strip small {
+    justify-content: start;
+    padding-left: 5px;
+    border-bottom: 0;
+    font-size: 10px;
+  }
+
+  .mdr-nav-strip span {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.13) 50%, rgba(0, 0, 0, 0.14) 50%),
+      rgba(6, 27, 36, 0.96);
+    background-size: 100% 5px, auto;
+    opacity: 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    transform: translateY(7px);
+    transition:
+      opacity 140ms ease,
+      transform 140ms ease;
+  }
+
+  .mdr-nav-strip a:hover,
+  .mdr-nav-strip a:focus-visible,
+  .mdr-nav-strip a.active {
+    color: #d9fbff;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.15) 50%, rgba(0, 0, 0, 0.1) 50%),
+      #082c39;
+    box-shadow:
+      inset 0 0 22px rgba(99, 221, 245, 0.24),
+      0 0 0 1px rgba(157, 242, 255, 0.32),
+      0 10px 30px rgba(99, 221, 245, 0.14);
+    transform: translateY(-2px);
+  }
+
+  .mdr-nav-strip a:hover span,
+  .mdr-nav-strip a:focus-visible span {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 760px) {
+    .mdr-nav-strip {
+      right: 12px;
+      left: 110px;
+      top: 12px;
+      grid-template-columns: repeat(4, minmax(54px, 1fr));
+      gap: 6px;
+    }
+
+    .mdr-floating-home {
+      top: 12px;
+      left: 12px;
+      width: 86px;
+    }
+  }
+</style>

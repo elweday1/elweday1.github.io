@@ -54,7 +54,6 @@
   }
 
   /* Remove old data-theme specific styles if needed, or keep for compatibility */
-  #sun-svg,
   @media (prefers-color-scheme: dark) {
     #sun-svg { display: block; }
     #moon-svg { display: none; }

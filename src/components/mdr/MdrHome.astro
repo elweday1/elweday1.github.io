@@ -1,0 +1,591 @@
+---
+import MdrNav from "./MdrNav.astro";
+import MdrNumberField from "./MdrNumberField.astro";
+import MdrTooltip from "./MdrTooltip.astro";
+
+const mdrNumberKeys = Array.from({ length: 13 }, () => "");
+const mdrQwertyKeys = Array.from({ length: 13 }, () => "");
+const mdrHomeKeys = Array.from({ length: 12 }, () => "");
+const mdrBottomKeys = Array.from({ length: 12 }, () => "");
+const mdrUtilityKeys = ["", "", ""];
+const mdrArrowKeys = ["", "", "", "", ""];
+---
+
+<main class="mdr-home" aria-labelledby="mdr-title">
+  <div class="fluorescent"></div>
+
+  <article class="innie">
+    <p>Mohammed Nasser / Personal Worksite</p>
+    <h1 id="mdr-title">Engineering mysterious and important systems.</h1>
+  </article>
+
+  <section class="mdr-room" aria-label="Macrodata refinement terminal">
+    <div class="terminal" transition:name="mdr-terminal">
+      <div class="monitor-shell">
+        <div class="crt">
+          <div class="crt-top">
+            <MdrTooltip label="Home Town in Giza, Egypt" class="location-tip">
+              <span class="location-label">Baharia Oasis</span>
+            </MdrTooltip>
+            <span>37% Complete</span>
+            <MdrTooltip label="Company" class="google-tip">
+              <b class="google-mark" transition:name="mdr-google-mark"
+                ><i>GOOGLE</i></b
+              >
+            </MdrTooltip>
+          </div>
+          <div class="screen-transition-field">
+            <MdrNumberField
+              class="screen-number-field"
+              count={165}
+              columns={19}
+            />
+          </div>
+          <MdrNav mode="bins" />
+          <div class="crt-footer">0x01775 : 0x00DC11</div>
+        </div>
+      </div>
+
+      <div class="keyboard-deck" aria-hidden="true">
+        <div class="keyboard-main">
+          <div class="function-row">
+            {Array.from({ length: 8 }).map(() => <span class="cyan" />)}
+          </div>
+          <div class="key-row number-row">
+            {
+              mdrNumberKeys.map((key, i) => (
+                <span class:list={[{ cyan: i === 12 }]}>{key}</span>
+              ))
+            }
+          </div>
+          <div class="key-row qwerty-row">
+            {
+              mdrQwertyKeys.map((key, i) => (
+                <span class:list={[{ cyan: i === 0 || i > 10 }]}>{key}</span>
+              ))
+            }
+          </div>
+          <div class="key-row home-row">
+            {
+              mdrHomeKeys.map((key, i) => (
+                <span class:list={[{ cyan: i === 0 || i === 11 }]}>{key}</span>
+              ))
+            }
+          </div>
+          <div class="key-row bottom-row">
+            {
+              mdrBottomKeys.map((key, i) => (
+                <span class:list={[{ cyan: i === 0 || i > 9 }]}>{key}</span>
+              ))
+            }
+          </div>
+          <div class="space-row"><span></span></div>
+        </div>
+        <div class="control-cluster">
+          <div class="mini-row">
+            {mdrUtilityKeys.map(key => <span class="cyan">{key}</span>)}
+          </div>
+          <div class="arrow-cross">
+            {mdrArrowKeys.map(key => <span>{key}</span>)}
+          </div>
+          <div class="mini-row">
+            {mdrUtilityKeys.map(key => <span class="cyan">{key}</span>)}
+          </div>
+        </div>
+        <div class="trackball"><i></i></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<style>
+  .mdr-home {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(rgba(9, 44, 46, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(9, 44, 46, 0.045) 1px, transparent 1px),
+      radial-gradient(
+        circle at 75% 18%,
+        rgba(99, 221, 245, 0.13),
+        transparent 32%
+      ),
+      #eef4ef;
+    background-size:
+      64px 64px,
+      64px 64px,
+      auto,
+      auto;
+    color: #092c2e;
+    font-family: "IBM Plex Mono", "Azeret Mono", monospace;
+  }
+
+  .fluorescent {
+    position: absolute;
+    left: 28%;
+    right: 12%;
+    top: 0;
+    height: 17vh;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(255, 255, 255, 0)
+    );
+    filter: blur(10px);
+    pointer-events: none;
+  }
+
+  .mdr-room {
+    position: absolute;
+    inset: 11vh 8vw 9vh 36vw;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    perspective: 1200px;
+  }
+
+  .terminal {
+    position: relative;
+    width: min(790px, 55vw);
+    transform: rotateX(3deg);
+  }
+
+  .monitor-shell {
+    position: relative;
+    padding: 30px 42px 30px 38px;
+    border-radius: 22px 26px 28px 28px;
+    background: radial-gradient(
+        circle at 18% 22%,
+        rgba(9, 44, 46, 0.035) 0 1px,
+        transparent 1.5px
+      ),
+      linear-gradient(120deg, #fff, #f3f7f4);
+    background-size:
+      9px 9px,
+      auto;
+    box-shadow:
+      0 24px 0 #d6dfdb,
+      0 42px 54px rgba(9, 44, 46, 0.2);
+  }
+
+  .crt {
+    position: relative;
+    z-index: 3;
+    min-height: 472px;
+    padding: 18px 20px 12px;
+    overflow: hidden;
+    border: 18px solid #0b3141;
+    border-radius: 18px 18px 30px 30px / 18px 18px 42px 42px;
+    background: radial-gradient(
+        circle at 54% 48%,
+        rgba(157, 242, 255, 0.1),
+        transparent 31%
+      ),
+      radial-gradient(
+        circle at 12% 18%,
+        rgba(157, 242, 255, 0.16) 0 1px,
+        transparent 1.5px
+      ),
+      #061b24;
+    background-size:
+      auto,
+      7px 7px,
+      auto;
+    box-shadow:
+      inset 0 0 40px rgba(99, 221, 245, 0.22),
+      0 0 0 4px #061b24;
+    transform: perspective(900px) rotateX(-1deg);
+    user-select: none;
+  }
+
+  .crt::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    background: linear-gradient(
+      rgba(157, 242, 255, 0.14) 50%,
+      rgba(0, 0, 0, 0.14) 50%
+    );
+    background-size: 100% 5px;
+    mix-blend-mode: screen;
+  }
+
+  .crt::after {
+    content: "";
+    position: absolute;
+    inset: -2% -4%;
+    z-index: 6;
+    pointer-events: none;
+    border-radius: 48% / 12%;
+    box-shadow: inset 0 0 42px rgba(4, 13, 18, 0.86);
+  }
+
+  .crt-top {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #9df2ff;
+    color: #b9f7ff;
+    font-size: 14px;
+    font-weight: 900;
+    text-shadow: 0 0 10px #63ddf5;
+    transform: skewX(-2deg);
+  }
+
+  .crt-top > span,
+  .location-label {
+    padding: 4px 8px;
+    border: 2px solid #9df2ff;
+    line-height: 1;
+  }
+
+  .location-label {
+    display: inline-block;
+    transition:
+      background 140ms ease,
+      color 140ms ease,
+      text-shadow 140ms ease;
+  }
+
+  .location-tip:hover .location-label {
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.16) 50%, rgba(0, 0, 0, 0.12) 50%),
+      rgba(99, 221, 245, 0.08);
+    background-size: 100% 4px, auto;
+    color: #fff;
+    text-shadow:
+      0 0 10px #fff,
+      0 0 18px #63ddf5;
+  }
+
+  .google-mark {
+    position: relative;
+    display: grid;
+    width: 76px;
+    height: 34px;
+    place-items: center;
+    overflow: hidden;
+    border: 2px solid #9df2ff;
+    border-radius: 50%;
+    font-size: 10px;
+    letter-spacing: 0;
+    transition:
+      background 140ms ease,
+      color 140ms ease,
+      box-shadow 140ms ease,
+      transform 140ms ease;
+  }
+
+  .google-mark i {
+    position: relative;
+    z-index: 2;
+    font-style: normal;
+  }
+
+  .google-mark::before {
+    content: "";
+    position: absolute;
+    inset: 5px 3px;
+    border-top: 2px solid #9df2ff;
+    border-bottom: 2px solid #9df2ff;
+    border-radius: 50%;
+    opacity: 0.8;
+  }
+
+  .google-mark::after {
+    content: "";
+    position: absolute;
+    inset: -7px 25px;
+    border-right: 2px solid #9df2ff;
+    border-left: 2px solid #9df2ff;
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+
+  .google-tip:hover .google-mark,
+  .google-mark:focus-visible {
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.16) 50%, rgba(0, 0, 0, 0.12) 50%),
+      rgba(99, 221, 245, 0.08);
+    background-size: 100% 4px, auto;
+    color: #fff;
+    box-shadow:
+      inset 0 0 14px rgba(157, 242, 255, 0.26),
+      0 0 16px rgba(99, 221, 245, 0.24);
+    transform: scale(1.04);
+  }
+
+  :global(.screen-number-field) {
+    z-index: 2;
+    min-height: 250px;
+    padding: 10px 4px 14px;
+    border-top: 2px solid #9df2ff;
+    border-bottom: 2px solid #9df2ff;
+  }
+
+  :global(.screen-number-field *::selection) {
+    background: transparent;
+    color: inherit;
+  }
+
+  .screen-transition-field {
+    position: relative;
+    z-index: 2;
+    overflow: visible;
+    transform: translateZ(0);
+  }
+
+  .crt-footer {
+    position: relative;
+    z-index: 2;
+    margin-top: 8px;
+    color: #9df2ff;
+    font-size: 12px;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 0 0 8px #63ddf5;
+  }
+
+  .keyboard-deck {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 1.35fr 0.34fr 0.44fr;
+    gap: 20px;
+    align-items: end;
+    width: 88%;
+    margin: 26px auto 0;
+    padding: 18px 22px 20px;
+    border: 7px solid #f8fbf9;
+    border-radius: 14px 14px 30px 30px;
+    background: radial-gradient(
+        circle at 25% 18%,
+        rgba(255, 255, 255, 0.08) 0 1px,
+        transparent 1.5px
+      ),
+      #0c3a4b;
+    background-size:
+      8px 8px,
+      auto;
+    box-shadow:
+      0 13px 0 #d7e0dc,
+      0 22px 34px rgba(9, 44, 46, 0.18);
+    transform: perspective(700px) rotateX(19deg);
+    transform-origin: top;
+  }
+
+  .keyboard-main {
+    display: grid;
+    align-content: end;
+    gap: 6px;
+  }
+
+  .function-row {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 7px;
+    width: 56%;
+    margin: 0 0 8px 22%;
+  }
+
+  .key-row {
+    display: grid;
+    gap: 6px;
+  }
+
+  .number-row,
+  .qwerty-row {
+    grid-template-columns: repeat(13, 1fr);
+  }
+
+  .home-row {
+    grid-template-columns: repeat(12, 1fr);
+    margin-left: 7%;
+  }
+
+  .bottom-row {
+    grid-template-columns: repeat(12, 1fr);
+    width: 86%;
+    margin-left: 10%;
+  }
+
+  .space-row {
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+  }
+
+  .space-row span {
+    grid-column: 4 / span 6;
+  }
+
+  .control-cluster {
+    display: grid;
+    align-content: end;
+    justify-items: center;
+    gap: 13px;
+  }
+
+  .mini-row {
+    display: grid;
+    grid-template-columns: repeat(3, 28px);
+    gap: 7px;
+  }
+
+  .arrow-cross {
+    display: grid;
+    grid-template-rows: repeat(3, 20px);
+    grid-template-columns: repeat(3, 28px);
+    gap: 7px;
+  }
+
+  .arrow-cross span:nth-child(1) {
+    grid-column: 2;
+  }
+
+  .arrow-cross span:nth-child(2) {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .arrow-cross span:nth-child(3) {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
+  .arrow-cross span:nth-child(4) {
+    grid-row: 2;
+    grid-column: 3;
+  }
+
+  .arrow-cross span:nth-child(5) {
+    grid-row: 3;
+    grid-column: 2;
+  }
+
+  .keyboard-main span,
+  .control-cluster span {
+    display: grid;
+    height: 20px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #0d5d83;
+    box-shadow: 0 4px 0 #082633;
+    color: transparent;
+    font-size: 0;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: none;
+  }
+
+  .keyboard-main span.cyan,
+  .control-cluster span.cyan {
+    color: transparent;
+    background: #53d8ee;
+  }
+
+  .trackball {
+    position: relative;
+    display: grid;
+    min-height: 92px;
+    place-items: center;
+  }
+
+  .trackball::before,
+  .trackball::after {
+    display: none;
+  }
+
+  .trackball i {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #111d22;
+    box-shadow:
+      inset -10px -9px 0 rgba(0, 0, 0, 0.32),
+      inset 8px 9px 0 rgba(255, 255, 255, 0.05),
+      0 8px 0 #082633;
+  }
+
+  .innie {
+    position: absolute;
+    top: 30vh;
+    left: 5vw;
+    z-index: 5;
+    width: min(420px, 28vw);
+  }
+
+  .innie p {
+    margin: 0 0 14px;
+    color: #137267;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .innie h1 {
+    margin: 0;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: clamp(44px, 4.8vw, 72px);
+    line-height: 0.88;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 900px) {
+    .mdr-home {
+      display: grid;
+      gap: 18px;
+      min-height: 100vh;
+      padding: 92px 16px 16px;
+      overflow-x: hidden;
+    }
+
+    .mdr-room,
+    .innie {
+      position: static;
+      width: auto;
+      transform: none;
+    }
+
+    .terminal {
+      width: 100%;
+      transform: none;
+    }
+
+    .monitor-shell {
+      min-height: auto;
+      padding: 26px;
+      border-radius: 24px;
+    }
+
+    .crt {
+      min-height: auto;
+      padding: 14px;
+      border-width: 14px;
+    }
+
+    .crt-top {
+      grid-template-columns: 1fr 1fr auto;
+      font-size: 11px;
+    }
+
+    :global(.screen-number-field) {
+      --mdr-columns: 10 !important;
+      min-height: 260px;
+      font-size: 14px;
+    }
+
+    .keyboard-deck {
+      display: none;
+    }
+  }
+</style>

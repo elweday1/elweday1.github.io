@@ -1,23 +1,40 @@
 ---
 import trim from "@utils/trim";
-const TABS = [{name:"Search by text", path:"search", type:"text"}, {name:"Search by tag", path:"search", type:"tag"}];
+const TABS = [
+  { name: "Search by text", path: "search", type: "text" },
+  { name: "Search by tag", path: "search", type: "tag" },
+];
 
 const currentPathName = trim(Astro.url.pathname, "/");
 const searchType = Astro.url.searchParams.get("type") || "text";
 ---
 
-      <ul class="relative w-full my-4  flex flex-wrap p-2 list-none rounded-lg bg-skin-fill" data-tabs="tabs" role="list">
-        {TABS.map(({name, path, type}) => {
-          const isActive = (type === "text" && (searchType === "text" || searchType === null)) || (type === "tag" && searchType === "tag");
-          return (
-        <li class="relative z-30 flex-auto text-center cursor-pointer">
-            {isActive ? <div transition:name="tab-selected" class="absolute rounded-lg w-full h-full bg-skin-accent/30" /> : null}
-        <a href={`/${path}?type=${type}`} class="z-30 flex items-center justify-center w-full  py-1 mb-0 transition-all ease-in-out border-0 rounded-lg  "
-            data-tab-target="" role="tab" aria-selected={isActive}>
+<ul
+  class="relative my-4 flex w-full list-none flex-wrap rounded-lg bg-skin-fill p-2"
+  data-tabs="tabs"
+  role="list"
+>
+  {
+    TABS.map(({ name, path, type }) => {
+      const isActive =
+        (type === "text" && (searchType === "text" || searchType === null)) ||
+        (type === "tag" && searchType === "tag");
+      return (
+        <li class="relative z-30 flex-auto cursor-pointer text-center">
+          {isActive ? (
+            <div class="absolute h-full w-full rounded-lg bg-skin-accent/30" />
+          ) : null}
+          <a
+            href={`/${path}?type=${type}`}
+            class="z-30 mb-0 flex w-full items-center  justify-center rounded-lg border-0 py-1 transition-all ease-in-out  "
+            data-tab-target=""
+            role="tab"
+            aria-selected={isActive}
+          >
             <span class="ml-1">{name}</span>
           </a>
         </li>
-          );
-        })}
-      </ul>
-  
+      );
+    })
+  }
+</ul>

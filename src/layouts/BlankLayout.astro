@@ -1,0 +1,110 @@
+---
+import { SITE } from "@config";
+import { ViewTransitions } from "astro:transitions";
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title = SITE.title, description = SITE.desc } = Astro.props;
+const pageTitle = `${SITE.title} | ${title}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <meta name="title" content={pageTitle} />
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={pageTitle} />
+    <meta property="twitter:description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@500;700;900&family=Bricolage+Grotesque:wght@400;700;800&family=Fraunces:opsz,wght@9..144,700;9..144,900&family=IBM+Plex+Mono:wght@500;700&family=Space+Mono:wght@700&display=swap"
+    />
+    <ViewTransitions />
+  </head>
+  <body>
+    <slot />
+    <style is:global>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+        margin: 0;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      ::view-transition-old(mdr-refinement-nav),
+      ::view-transition-new(mdr-refinement-nav) {
+        animation-duration: 560ms;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      ::view-transition-group(mdr-refinement-nav) {
+        z-index: 10;
+        animation-duration: 560ms;
+      }
+
+      ::view-transition-group(mdr-google-mark) {
+        z-index: 11;
+        animation-duration: 620ms;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      ::view-transition-old(mdr-google-mark),
+      ::view-transition-new(mdr-google-mark) {
+        animation-duration: 620ms;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      ::view-transition-group(mdr-terminal) {
+        z-index: 1;
+        overflow: visible;
+        animation-duration: 760ms;
+        animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      ::view-transition-new(mdr-terminal) {
+        animation: mdr-terminal-return-new 760ms cubic-bezier(0.16, 1, 0.3, 1)
+          both;
+      }
+
+      @keyframes mdr-terminal-return-new {
+        from {
+          opacity: 0;
+          transform: translate3d(0, 26px, 0) scale(0.985);
+        }
+        to {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+      }
+    </style>
+  </body>
+</html>

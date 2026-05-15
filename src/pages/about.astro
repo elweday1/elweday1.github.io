@@ -1,113 +1,541 @@
 ---
 export const prerender = true;
 
-import { MY_SHOWS, HOBBIES } from "@config";
-import MoviesGallery from "@components/Carousel.astro";
-import Tooltip from "@components/StackIconTooltip.astro";
+import { MY_SHOWS, SOCIALS } from "@config";
 import getShowsData from "@utils/shows";
 import { techStackByType } from "@utils/getTechStack";
 import { Icon } from "astro-icon";
 import Layout from "@layouts/Layout.astro";
-// FREE API KEY FROM OMDB, SAFE TO INLINE
+import MdrTooltip from "@components/mdr/MdrTooltip.astro";
+
 const showsData = await getShowsData("50788f34", MY_SHOWS);
+
+const routes = [
+  { href: "/projects", code: "01", label: "Project Files", text: "interfaces, tools, systems" },
+  { href: "/blog", code: "02", label: "Notes", text: "rough thoughts that survived" },
+  { href: "/search", code: "03", label: "Search", text: "jump by tag or keyword" },
+];
+
+const activeSocials = SOCIALS.filter(social => social.active);
 ---
 
 <Layout title="About" description="Mohammed Nasser | About me">
-  <article>
-    <h1 class="py-6 text-start text-2xl tracking-wider sm:text-3xl">About</h1>
-    <div class="flex flex-col gap-12">
-      <section>
-        <h2 tabindex="0">Education</h2>
-        <div class="space-y-4 rounded-lg bg-skin-fill p-6">
-          <div
-            class="flex flex-col items-start justify-between sm:flex-row sm:items-center"
-          >
-            <h3 class="text-lg font-bold text-skin-base">Helwan University</h3>
-            <span class="text-sm font-medium text-skin-accent"
-              >Graduation: June 2026</span
-            >
-          </div>
+  <article class="about-lab">
+    <header class="identity-panel">
+      <div class="identity-copy">
+        <p class="eyebrow">Personal Surface</p>
+        <h1>Mohammed Nasser</h1>
+        <p>
+          Software engineer building developer tools, agentic workflows, and
+          interfaces that compress complicated systems into something fast
+          enough to think with.
+        </p>
+      </div>
+    </header>
+
+    <section class="route-section">
+      <nav class="route-strip" aria-label="About page routes">
+        {
+          routes.map(route => (
+            <a href={route.href}>
+              <span>{route.code}</span>
+              <b>{route.label}</b>
+              <small>{route.text}</small>
+            </a>
+          ))
+        }
+      </nav>
+    </section>
+
+    <section class="show-console" aria-labelledby="shows-title">
+        <div class="console-heading">
           <div>
-            <p class="mb-2 text-skin-base/80">B.S. in Computer Engineering</p>
-            <div class="border-l-2 border-skin-accent/30 py-1 pl-4">
-              <span
-                class="mb-1 block text-xs font-black uppercase tracking-widest text-skin-accent/60"
-                >Graduation Project</span
-              >
-              <p class="text-sm italic text-skin-base/60">
-                Virtual Laboratory Learning Management System to connect
-                physical labs to user accessible AI assisted UIs.
-              </p>
-            </div>
+            <p class="panel-label">Reference Shelf</p>
+            <h2 id="shows-title">Shows That Bent The Taste A Bit</h2>
+          </div>
+          <div class="carousel-controls">
+            <button type="button" data-show-prev aria-label="Previous show">
+              <Icon name="ph:arrow-left-bold" />
+            </button>
+            <button type="button" data-show-next aria-label="Next show">
+              <Icon name="ph:arrow-right-bold" />
+            </button>
           </div>
         </div>
-      </section>
-      <section id="tech-stack-section">
-        <h2 tabindex="0">Tech Stack</h2>
-        <ul class="flex flex-col gap-4">
-          {
-            Object.entries(techStackByType).map(([type, stack]) => {
-              return (
-                <li class="flex flex-col gap-1">
-                  <div class="flex flex-col gap-2 rounded-lg  bg-skin-fill p-5">
-                    <h3 aria- class=" font-bold">
-                      {type}
-                    </h3>
-                    <ul class="flex gap-4 overflow-visible overflow-x-auto rounded-lg p-2">
-                      {stack.map(({ name, icon, url, description }) => (
-                        <li>
-                          <Tooltip
-                            name={name}
-                            icon={icon}
-                            url={url}
-                            description={description}
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </li>
-              );
-            })
-          }
-        </ul>
-      </section>
 
-      <section>
-        <h2 tabindex="0">Professional Interests</h2>
-        <ul class="grid grid-cols-2 justify-center gap-3 sm:grid-cols-3">
+        <div class="show-stage" data-show-stage tabindex="0" aria-label="Swipe shows carousel">
           {
-            HOBBIES.map(hobby => (
-              <li
-                tabindex="0"
-                class="flex gap-4 rounded-lg border border-transparent bg-skin-fill px-5 py-3 transition-all hover:border-skin-accent/20 hover:bg-skin-accent/10"
+            showsData.map(({ imdbID, Poster, Title, Genre, Plot }, index) => (
+              <a
+                href={`https://www.imdb.com/title/${imdbID}`}
+                class="show-slide"
+                data-show-slide
               >
-                <Icon name={hobby.icon} class="size-6 text-skin-accent" />
-                <span class="place-self-center text-sm font-medium">
-                  {hobby.name}
-                </span>
-              </li>
+                <MdrTooltip label={`${Title}: ${Plot}`} class="show-poster-tip">
+                  <img
+                    src={Poster}
+                    alt={Title}
+                    loading="lazy"
+                    decoding="async"
+                    draggable="false"
+                  />
+                </MdrTooltip>
+              </a>
             ))
           }
-        </ul>
-      </section>
-      <section>
-        <h2 tabindex="0">Movies and TV Suggestions</h2>
-        <MoviesGallery showsData={showsData} />
-      </section>
-    </div>
+        </div>
+
+        <div class="show-dots" aria-label="Choose show">
+          {
+            showsData.map(({ Title }, index) => (
+              <button
+                type="button"
+                class:list={{ active: index === 0 }}
+              data-show-thumb
+              data-index={index}
+              aria-label={`Show ${Title}`}
+            >
+            </button>
+          ))
+        }
+        </div>
+    </section>
+
+    <section class="stack-console" aria-labelledby="stack-title">
+        <p class="panel-label">Stack</p>
+        <h2 id="stack-title">Useful Materials</h2>
+        <div class="stack-board">
+          {
+            Object.entries(techStackByType).map(([type, stack]) => (
+              <section class="stack-column">
+                <h3>{type}</h3>
+                <ul>
+                  {stack.slice(0, 7).map(({ name, icon, url }) => (
+                    <li>
+                      <a href={url}>
+                        <Icon name={icon} />
+                        <span>{name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))
+          }
+        </div>
+    </section>
+
+    <section class="socials-panel" aria-labelledby="socials-title">
+      <div>
+        <p class="panel-label">Socials</p>
+        <h2 id="socials-title">Other Surfaces</h2>
+      </div>
+      <div class="social-grid">
+        {
+          activeSocials.map(social => (
+            <a href={social.href} aria-label={social.linkTitle}>
+              <Icon name={social.icon} />
+              <span>{social.name}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
   </article>
 </Layout>
 
+<script>
+  const bindShowCarousel = () => {
+    const stage = document.querySelector<HTMLElement>("[data-show-stage]");
+    const slides = Array.from(document.querySelectorAll<HTMLElement>("[data-show-slide]"));
+    const thumbs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-show-thumb]"));
+    const prev = document.querySelector<HTMLButtonElement>("[data-show-prev]");
+    const next = document.querySelector<HTMLButtonElement>("[data-show-next]");
+    if (!stage || !slides.length || !prev || !next) return;
+    if (stage.dataset.bound === "true") return;
+    stage.dataset.bound = "true";
+
+    let active = 0;
+    const setActive = (index: number) => {
+      active = (index + slides.length) % slides.length;
+      slides[active]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      thumbs.forEach((thumb, i) => thumb.classList.toggle("active", i === active));
+    };
+
+    prev.addEventListener("click", () => setActive(active - 1));
+    next.addEventListener("click", () => setActive(active + 1));
+    thumbs.forEach(thumb => {
+      thumb.addEventListener("click", () => setActive(Number(thumb.dataset.index || 0)));
+    });
+
+    const updateActiveFromScroll = () => {
+      const stageCenter = stage.scrollLeft + stage.clientWidth / 2;
+      let closest = 0;
+      let closestDistance = Infinity;
+      slides.forEach((slide, i) => {
+        const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+        const distance = Math.abs(stageCenter - slideCenter);
+        if (distance < closestDistance) {
+          closest = i;
+          closestDistance = distance;
+        }
+      });
+      active = closest;
+      thumbs.forEach((thumb, i) => thumb.classList.toggle("active", i === active));
+    };
+
+    stage.addEventListener("scroll", () => requestAnimationFrame(updateActiveFromScroll), { passive: true });
+    stage.addEventListener("keydown", event => {
+      if (event.key === "ArrowLeft") setActive(active - 1);
+      if (event.key === "ArrowRight") setActive(active + 1);
+    });
+    updateActiveFromScroll();
+  };
+
+  document.addEventListener("astro:page-load", bindShowCarousel);
+  bindShowCarousel();
+</script>
+
 <style>
-  section {
-    @apply flex  w-full flex-col gap-2 justify-self-start;
+  .about-lab {
+    display: grid;
+    gap: 16px;
   }
 
-  h2 {
-    @apply text-start text-xl tracking-wider  sm:text-2xl;
+  .about-lab :where(section) {
+    max-width: none;
+    margin: 0;
   }
-  .toast-title {
-    @apply text-xl font-bold text-skin-accent;
+
+  .identity-panel {
+    padding: 22px;
+    border: 1px solid rgba(9, 44, 46, 0.1);
+    border-radius: 4px;
+    background: rgba(248, 252, 249, 0.55);
+    border-bottom: 1px solid rgba(9, 44, 46, 0.14);
+  }
+
+  .identity-copy {
+    display: grid;
+    align-content: end;
+    min-height: 140px;
+  }
+
+  .identity-copy h1 {
+    margin: 0;
+    max-width: 12ch;
+  }
+
+  .identity-copy p:not(.eyebrow) {
+    max-width: 680px;
+    margin: 12px 0 0;
+    color: #38595a;
+    font-size: clamp(13px, 1.15vw, 16px);
+    font-weight: 700;
+    line-height: 1.55;
+  }
+
+  .show-console,
+  .stack-console,
+  .route-section,
+  .socials-panel {
+    border: 1px solid rgba(9, 44, 46, 0.14);
+    border-radius: 4px;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.035) 50%, rgba(0, 0, 0, 0.018) 50%),
+      rgba(248, 252, 249, 0.86);
+    background-size: 100% 5px, auto;
+    box-shadow: none;
+    padding: 20px;
+  }
+
+  .panel-label {
+    color: #137267;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .route-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .route-strip a {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 2px 12px;
+    min-height: 62px;
+    padding: 11px;
+    border: 1px solid rgba(9, 44, 46, 0.14);
+    border-radius: 3px;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.055) 50%, rgba(0, 0, 0, 0.035) 50%),
+      rgba(255, 255, 255, 0.52);
+    background-size: 100% 5px, auto;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .route-strip span {
+    grid-row: span 2;
+    color: #137267;
+    font-weight: 900;
+  }
+
+  .route-strip b {
+    color: #092c2e;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .route-strip small {
+    color: #486566;
+    font-weight: 700;
+  }
+
+  .show-console,
+  .stack-console,
+  .socials-panel {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .console-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .panel-label {
+    margin: 0 0 8px;
+  }
+
+  .show-console h2,
+  .stack-console h2,
+  .socials-panel h2 {
+    margin: 0;
+    color: #092c2e;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: clamp(24px, 2.3vw, 36px);
+    line-height: 0.96;
+  }
+
+  .carousel-controls {
+    display: flex;
+    gap: 7px;
+  }
+
+  .carousel-controls button {
+    display: grid;
+    width: 36px;
+    height: 32px;
+    place-items: center;
+    border: 1px solid #9df2ff;
+    border-radius: 2px;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.12) 50%, rgba(0, 0, 0, 0.12) 50%),
+      #061b24;
+    background-size: 100% 4px, auto;
+    color: #d9fbff;
+    cursor: pointer;
+  }
+
+  .carousel-controls svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .show-stage {
+    position: relative;
+    display: flex;
+    gap: 9px;
+    height: 226px;
+    padding: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: 1px solid rgba(9, 44, 46, 0.12);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.38);
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    touch-action: pan-x;
+  }
+
+  .show-stage::-webkit-scrollbar {
+    display: none;
+  }
+
+  .show-slide {
+    position: relative;
+    flex: 0 0 clamp(104px, 15vw, 138px);
+    display: block;
+    height: 100%;
+    color: inherit;
+    scroll-snap-align: center;
+    text-decoration: none;
+  }
+
+  .show-slide img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border: 1px solid rgba(9, 44, 46, 0.18);
+    border-radius: 3px;
+    filter: saturate(0.94) contrast(0.96);
+    transition:
+      border-color 140ms ease,
+      filter 140ms ease,
+      transform 140ms ease;
+  }
+
+  .show-slide:hover img,
+  .show-slide:focus-visible img {
+    border-color: #9df2ff;
+    filter: saturate(1.05) contrast(1.02);
+    transform: translateY(-2px);
+  }
+
+  .show-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+
+  .show-dots button {
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgba(9, 44, 46, 0.14);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.44);
+    cursor: pointer;
+    font-size: 0;
+  }
+
+  .show-dots button.active {
+    border-color: #9df2ff;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.12) 50%, rgba(0, 0, 0, 0.12) 50%),
+      #061b24;
+    background-size: 100% 4px, auto;
+  }
+
+  .stack-board {
+    display: grid;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .stack-column {
+    border-top: 1px solid rgba(9, 44, 46, 0.14);
+    padding-top: 8px !important;
+  }
+
+  .stack-column h3 {
+    margin: 0 0 8px;
+    color: #137267;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .stack-column ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .stack-column a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding: 4px 6px;
+    border: 1px solid rgba(9, 44, 46, 0.12);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.5);
+    color: #244c4d;
+    font-size: 11px;
+    font-weight: 900;
+    text-decoration: none;
+  }
+
+  .stack-column svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+  }
+
+  .socials-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(86px, 1fr));
+    gap: 8px;
+  }
+
+  .social-grid a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 7px 9px;
+    border: 1px solid rgba(9, 44, 46, 0.12);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.48);
+    color: #244c4d;
+    font-size: 11px;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .social-grid svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+  }
+
+  @media (max-width: 900px) {
+    .identity-panel,
+    .socials-panel,
+    .social-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .identity-copy {
+      min-height: 120px;
+    }
+
+    .route-strip {
+      grid-template-columns: 1fr;
+    }
+
+    .show-stage {
+      height: 218px;
+    }
+
+    .show-slide {
+      flex-basis: 120px;
+    }
   }
 </style>

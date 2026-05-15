@@ -1,0 +1,271 @@
+---
+import MdrTooltip from "./MdrTooltip.astro";
+
+interface Props {
+  count?: number;
+  columns?: number;
+  class?: string;
+  batch?: number;
+  batchCount?: number;
+  placed?: boolean;
+  interactive?: boolean;
+}
+
+const {
+  count = 224,
+  columns = 16,
+  class: className = "",
+  batch = 0,
+  batchCount = 1,
+  placed = false,
+  interactive = true,
+} = Astro.props;
+
+const rows = Math.ceil(count / columns);
+const eggMap = new Map<number, string>([
+  [12, "Refined cluster: suspiciously friendly"],
+  [37, "37% complete, nobody explain why"],
+  [52, "Baharia Oasis coordinate accepted"],
+  [86, "The numbers are not scary. The grouping is."],
+  [117, "Google residue detected"],
+  [147, "Please enjoy all numbers equally"],
+]);
+const numbers = Array.from({ length: count }, (_, index) => ({
+  index,
+  value: Math.floor(Math.random() * 10),
+  mood: (index * 7) % 5,
+  dx: ((index * 37) % 43) - 21,
+  dy: ((index * 53) % 39) - 19,
+  scale: 0.78 + ((index * 19) % 13) / 26,
+  egg: eggMap.get(index),
+})).filter(number => number.index % batchCount === batch);
+---
+
+<div
+  class:list={["mdr-number-field", { "is-placed-grid": placed }, className]}
+  data-interactive={interactive ? "true" : "false"}
+  style={`--mdr-columns:${columns};--mdr-rows:${rows};`}
+>
+  {
+    numbers.map(number => {
+      const numberNode = (
+        <span
+          data-index={number.index}
+          class={`mood-${number.mood}`}
+          style={
+            placed
+              ? `grid-column:${(number.index % columns) + 1};grid-row:${
+                  Math.floor(number.index / columns) + 1
+                };--dx:${number.dx}px;--dy:${number.dy}px;--s:${number.scale};`
+              : undefined
+          }
+        >
+          {number.value}
+        </span>
+      );
+
+      if (number.egg && interactive && !placed) {
+        return (
+          <MdrTooltip label={number.egg} class="mdr-number-egg">
+            {numberNode}
+          </MdrTooltip>
+        );
+      }
+
+      return numberNode;
+    })
+  }
+</div>
+
+<script>
+  const bindMdrFields = () => {
+    const fields = document.querySelectorAll<HTMLElement>(
+      ".mdr-number-field[data-interactive='true']"
+    );
+
+    fields.forEach(field => {
+      if (field.dataset.mdrBound === "true") return;
+      field.dataset.mdrBound = "true";
+
+      const numbers = Array.from(
+        field.querySelectorAll<HTMLElement>("span[data-index]")
+      );
+
+      numbers.forEach(number => {
+        number.textContent = String(Math.floor(Math.random() * 10));
+      });
+
+      const clear = () => {
+        numbers.forEach(number => number.classList.remove("is-hot", "is-near"));
+      };
+
+      field.addEventListener("pointerover", event => {
+        const target = event.target;
+        if (
+          !(target instanceof HTMLElement) ||
+          !target.matches("span[data-index]")
+        ) {
+          return;
+        }
+
+        const columns =
+          getComputedStyle(field).gridTemplateColumns.split(" ").length || 16;
+        const activeIndex = Number(target.dataset.index);
+        const activeRow = Math.floor(activeIndex / columns);
+        const activeColumn = activeIndex % columns;
+
+        clear();
+
+        numbers.forEach(number => {
+          const index = Number(number.dataset.index);
+          const row = Math.floor(index / columns);
+          const column = index % columns;
+          const distance = Math.max(
+            Math.abs(row - activeRow),
+            Math.abs(column - activeColumn)
+          );
+
+          if (distance === 0) number.classList.add("is-hot");
+          else if (distance === 1) number.classList.add("is-near");
+        });
+      });
+
+      field.addEventListener("pointerleave", clear);
+    });
+  };
+
+  document.addEventListener("astro:page-load", bindMdrFields);
+  bindMdrFields();
+</script>
+
+<style is:global>
+  .mdr-number-field {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--mdr-columns), 1fr);
+    gap: 8px 12px;
+    align-content: center;
+    color: #a9f5ff;
+    font-family: "IBM Plex Mono", "Azeret Mono", monospace;
+    font-size: clamp(11px, 1.05vw, 18px);
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    text-shadow: 0 0 9px #63ddf5;
+    caret-color: transparent;
+    cursor: default;
+    user-select: none;
+  }
+
+  .mdr-number-field.is-placed-grid {
+    grid-template-columns: repeat(var(--mdr-columns), var(--mdr-cell));
+    grid-template-rows: repeat(var(--mdr-rows), var(--mdr-cell));
+  }
+
+  .mdr-number-field span[data-index] {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    cursor: default;
+    transform-origin: center;
+    transition:
+      transform 160ms ease,
+      color 160ms ease,
+      opacity 160ms ease,
+      text-shadow 160ms ease;
+  }
+
+  .mdr-number-field .mdr-number-egg {
+    display: contents;
+  }
+
+  .mdr-number-field .mood-0,
+  .mdr-number-field .mood-4 {
+    color: #e9feff;
+  }
+
+  .mdr-number-field .mood-2 {
+    color: #73e6f5;
+    opacity: 0.85;
+  }
+
+  .mdr-number-field span.is-near {
+    z-index: 3;
+    color: #d9fbff;
+    text-shadow: 0 0 13px #9df2ff;
+    transform: scale(1.34);
+  }
+
+  .mdr-number-field span.is-hot {
+    z-index: 4;
+    color: #fff;
+    text-shadow:
+      0 0 18px #fff,
+      0 0 28px #63ddf5;
+    transform: scale(2.05);
+  }
+
+  .mdr-backdrop-field {
+    position: fixed;
+    left: calc(var(--mdr-cell) * -3);
+    top: calc(var(--mdr-cell) * -3);
+    z-index: 0;
+    width: max-content;
+    height: max-content;
+    gap: 0;
+    overflow: hidden;
+    opacity: 1;
+    font-size: clamp(15px, 1.18vw, 23px);
+    color: #0e6764;
+    text-shadow: none;
+    pointer-events: none;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    will-change: opacity, transform;
+  }
+
+  .mdr-backdrop-field.batch-1 {
+    color: #128078;
+  }
+
+  .mdr-backdrop-field.batch-2 {
+    color: #0b4f55;
+  }
+
+  .mdr-backdrop-field span {
+    display: grid;
+    width: var(--mdr-cell);
+    height: var(--mdr-cell);
+    place-items: center;
+    transform: translate3d(var(--dx, 0), var(--dy, 0), 0) scale(var(--s, 1));
+  }
+
+  .mdr-backdrop-field span {
+    opacity: 0.115;
+  }
+
+  .mdr-backdrop-field .mood-0,
+  .mdr-backdrop-field .mood-4 {
+    color: #092c2e;
+    opacity: 0.075;
+  }
+
+  .mdr-backdrop-field .mood-2 {
+    color: #0b969b;
+    opacity: 0.15;
+  }
+
+  @media (max-width: 700px) {
+    .mdr-number-field {
+      gap: 6px;
+    }
+
+    .mdr-number-field span.is-hot {
+      transform: scale(1.68);
+    }
+
+    .mdr-number-field span.is-near {
+      transform: scale(1.2);
+    }
+  }
+</style>

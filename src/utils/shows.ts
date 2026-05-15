@@ -29,19 +29,25 @@ export type Show = {
 
 const omdbHandler = (omdbApiKey: string) => {
   return async (showName: string) => {
-    const res = await fetch(
-      `https://www.omdbapi.com/?t=${showName}&apikey=${omdbApiKey}`,
-      {
-        cache: "force-cache"
-      }
-    );
-    const data = await res.json();
-    return data as Show;
+    try {
+      const res = await fetch(
+        `https://www.omdbapi.com/?t=${showName}&apikey=${omdbApiKey}`,
+        {
+          cache: "force-cache"
+        }
+      );
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data as Show;
+    } catch {
+      return null;
+    }
   };
 
 }
 
 export default async (apikey: string, showsList: string[]) => {
   const getShow = omdbHandler(apikey);
-  return await Promise.all(showsList.map(async showName => await getShow(showName)))
+  const shows = await Promise.all(showsList.map(async showName => await getShow(showName)))
+  return shows.filter((show): show is Show => Boolean(show && show.Response !== "False" && show.Poster && show.Poster !== "N/A"))
 };

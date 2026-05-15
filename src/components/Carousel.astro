@@ -45,21 +45,23 @@ const { showsData } = Astro.props;
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0.75rem;
   }
 
   /* Navigation Dots */
   .slider-nav {
     display: flex;
     gap: 0.5rem;
+    justify-content: flex-start;
   }
 
   .nav-dot {
     width: 8px;
     height: 8px;
-    background: #ccc;
-    border-radius: 50%;
+    border: 1px solid #63ddf5;
+    background: #061b24;
+    border-radius: 2px;
     transition:
       background 0.3s,
       transform 0.2s;
@@ -67,7 +69,7 @@ const { showsData } = Astro.props;
 
   .nav-dot:hover,
   .nav-dot:focus {
-    background: #000;
+    background: #63ddf5;
     transform: scale(1.2);
   }
 
@@ -78,7 +80,7 @@ const { showsData } = Astro.props;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    gap: 1.5rem;
+    gap: 0.75rem;
     padding-bottom: 10px;
 
     /* Hide Scrollbar */
@@ -93,11 +95,12 @@ const { showsData } = Astro.props;
   /* Individual Slide */
   .slide-item {
     flex: 0 0 auto;
-    width: 150px; /* Reduced size */
+    width: 132px;
     aspect-ratio: 2/3;
     position: relative;
     scroll-snap-align: center;
-    border-radius: 12px;
+    border: 1px solid rgba(9, 44, 46, 0.18);
+    border-radius: 4px;
     overflow: hidden;
     background: #f0f0f0;
   }
@@ -112,7 +115,10 @@ const { showsData } = Astro.props;
   .slide-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.08) 50%, rgba(0, 0, 0, 0.08) 50%),
+      linear-gradient(to top, rgba(0, 0, 0, 0.86), transparent);
+    background-size: 100% 5px, auto;
     display: flex;
     align-items: flex-end;
     padding: 0.75rem;
@@ -127,8 +133,8 @@ const { showsData } = Astro.props;
 
   .slide-title {
     color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 900;
     line-height: 1.2;
   }
 </style>

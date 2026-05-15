@@ -35,7 +35,7 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
 }, {});
 ---
 
-<div class="search-container mx-auto max-w-4xl">
+<div class="search-container search-panel">
   <label class="relative mb-8 block">
     <span class="absolute inset-y-0 left-0 flex items-center pl-3 opacity-60">
       <Icon name="ion:search" class="size-5" />
@@ -43,7 +43,7 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
     <input
       id="search-input"
       value={urlQuery}
-      class="w-full rounded-lg border border-skin-fill border-opacity-40 bg-skin-card/30 py-3 pl-10 pr-4 transition-colors focus:border-skin-accent focus:outline-none"
+      class="search-input"
       placeholder="Search projects and posts..."
       type="text"
       autocomplete="off"
@@ -51,8 +51,8 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
   </label>
 
   <div class="mb-10">
-    <h2 class="mb-4 text-xl font-bold">Filter by Tags</h2>
-    <ul class="flex flex-wrap gap-2">
+    <h2 class="section-label">Filter by Tags</h2>
+    <ul class="tag-bank">
       {
         allTags.map(tag => (
           <label
@@ -72,7 +72,7 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
               name={tag}
               size="lg"
               type="category"
-              class="w-full pr-3 peer-checked:bg-skin-card/10 peer-checked:text-skin-accent peer-checked:ring-2 peer-checked:ring-skin-accent"
+              class="peer-checked:ring-2 peer-checked:ring-skin-accent"
             />
           </label>
         ))
@@ -81,7 +81,7 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
   </div>
 
   <div id="results-wrapper">
-    <p id="number-of-results" class="mb-4 px-4 font-medium text-skin-base/70">
+    <p id="number-of-results" class="eyebrow">
     </p>
 
     <div
@@ -92,14 +92,14 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
       <p class="text-xl font-bold">No results found</p>
     </div>
 
-    <ul id="search-results" class="grid grid-cols-1 gap-4 px-4">
+    <ul id="search-results" class="grid grid-cols-1 gap-4">
       {
         processedEntries.map(entry => (
           <a
             href={`/${entry.collection}/${entry.slug}`}
             data-item
             data-slug={entry.slug}
-            class="flex hidden flex-col rounded-lg border border-transparent bg-skin-fill p-5 shadow-sm transition-all hover:border-skin-accent"
+            class="search-result-card hidden"
           >
             <div class="mb-3 flex w-full flex-row justify-between">
               <Datetime
@@ -123,13 +123,10 @@ const searchDataMap = processedEntries.reduce((acc, entry) => {
                 </span>
               </div>
             </div>
-            <span
-              class="mb-2 text-xl font-bold text-skin-accent"
-              data-field="title"
-            >
+            <span class="text-xl font-bold" data-field="title">
               {entry.title}
             </span>
-            <p class="mb-4 text-sm opacity-80" data-field="description">
+            <p class="text-sm opacity-80" data-field="description">
               {entry.description}
             </p>
             <div class="mt-auto flex flex-wrap gap-2" data-result-tags />

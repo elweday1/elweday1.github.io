@@ -12,7 +12,17 @@ const showTextSearch = searchType === "text" || searchType === null;
 ---
 
 <Layout title="Search" description="Search through my blog and projects">
-  <div class="w-full p-2">
+  <section class="search-page">
+    <header class="search-hero">
+      <div>
+        <p class="eyebrow">Find Something</p>
+        <h1>Search</h1>
+      </div>
+      <p class="lede">
+        Browse the site by phrase or tag across notes, projects, experiments,
+        and older build logs.
+      </p>
+    </header>
     <Search />
-  </div>
+  </section>
 </Layout>

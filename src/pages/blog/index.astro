@@ -33,23 +33,27 @@ const tagSearchParams = isTags ? tags.map(tag => `tag=${tag}&`).join("") : "";
 
 <data id="tag-search-params" value={tagSearchParams}></data>
 <Layout title="posts" , description="All the articles I've posted.">
-  <div class="mx-auto w-full px-4 pb-12">
-    <h1 class="pt-6 text-start text-2xl tracking-wider sm:text-3xl">Tags</h1>
+  <section class="collection-page">
+    <header class="collection-hero">
+      <div>
+        <p class="eyebrow">Notes Archive</p>
+        <h1>Writing</h1>
+      </div>
+      <p class="lede">
+        Short technical notes, build logs, and the occasional opinion that
+        survived long enough to become useful.
+      </p>
+    </header>
 
-    <ContentTags tags={allTags} type="tag">
-      <Tag
-        class="bg-skin-card px-5 py-2 text-xl text-skin-inverted"
-        name="VIEW-ALL"
-        type="all"
-        size="lg"
-      />
-    </ContentTags>
+    <section aria-labelledby="post-tags">
+      <h2 class="section-label" id="post-tags">Tags</h2>
+      <ContentTags tags={allTags} type="tag">
+        <Tag name="View all" type="all" size="lg" />
+      </ContentTags>
+    </section>
 
-    <h1 class="pt-6 text-start text-2xl tracking-wider sm:text-3xl">Posts</h1>
-    <ul
-      id="posts"
-      class="grid place-items-center gap-2 place-self-center sm:grid-cols-2"
-    >
+    <h2 class="section-label">Entries</h2>
+    <ul id="posts" class="note-grid">
       {
         paginatedPosts.map(post => (
           <PostCard post={post as CollectionEntry<"blog">} />
@@ -87,7 +91,7 @@ const tagSearchParams = isTags ? tags.map(tag => `tag=${tag}&`).join("") : "";
         </nav>
       )
     }
-  </div>
+  </section>
 </Layout>
 
 <style>

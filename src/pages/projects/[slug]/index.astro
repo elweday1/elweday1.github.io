@@ -21,7 +21,17 @@ const { project } = Astro.props;
 const { Content } = await project.render();
 const {
   slug,
-  data: { title, description, cover, stack, tags, dateTime, endDate },
+  data: {
+    title,
+    description,
+    cover,
+    stack,
+    tags,
+    dateTime,
+    endDate,
+    projectURL,
+    githubURL,
+  },
 } = project;
 ---
 
@@ -30,56 +40,71 @@ const {
   description={description}
   ogImage={SITE.website + "/projects/" + slug + ".png"}
 >
-  <main class="mx-8" id="main-content">
-    <div class="mx-auto flex w-full justify-start px-2">
-      <button class="mb-2 mt-8 flex hover:opacity-75" onclick="history.back()">
-        <svg xmlns="http://www.w3.org/2000/svg"
-          ><path
-            d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-          ></path>
-        </svg><span>back</span>
-      </button>
-    </div>
+  <main class="detail-page" id="main-content">
+    <a class="back-link" href="/projects">Back to projects</a>
 
-    <Datetime datetime={dateTime} endDate={endDate} size="lg" class="my-2" />
-    <h1 transition:name={slug} class="text-4xl font-semibold text-skin-accent">
-      {title}
-    </h1>
-    <p transition:name={slug + ":desc"}>{description}</p>
-    <Image
-      transition:name={slug + ":cover"}
-      width={1280}
-      height={1024}
-      format="webp"
-      src={cover}
-      class="my-5 aspect-video w-full rounded-xl"
-      alt={description}
-    />
-    <h2 class="mb-2 text-2xl font-semibold tracking-wide text-skin-accent">
-      Tech Stack
-    </h2>
-    <ul class="flex flex-col gap-7">
-      {
-        stack.map(t => {
-          if (!Technologies[t]) return;
-          const { name, icon, url, description } = Technologies[t];
-          return (
-            <li>
-              <a class="inline-flex gap-2" href={url}>
-                <Icon
-                  transition:name={slug + ":stack:" + name}
-                  class="h-8 w-8 text-skin-base"
-                  name={icon}
-                />
-                <h3 class="font-bold underline">{name}</h3>:
-                <span class="font-thin">{description}</span>
+    <header class="detail-hero">
+      <div>
+        <p class="eyebrow">Project File</p>
+        <h1>{title}</h1>
+      </div>
+      <div class="info-panel p-5">
+        <Datetime datetime={dateTime} endDate={endDate} size="lg" />
+        <p class="lede">{description}</p>
+        <div class="card-chip-row">
+          {
+            githubURL && (
+              <a class="card-chip" href={githubURL} target="_blank" rel="noreferrer">
+                <Icon name="ph:github-logo-fill" />
+                GitHub
               </a>
-            </li>
-          );
-        })
-      }
-    </ul>
-    <article id="article" role="article" class="prose max-w-none">
+            )
+          }
+          {
+            projectURL && (
+              <a class="card-chip" href={projectURL} target="_blank" rel="noreferrer">
+                <Icon name="ph:browser-bold" />
+                Live
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </header>
+
+    <figure class="detail-cover">
+      <Image
+        width={1280}
+        height={1024}
+        format="webp"
+        src={cover}
+        alt={description}
+      />
+    </figure>
+
+    <section class="info-panel detail-stack-panel">
+      <h2 class="section-label">Tech Stack</h2>
+      <ul class="detail-stack-list">
+        {
+          stack.map(t => {
+            if (!Technologies[t]) return;
+            const { name, icon, url, description } = Technologies[t];
+            return (
+              <li>
+                <a class="inline-flex items-start gap-3" href={url}>
+                  <Icon class="h-6 w-6 text-skin-accent" name={icon} />
+                  <span>
+                    <b>{name}</b>: {description}
+                  </span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </section>
+
+    <article id="article" role="article" class="prose">
       <Content />
     </article>
 

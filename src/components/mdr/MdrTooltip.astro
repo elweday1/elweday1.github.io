@@ -1,0 +1,148 @@
+---
+interface Props {
+  label: string;
+  class?: string;
+  side?: "top" | "bottom";
+}
+
+const { label, class: className = "", side = "top" } = Astro.props;
+---
+
+<span
+  class:list={["mdr-tooltip", className]}
+  data-mdr-tooltip={label}
+  data-mdr-tooltip-side={side}
+>
+  <slot />
+</span>
+
+<script>
+  const bindMdrTooltips = () => {
+    if ((window as any).__mdrTooltipBound) return;
+    (window as any).__mdrTooltipBound = true;
+
+    const bubble = document.createElement("div");
+    bubble.className = "mdr-tooltip-bubble";
+    bubble.setAttribute("role", "tooltip");
+    document.body.appendChild(bubble);
+
+    let active: HTMLElement | null = null;
+
+    const getAnchor = (trigger: HTMLElement) => {
+      const child = trigger.firstElementChild;
+      return child instanceof HTMLElement ? child : trigger;
+    };
+
+    const place = (trigger: HTMLElement) => {
+      const anchor = getAnchor(trigger);
+      const rect = anchor.getBoundingClientRect();
+      const side = trigger.dataset.mdrTooltipSide || "top";
+      const bubbleRect = bubble.getBoundingClientRect();
+      const left = Math.min(
+        window.innerWidth - bubbleRect.width / 2 - 10,
+        Math.max(10 + bubbleRect.width / 2, rect.left + rect.width / 2)
+      );
+      const top =
+        side === "bottom"
+          ? rect.bottom + 10
+          : rect.top - bubbleRect.height - 10;
+
+      bubble.style.left = `${left}px`;
+      bubble.style.top = `${Math.max(10, top)}px`;
+    };
+
+    const show = (trigger: HTMLElement) => {
+      active = trigger;
+      bubble.textContent = trigger.dataset.mdrTooltip || "";
+      bubble.classList.add("is-visible");
+      place(trigger);
+    };
+
+    const hide = () => {
+      active = null;
+      bubble.classList.remove("is-visible");
+    };
+
+    document.addEventListener("pointerover", event => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const trigger = target.closest<HTMLElement>("[data-mdr-tooltip]");
+      if (!trigger) return;
+      show(trigger);
+    });
+
+    document.addEventListener("pointermove", () => {
+      if (active) place(active);
+    });
+
+    document.addEventListener("pointerout", event => {
+      if (!active) return;
+      const related = event.relatedTarget;
+      if (related instanceof Node && active.contains(related)) return;
+      hide();
+    });
+
+    document.addEventListener("focusin", event => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const trigger = target.closest<HTMLElement>("[data-mdr-tooltip]");
+      if (trigger) show(trigger);
+    });
+
+    document.addEventListener("focusout", hide);
+    document.addEventListener("astro:before-swap", hide);
+  };
+
+  document.addEventListener("astro:page-load", bindMdrTooltips);
+  bindMdrTooltips();
+</script>
+
+<style is:global>
+  .mdr-tooltip {
+    display: contents;
+    cursor: default;
+    user-select: none;
+  }
+
+  .mdr-tooltip > * {
+    cursor: default;
+    user-select: none;
+  }
+
+  .mdr-tooltip-bubble {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    width: max-content;
+    max-width: 220px;
+    padding: 7px 9px;
+    border: 1px solid #9df2ff;
+    border-radius: 2px;
+    background:
+      linear-gradient(rgba(157, 242, 255, 0.13) 50%, rgba(0, 0, 0, 0.14) 50%),
+      #061b24;
+    background-size: 100% 4px, auto;
+    color: #d9fbff;
+    font-family: "IBM Plex Mono", "Azeret Mono", monospace;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.25;
+    opacity: 0;
+    pointer-events: none;
+    text-align: left;
+    text-shadow: 0 0 8px #63ddf5;
+    text-transform: uppercase;
+    transform: translate3d(0, 4px, 0) scale(0.96);
+    transition:
+      opacity 120ms ease,
+      transform 120ms ease;
+    user-select: none;
+    white-space: normal;
+  }
+
+  .mdr-tooltip-bubble.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+</style>

@@ -2,9 +2,9 @@ export const SITE = {
   website: "mnasser.dev",
   author: "Mohammed Nasser",
   authorDescription: `
-  Software Engineer at Google DeepMind. Passionate about Agentic workflows, System Design, and building high-performance digital tools.
+  Software Engineer at Google Health in London. Passionate about agentic workflows, system design, and building high-performance digital tools.
   `,
-  desc: "Personal portfolio of Mohammed Nasser, Software Engineer at Google DeepMind.",
+  desc: "Personal portfolio of Mohammed Nasser, Software Engineer at Google Health.",
   title: "M. Nasser | Software Engineer",
   ogImage: "assets/images/fallback.png",
   lightAndDarkMode: false,
@@ -13,7 +13,8 @@ export const SITE = {
 
 
 export const HIGHLIGHTS = [
-  { label: "Engineering", value: "prev. Google DeepMind Intern", trend: "Gemini Collaborator" },
+  { label: "Engineering", value: "Software Engineer", trend: "Google Health · London" },
+  { label: "Previously", value: "Google DeepMind Intern", trend: "Gemini Collaborator" },
   { label: "Focus", value: "Full Stack", trend: "Web Development" },
   { label: "Developing", value: "Agentic Workflows", trend: "Intelligent Systems" },
 ];
@@ -52,7 +53,7 @@ export const PATHS = [
   { name: "Search", path: "/search", icon: "ic:baseline-search" },
 ] as const;
 
-export const LOCALE = ["en-EN"];
+export const LOCALE = ["en-US"];
 
 export const SOCIALS = [
   {
