@@ -20,7 +20,7 @@ const mdrArrowKeys = ["", "", "", "", ""];
   </article>
 
   <section class="mdr-room" aria-label="Macrodata refinement terminal">
-    <div class="terminal" transition:name="mdr-terminal">
+    <div class="terminal">
       <div class="monitor-shell">
         <div class="crt">
           <div class="crt-top">
@@ -141,18 +141,22 @@ const mdrArrowKeys = ["", "", "", "", ""];
     z-index: 3;
     display: grid;
     place-items: center;
+    min-width: 0;
     perspective: 1200px;
   }
 
   .terminal {
     position: relative;
-    width: min(790px, 55vw);
+    width: min(720px, 50vw);
+    max-width: 100%;
     transform: rotateX(3deg);
+    transform-origin: center;
   }
 
   .monitor-shell {
     position: relative;
     padding: 30px 42px 30px 38px;
+    min-width: 0;
     border-radius: 22px 26px 28px 28px;
     background: radial-gradient(
         circle at 18% 22%,
@@ -196,6 +200,7 @@ const mdrArrowKeys = ["", "", "", "", ""];
       0 0 0 4px #061b24;
     transform: perspective(900px) rotateX(-1deg);
     user-select: none;
+    min-width: 0;
   }
 
   .crt::before {
@@ -237,6 +242,7 @@ const mdrArrowKeys = ["", "", "", "", ""];
     font-weight: 900;
     text-shadow: 0 0 10px #63ddf5;
     transform: skewX(-2deg);
+    min-width: 0;
   }
 
   .crt-top > span,
@@ -244,6 +250,10 @@ const mdrArrowKeys = ["", "", "", "", ""];
     padding: 4px 8px;
     border: 2px solid #9df2ff;
     line-height: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .location-label {
@@ -255,10 +265,14 @@ const mdrArrowKeys = ["", "", "", "", ""];
   }
 
   .location-tip:hover .location-label {
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.16) 50%, rgba(0, 0, 0, 0.12) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.16) 50%,
+        rgba(0, 0, 0, 0.12) 50%
+      ),
       rgba(99, 221, 245, 0.08);
-    background-size: 100% 4px, auto;
+    background-size:
+      100% 4px,
+      auto;
     color: #fff;
     text-shadow:
       0 0 10px #fff,
@@ -311,10 +325,14 @@ const mdrArrowKeys = ["", "", "", "", ""];
 
   .google-tip:hover .google-mark,
   .google-mark:focus-visible {
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.16) 50%, rgba(0, 0, 0, 0.12) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.16) 50%,
+        rgba(0, 0, 0, 0.12) 50%
+      ),
       rgba(99, 221, 245, 0.08);
-    background-size: 100% 4px, auto;
+    background-size:
+      100% 4px,
+      auto;
     color: #fff;
     box-shadow:
       inset 0 0 14px rgba(157, 242, 255, 0.26),
@@ -540,12 +558,30 @@ const mdrArrowKeys = ["", "", "", "", ""];
     letter-spacing: 0;
   }
 
+  @media (max-width: 1120px) {
+    .mdr-room {
+      inset: 12vh 5vw 8vh 34vw;
+    }
+
+    .terminal {
+      width: min(660px, 54vw);
+    }
+
+    .monitor-shell {
+      padding: 24px 30px 26px;
+    }
+
+    .crt {
+      min-height: 430px;
+    }
+  }
+
   @media (max-width: 900px) {
     .mdr-home {
       display: grid;
       gap: 18px;
       min-height: 100vh;
-      padding: 92px 16px 16px;
+      padding: 86px clamp(10px, 4vw, 18px) 18px;
       overflow-x: hidden;
     }
 
@@ -557,35 +593,67 @@ const mdrArrowKeys = ["", "", "", "", ""];
     }
 
     .terminal {
-      width: 100%;
+      width: min(100%, 680px);
       transform: none;
     }
 
     .monitor-shell {
       min-height: auto;
-      padding: 26px;
-      border-radius: 24px;
+      padding: clamp(12px, 4vw, 22px);
+      border-radius: 18px;
     }
 
     .crt {
       min-height: auto;
-      padding: 14px;
-      border-width: 14px;
+      padding: clamp(10px, 3.4vw, 14px);
+      border-width: clamp(8px, 3.4vw, 14px);
     }
 
     .crt-top {
       grid-template-columns: 1fr 1fr auto;
-      font-size: 11px;
+      gap: 6px;
+      font-size: clamp(9px, 2.6vw, 11px);
     }
 
     :global(.screen-number-field) {
       --mdr-columns: 10 !important;
-      min-height: 260px;
-      font-size: 14px;
+      min-height: clamp(180px, 50vw, 260px);
+      font-size: clamp(11px, 3.1vw, 14px);
     }
 
     .keyboard-deck {
       display: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .mdr-home {
+      gap: 14px;
+      min-height: 100svh;
+    }
+
+    .innie p {
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+
+    .innie h1 {
+      font-size: clamp(38px, 13vw, 54px);
+      line-height: 0.92;
+    }
+
+    .crt-top {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .google-tip {
+      display: none;
+    }
+
+    :global(.screen-number-field) {
+      --mdr-columns: 8 !important;
+      gap: 5px;
+      min-height: 172px;
     }
   }
 </style>

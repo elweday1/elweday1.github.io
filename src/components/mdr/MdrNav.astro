@@ -27,8 +27,7 @@ const isActive = (href: string) => {
       aria-label="Home"
       transition:name="mdr-google-mark"
     >
-      <i aria-hidden="true">
-      </i>
+      <i aria-hidden="true" />
     </a>
   )
 }
@@ -146,10 +145,14 @@ const isActive = (href: string) => {
     place-items: center;
     overflow: hidden;
     border: 2px solid #9df2ff;
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.11) 50%, rgba(0, 0, 0, 0.12) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.11) 50%,
+        rgba(0, 0, 0, 0.12) 50%
+      ),
       #061b24;
-    background-size: 100% 5px, auto;
+    background-size:
+      100% 5px,
+      auto;
     color: #d9fbff;
     text-shadow: 0 0 8px #63ddf5;
     box-shadow:
@@ -200,8 +203,10 @@ const isActive = (href: string) => {
   .mdr-floating-home:hover,
   .mdr-floating-home:focus-visible,
   .mdr-floating-home.active {
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.15) 50%, rgba(0, 0, 0, 0.1) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.15) 50%,
+        rgba(0, 0, 0, 0.1) 50%
+      ),
       #082c39;
     box-shadow:
       inset 0 0 22px rgba(99, 221, 245, 0.24),
@@ -216,10 +221,14 @@ const isActive = (href: string) => {
     min-height: 54px;
     overflow: hidden;
     border: 2px solid #9df2ff;
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.11) 50%, rgba(0, 0, 0, 0.12) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.11) 50%,
+        rgba(0, 0, 0, 0.12) 50%
+      ),
       #061b24;
-    background-size: 100% 5px, auto;
+    background-size:
+      100% 5px,
+      auto;
     box-shadow:
       inset 0 0 18px rgba(99, 221, 245, 0.16),
       0 0 0 1px rgba(6, 27, 36, 0.8),
@@ -252,10 +261,14 @@ const isActive = (href: string) => {
     inset: 0;
     display: grid;
     place-items: center;
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.13) 50%, rgba(0, 0, 0, 0.14) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.13) 50%,
+        rgba(0, 0, 0, 0.14) 50%
+      ),
       rgba(6, 27, 36, 0.96);
-    background-size: 100% 5px, auto;
+    background-size:
+      100% 5px,
+      auto;
     opacity: 0;
     font-size: 10px;
     text-transform: uppercase;
@@ -269,8 +282,10 @@ const isActive = (href: string) => {
   .mdr-nav-strip a:focus-visible,
   .mdr-nav-strip a.active {
     color: #d9fbff;
-    background:
-      linear-gradient(rgba(157, 242, 255, 0.15) 50%, rgba(0, 0, 0, 0.1) 50%),
+    background: linear-gradient(
+        rgba(157, 242, 255, 0.15) 50%,
+        rgba(0, 0, 0, 0.1) 50%
+      ),
       #082c39;
     box-shadow:
       inset 0 0 22px rgba(99, 221, 245, 0.24),
@@ -298,6 +313,50 @@ const isActive = (href: string) => {
       top: 12px;
       left: 12px;
       width: 86px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .mdr-nav-strip {
+      right: 8px;
+      left: 76px;
+      top: 10px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+    }
+
+    .mdr-floating-home {
+      top: 10px;
+      left: 8px;
+      width: 58px;
+      height: 46px;
+    }
+
+    .mdr-floating-home i {
+      width: 46px;
+      height: 22px;
+    }
+
+    .mdr-floating-home i::before {
+      inset: 3px 2px;
+    }
+
+    .mdr-floating-home i::after {
+      inset: -5px 15px;
+    }
+
+    .mdr-nav-strip a {
+      min-height: 46px;
+      grid-template-rows: 25px 17px;
+    }
+
+    .mdr-nav-strip b {
+      font-size: 11px;
+    }
+
+    .mdr-nav-strip small {
+      padding-left: 3px;
+      font-size: 8px;
     }
   }
 </style>
